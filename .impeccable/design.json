@@ -1,0 +1,606 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T00:00:00Z",
+  "title": "Design System: Softrix · Ruta Softrix",
+  "extensions": {
+    "colorMeta": {
+      "pintura": {
+        "role": "neutral",
+        "displayName": "Pintura de Carrocería",
+        "canonical": "oklch(13.9% 0.006 17.8)",
+        "tonalRamp": [
+          "oklch(15% 0.003 17.8)",
+          "oklch(26% 0.004 17.8)",
+          "oklch(38% 0.004 17.8)",
+          "oklch(49% 0.005 17.8)",
+          "oklch(61% 0.006 17.8)",
+          "oklch(72% 0.005 17.8)",
+          "oklch(84% 0.004 17.8)",
+          "oklch(95% 0.004 17.8)"
+        ]
+      },
+      "pintura-oscuro": {
+        "role": "neutral",
+        "displayName": "Pintura de Carrocería (tema oscuro)",
+        "canonical": "oklch(11.9% 0.005 17.9)",
+        "tonalRamp": [
+          "oklch(15% 0.003 17.9)",
+          "oklch(26% 0.004 17.9)",
+          "oklch(38% 0.004 17.9)",
+          "oklch(49% 0.005 17.9)",
+          "oklch(61% 0.005 17.9)",
+          "oklch(72% 0.004 17.9)",
+          "oklch(84% 0.004 17.9)",
+          "oklch(95% 0.003 17.9)"
+        ]
+      },
+      "rojo": {
+        "role": "primary",
+        "displayName": "Rojo Softrix",
+        "canonical": "oklch(58.7% 0.224 29.1)",
+        "tonalRamp": [
+          "oklch(15% 0.119 29.1)",
+          "oklch(26% 0.140 29.1)",
+          "oklch(38% 0.160 29.1)",
+          "oklch(49% 0.181 29.1)",
+          "oklch(61% 0.199 29.1)",
+          "oklch(72% 0.178 29.1)",
+          "oklch(84% 0.158 29.1)",
+          "oklch(95% 0.137 29.1)"
+        ]
+      },
+      "rojo-profundo": {
+        "role": "primary",
+        "displayName": "Rojo Profundo",
+        "canonical": "oklch(34.7% 0.130 28.5)",
+        "tonalRamp": [
+          "oklch(15% 0.077 28.5)",
+          "oklch(26% 0.091 28.5)",
+          "oklch(38% 0.104 28.5)",
+          "oklch(49% 0.118 28.5)",
+          "oklch(61% 0.129 28.5)",
+          "oklch(72% 0.116 28.5)",
+          "oklch(84% 0.103 28.5)",
+          "oklch(95% 0.089 28.5)"
+        ]
+      },
+      "cabina": {
+        "role": "secondary",
+        "displayName": "Luz de Cabina",
+        "canonical": "oklch(85.0% 0.169 85.7)",
+        "tonalRamp": [
+          "oklch(15% 0.100 85.7)",
+          "oklch(26% 0.118 85.7)",
+          "oklch(38% 0.135 85.7)",
+          "oklch(49% 0.152 85.7)",
+          "oklch(61% 0.168 85.7)",
+          "oklch(72% 0.150 85.7)",
+          "oklch(84% 0.133 85.7)",
+          "oklch(95% 0.116 85.7)"
+        ]
+      },
+      "cabina-hover": {
+        "role": "secondary",
+        "displayName": "Cabina Encendida",
+        "canonical": "oklch(89.1% 0.146 91.1)",
+        "tonalRamp": [
+          "oklch(15% 0.087 91.1)",
+          "oklch(26% 0.102 91.1)",
+          "oklch(38% 0.117 91.1)",
+          "oklch(49% 0.132 91.1)",
+          "oklch(61% 0.145 91.1)",
+          "oklch(72% 0.130 91.1)",
+          "oklch(84% 0.115 91.1)",
+          "oklch(95% 0.100 91.1)"
+        ]
+      },
+      "cabina-tinta": {
+        "role": "secondary",
+        "displayName": "Tinta de Cabina",
+        "canonical": "oklch(18.8% 0.032 83.9)",
+        "tonalRamp": [
+          "oklch(15% 0.019 83.9)",
+          "oklch(26% 0.022 83.9)",
+          "oklch(38% 0.025 83.9)",
+          "oklch(49% 0.029 83.9)",
+          "oklch(61% 0.031 83.9)",
+          "oklch(72% 0.028 83.9)",
+          "oklch(84% 0.025 83.9)",
+          "oklch(95% 0.022 83.9)"
+        ]
+      },
+      "cromo-claro": {
+        "role": "tertiary",
+        "displayName": "Cromo Claro",
+        "canonical": "oklch(97.1% 0.001 17.2)",
+        "tonalRamp": [
+          "oklch(15% 0.001 17.2)",
+          "oklch(26% 0.001 17.2)",
+          "oklch(38% 0.001 17.2)",
+          "oklch(49% 0.001 17.2)",
+          "oklch(61% 0.001 17.2)",
+          "oklch(72% 0.001 17.2)",
+          "oklch(84% 0.001 17.2)",
+          "oklch(95% 0.001 17.2)"
+        ]
+      },
+      "cromo-medio": {
+        "role": "tertiary",
+        "displayName": "Cromo Medio",
+        "canonical": "oklch(76.0% 0.005 17.3)",
+        "tonalRamp": [
+          "oklch(15% 0.003 17.3)",
+          "oklch(26% 0.003 17.3)",
+          "oklch(38% 0.004 17.3)",
+          "oklch(49% 0.004 17.3)",
+          "oklch(61% 0.005 17.3)",
+          "oklch(72% 0.004 17.3)",
+          "oklch(84% 0.004 17.3)",
+          "oklch(95% 0.003 17.3)"
+        ]
+      },
+      "cromo-oscuro": {
+        "role": "tertiary",
+        "displayName": "Cromo Oscuro",
+        "canonical": "oklch(46.5% 0.006 17.4)",
+        "tonalRamp": [
+          "oklch(15% 0.004 17.4)",
+          "oklch(26% 0.005 17.4)",
+          "oklch(38% 0.005 17.4)",
+          "oklch(49% 0.006 17.4)",
+          "oklch(61% 0.006 17.4)",
+          "oklch(72% 0.006 17.4)",
+          "oklch(84% 0.005 17.4)",
+          "oklch(95% 0.004 17.4)"
+        ]
+      },
+      "sobre-pintura": {
+        "role": "neutral",
+        "displayName": "Sobre Pintura",
+        "canonical": "oklch(97.7% 0.006 31.1)",
+        "tonalRamp": [
+          "oklch(15% 0.003 31.1)",
+          "oklch(26% 0.004 31.1)",
+          "oklch(38% 0.004 31.1)",
+          "oklch(49% 0.005 31.1)",
+          "oklch(61% 0.005 31.1)",
+          "oklch(72% 0.005 31.1)",
+          "oklch(84% 0.004 31.1)",
+          "oklch(95% 0.004 31.1)"
+        ]
+      },
+      "sobre-pintura-2": {
+        "role": "neutral",
+        "displayName": "Sobre Pintura Secundario",
+        "canonical": "oklch(85.5% 0.020 29.6)",
+        "tonalRamp": [
+          "oklch(15% 0.012 29.6)",
+          "oklch(26% 0.014 29.6)",
+          "oklch(38% 0.016 29.6)",
+          "oklch(49% 0.018 29.6)",
+          "oklch(61% 0.019 29.6)",
+          "oklch(72% 0.017 29.6)",
+          "oklch(84% 0.015 29.6)",
+          "oklch(95% 0.013 29.6)"
+        ]
+      },
+      "papel": {
+        "role": "neutral",
+        "displayName": "Papel",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(26% 0.000 89.9)",
+          "oklch(38% 0.000 89.9)",
+          "oklch(49% 0.000 89.9)",
+          "oklch(61% 0.000 89.9)",
+          "oklch(72% 0.000 89.9)",
+          "oklch(84% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "papel-2": {
+        "role": "neutral",
+        "displayName": "Papel 2",
+        "canonical": "oklch(96.2% 0.001 17.2)",
+        "tonalRamp": [
+          "oklch(15% 0.001 17.2)",
+          "oklch(26% 0.001 17.2)",
+          "oklch(38% 0.001 17.2)",
+          "oklch(49% 0.001 17.2)",
+          "oklch(61% 0.001 17.2)",
+          "oklch(72% 0.001 17.2)",
+          "oklch(84% 0.001 17.2)",
+          "oklch(95% 0.001 17.2)"
+        ]
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "oklch(19.0% 0.005 17.6)",
+        "tonalRamp": [
+          "oklch(15% 0.003 17.6)",
+          "oklch(26% 0.003 17.6)",
+          "oklch(38% 0.004 17.6)",
+          "oklch(49% 0.004 17.6)",
+          "oklch(61% 0.005 17.6)",
+          "oklch(72% 0.004 17.6)",
+          "oklch(84% 0.004 17.6)",
+          "oklch(95% 0.003 17.6)"
+        ]
+      },
+      "tinta-2": {
+        "role": "neutral",
+        "displayName": "Tinta 2",
+        "canonical": "oklch(37.4% 0.010 27.4)",
+        "tonalRamp": [
+          "oklch(15% 0.006 27.4)",
+          "oklch(26% 0.007 27.4)",
+          "oklch(38% 0.008 27.4)",
+          "oklch(49% 0.009 27.4)",
+          "oklch(61% 0.010 27.4)",
+          "oklch(72% 0.009 27.4)",
+          "oklch(84% 0.008 27.4)",
+          "oklch(95% 0.007 27.4)"
+        ]
+      },
+      "rojo-tinta": {
+        "role": "primary",
+        "displayName": "Rojo de Tinta",
+        "canonical": "oklch(49.0% 0.189 29.3)",
+        "tonalRamp": [
+          "oklch(15% 0.112 29.3)",
+          "oklch(26% 0.132 29.3)",
+          "oklch(38% 0.151 29.3)",
+          "oklch(49% 0.171 29.3)",
+          "oklch(61% 0.188 29.3)",
+          "oklch(72% 0.168 29.3)",
+          "oklch(84% 0.149 29.3)",
+          "oklch(95% 0.129 29.3)"
+        ]
+      },
+      "papel-oscuro": {
+        "role": "neutral",
+        "displayName": "Papel (tema oscuro)",
+        "canonical": "oklch(17.2% 0.005 17.7)",
+        "tonalRamp": [
+          "oklch(15% 0.003 17.7)",
+          "oklch(26% 0.004 17.7)",
+          "oklch(38% 0.004 17.7)",
+          "oklch(49% 0.005 17.7)",
+          "oklch(61% 0.005 17.7)",
+          "oklch(72% 0.004 17.7)",
+          "oklch(84% 0.004 17.7)",
+          "oklch(95% 0.003 17.7)"
+        ]
+      },
+      "papel-2-oscuro": {
+        "role": "neutral",
+        "displayName": "Papel 2 (tema oscuro)",
+        "canonical": "oklch(21.0% 0.008 31.2)",
+        "tonalRamp": [
+          "oklch(15% 0.005 31.2)",
+          "oklch(26% 0.006 31.2)",
+          "oklch(38% 0.007 31.2)",
+          "oklch(49% 0.008 31.2)",
+          "oklch(61% 0.008 31.2)",
+          "oklch(72% 0.007 31.2)",
+          "oklch(84% 0.007 31.2)",
+          "oklch(95% 0.006 31.2)"
+        ]
+      },
+      "tinta-oscuro": {
+        "role": "neutral",
+        "displayName": "Tinta (tema oscuro)",
+        "canonical": "oklch(95.3% 0.007 28.8)",
+        "tonalRamp": [
+          "oklch(15% 0.004 28.8)",
+          "oklch(26% 0.005 28.8)",
+          "oklch(38% 0.005 28.8)",
+          "oklch(49% 0.006 28.8)",
+          "oklch(61% 0.007 28.8)",
+          "oklch(72% 0.006 28.8)",
+          "oklch(84% 0.005 28.8)",
+          "oklch(95% 0.005 28.8)"
+        ]
+      },
+      "tinta-2-oscuro": {
+        "role": "neutral",
+        "displayName": "Tinta 2 (tema oscuro)",
+        "canonical": "oklch(81.4% 0.014 28.9)",
+        "tonalRamp": [
+          "oklch(15% 0.008 28.9)",
+          "oklch(26% 0.010 28.9)",
+          "oklch(38% 0.011 28.9)",
+          "oklch(49% 0.013 28.9)",
+          "oklch(61% 0.014 28.9)",
+          "oklch(72% 0.012 28.9)",
+          "oklch(84% 0.011 28.9)",
+          "oklch(95% 0.010 28.9)"
+        ]
+      },
+      "rojo-tinta-oscuro": {
+        "role": "primary",
+        "displayName": "Rojo de Tinta (tema oscuro)",
+        "canonical": "oklch(70.8% 0.184 27.0)",
+        "tonalRamp": [
+          "oklch(15% 0.109 27.0)",
+          "oklch(26% 0.128 27.0)",
+          "oklch(38% 0.147 27.0)",
+          "oklch(49% 0.166 27.0)",
+          "oklch(61% 0.183 27.0)",
+          "oklch(72% 0.164 27.0)",
+          "oklch(84% 0.145 27.0)",
+          "oklch(95% 0.126 27.0)"
+        ]
+      },
+      "hilo-pintura": {
+        "role": "neutral",
+        "displayName": "Hilo de Pintura"
+      },
+      "hilo": {
+        "role": "neutral",
+        "displayName": "Hilo"
+      },
+      "hilo-fuerte": {
+        "role": "neutral",
+        "displayName": "Hilo Fuerte"
+      }
+    },
+    "typographyMeta": {
+      "rotulo": {
+        "displayName": "Rótulo",
+        "purpose": "Destino dentro del letrero; Bungee amarilla con doble sombra roja. Tope 5.5/3.25/1.75rem según tamaño."
+      },
+      "rotulo-etiqueta": {
+        "displayName": "Rótulo Etiqueta",
+        "purpose": "Rótulos cortos en cromo claro sobre pintura: origen del letrero, «Elige tu parada», columnas del pie."
+      },
+      "display": {
+        "displayName": "Display",
+        "purpose": "Solo el h1 de la portada."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "h1 de cabezas interiores y h2 del cierre."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "h2 de sección sobre papel."
+      },
+      "item": {
+        "displayName": "Item",
+        "purpose": "Título de módulo o punto; las paradas usan la misma familia a 1.3rem."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido, medida 34–52ch."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Bajada bajo un titular, en sobre-pintura-2."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Botones."
+      }
+    },
+    "shadows": [
+      {
+        "name": "letrero-suspendido",
+        "value": "0 18px 40px -18px rgb(0 0 0 / 0.8)",
+        "purpose": "El letrero cuelga sobre la pintura."
+      },
+      {
+        "name": "vidrio-letrero",
+        "value": "0 0 0 1px rgb(0 0 0 / 0.6) inset, 0 0 0 4px var(--pintura) inset, 0 0 0 5px rgb(246 245 245 / 0.18) inset",
+        "purpose": "Doble bisel dentro del marco cromado."
+      },
+      {
+        "name": "boton-cabina",
+        "value": "0 1px 0 rgb(255 255 255 / 0.55) inset, 0 -2px 0 rgb(0 0 0 / 0.18) inset, 0 6px 18px -6px rgb(255 196 31 / 0.55)",
+        "purpose": "Relieve y halo amarillo del botón primario."
+      },
+      {
+        "name": "contorno-cromo",
+        "value": "0 0 0 1.5px var(--cromo-medio) inset",
+        "purpose": "Borde del botón secundario y de la píldora del producto elegido; cromo claro en hover."
+      },
+      {
+        "name": "panel-desplegado",
+        "value": "0 30px 60px -30px rgb(0 0 0 / 0.75)",
+        "purpose": "Menú de productos y menú móvil."
+      },
+      {
+        "name": "flotante",
+        "value": "0 0 0 3px var(--pintura), 0 10px 24px -8px rgb(0 0 0 / 0.55)",
+        "purpose": "Botón flotante de WhatsApp con aro de pintura."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-salida",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Salida suave: paneles, flecha de parada, entrada del destino del letrero, flotante."
+      },
+      {
+        "name": "dur-corta",
+        "value": "160ms",
+        "purpose": "Hover y cambios de color o contorno."
+      },
+      {
+        "name": "dur-media",
+        "value": "420ms",
+        "purpose": "Despliegue de paneles (clip-path) y giro del chevron."
+      },
+      {
+        "name": "letrero-salida",
+        "value": "240ms cubic-bezier(.5,0,.9,.4)",
+        "purpose": "El destino sale hacia arriba (-115%)."
+      },
+      {
+        "name": "letrero-entrada",
+        "value": "520ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "El siguiente destino entra desde abajo (115%)."
+      },
+      {
+        "name": "letrero-intervalo",
+        "value": "3200ms × 2 vueltas",
+        "purpose": "Rotación de la portada; se detiene sola, se pausa con puntero, foco o pestaña oculta, y nunca corre con movimiento reducido."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "rejilla-pie-1",
+        "value": "480px"
+      },
+      {
+        "name": "apilar-dos-columnas",
+        "value": "760px"
+      },
+      {
+        "name": "rejilla-pie-2",
+        "value": "820px"
+      },
+      {
+        "name": "portada-apilada",
+        "value": "900px"
+      },
+      {
+        "name": "cabecera-movil",
+        "value": "940px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón de cabina",
+      "kind": "button",
+      "refersTo": "button-cabina",
+      "description": "Primario. Solo sobre pintura, uno por bloque; su texto es «Solicitar cotización».",
+      "html": "<div class=\"ds-paint\"><a class=\"ds-btn ds-btn-cabina\" href=\"#\">Solicitar cotización</a></div>",
+      "css": ".ds-paint{background-color:#0b0808;background-image:radial-gradient(120% 90% at 92% 118%,rgb(227 35 26/.92) 0%,rgb(227 35 26/.35) 32%,transparent 62%),radial-gradient(70% 60% at 108% -10%,rgb(110 13 10/.75) 0%,transparent 60%);color:#fbf6f5;padding:2rem;}.ds-btn{display:inline-flex;align-items:center;gap:.6rem;min-height:3rem;padding:.75rem 1.35rem;border:0;border-radius:999px;font:700 1rem/1.1 'Inter Variable',Inter,system-ui,sans-serif;text-decoration:none;cursor:pointer;transition:background-color 160ms ease,box-shadow 160ms ease,transform 160ms ease;}.ds-btn-cabina{background:#ffc41f;color:#1a1203;box-shadow:0 1px 0 rgb(255 255 255/.55) inset,0 -2px 0 rgb(0 0 0/.18) inset,0 6px 18px -6px rgb(255 196 31/.55);}.ds-btn-cabina:hover{background:#ffd75c;transform:translateY(-1px);}.ds-btn-cabina:focus-visible{outline:3px solid #ffc41f;outline-offset:3px;}"
+    },
+    {
+      "name": "Botón de cromo",
+      "kind": "button",
+      "refersTo": "button-cromo",
+      "description": "Secundario junto al de cabina, casi siempre WhatsApp.",
+      "html": "<div class=\"ds-paint\"><a class=\"ds-btn ds-btn-cromo\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.2 21.8l4.9-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.8a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1 1 12 20Z\"/></svg>Escríbenos por WhatsApp</a></div>",
+      "css": ".ds-paint{background-color:#0b0808;background-image:radial-gradient(120% 90% at 92% 118%,rgb(227 35 26/.92) 0%,rgb(227 35 26/.35) 32%,transparent 62%),radial-gradient(70% 60% at 108% -10%,rgb(110 13 10/.75) 0%,transparent 60%);color:#fbf6f5;padding:2rem;}.ds-btn{display:inline-flex;align-items:center;gap:.6rem;min-height:3rem;padding:.75rem 1.35rem;border:0;border-radius:999px;font:700 1rem/1.1 'Inter Variable',Inter,system-ui,sans-serif;text-decoration:none;cursor:pointer;transition:background-color 160ms ease,box-shadow 160ms ease,transform 160ms ease;}.ds-btn-cromo{background:transparent;color:#fbf6f5;box-shadow:0 0 0 1.5px #b4b0b0 inset;}.ds-btn-cromo:hover{background:rgb(246 245 245/.08);box-shadow:0 0 0 1.5px #f6f5f5 inset;}.ds-btn-cromo:focus-visible{outline:3px solid #ffc41f;outline-offset:3px;}"
+    },
+    {
+      "name": "Vínculo de navegación",
+      "kind": "nav",
+      "refersTo": "nav-vinculo",
+      "description": "Píldora de la cabecera; la página actual lleva línea roja inferior de 2px.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\">Productos</a><a class=\"ds-nav-link\" aria-current=\"page\" href=\"#\">Distribuidores</a><a class=\"ds-nav-link\" href=\"#\">Contacto</a></nav>",
+      "css": ".ds-nav{display:flex;gap:.25rem;padding:.75rem 1rem;background:#0b0808;border-bottom:1px solid rgb(180 176 176/.55);}.ds-nav-link{display:inline-flex;align-items:center;min-height:2.5rem;padding:.4rem .8rem;border-radius:999px;color:#fbf6f5;font:600 .975rem/1 'Inter Variable',Inter,system-ui,sans-serif;text-decoration:none;transition:background-color 160ms ease;}.ds-nav-link:hover{background:rgb(246 245 245/.1);}.ds-nav-link[aria-current=page]{box-shadow:inset 0 -2px 0 #e3231a;border-radius:0;}.ds-nav-link:focus-visible{outline:3px solid #ffc41f;outline-offset:3px;}"
+    },
+    {
+      "name": "Letrero de ruta",
+      "kind": "custom",
+      "refersTo": "letrero",
+      "description": "Pieza firma: marco cromado, vidrio negro y destino en letra de rótulo amarilla con doble sombra roja.",
+      "html": "<div class=\"ds-letrero\"><div class=\"ds-letrero-marco\"><p class=\"ds-letrero-origen\"><span>SOFTRIX</span><span class=\"ds-letrero-flecha\">→</span><span class=\"ds-letrero-ruta\">Ruta</span></p><p class=\"ds-letrero-destino\">FACTURACIÓN</p></div></div>",
+      "css": ".ds-letrero{padding:2px;border-radius:18px;background:linear-gradient(100deg,#5d5858,#f6f5f5 22%,#b4b0b0 46%,#f6f5f5 70%,#5d5858);box-shadow:0 18px 40px -18px rgb(0 0 0/.8);max-width:36rem;}.ds-letrero-marco{border-radius:16px;padding:1.2rem 1.6rem 1.4rem;background:linear-gradient(180deg,rgb(255 255 255/.06),transparent 38%),#0b0808;box-shadow:0 0 0 1px rgb(0 0 0/.6) inset,0 0 0 4px #0b0808 inset,0 0 0 5px rgb(246 245 245/.18) inset;}.ds-letrero-origen{display:flex;align-items:center;gap:.6rem;margin:0 0 .35em;font:400 .9rem Bungee,'Archivo Variable',system-ui,sans-serif;letter-spacing:.08em;color:#f6f5f5;}.ds-letrero-flecha{color:#e3231a;}.ds-letrero-ruta{margin-left:auto;font:700 .75rem 'Inter Variable',Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#dccbc8;}.ds-letrero-destino{margin:0;white-space:nowrap;font:400 3.25rem/1.05 Bungee,'Archivo Variable',system-ui,sans-serif;letter-spacing:.01em;color:#ffc41f;text-shadow:.045em .055em 0 #e3231a,.09em .11em 0 #6e0d0a;}"
+    },
+    {
+      "name": "Ruta de productos",
+      "kind": "nav",
+      "description": "Paradas sobre carril cromado; la activa se enciende en amarillo con aro rojo.",
+      "html": "<div class=\"ds-paint\"><ol class=\"ds-ruta\"><li><a class=\"ds-parada\" href=\"#\"><span class=\"ds-punto\"></span><span class=\"ds-nombre\">Facturación <svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 12h15m-6-6 6 6-6 6\"/></svg></span><span class=\"ds-linea\">Ventas, inventario, caja y facturación electrónica DGI.</span></a></li><li><a class=\"ds-parada\" aria-current=\"page\" href=\"#\"><span class=\"ds-punto\"></span><span class=\"ds-nombre\">Planilla <svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 12h15m-6-6 6 6-6 6\"/></svg></span><span class=\"ds-linea\">Planilla para Panamá con fórmulas propias.</span></a></li></ol></div>",
+      "css": ".ds-paint{background-color:#0b0808;background-image:radial-gradient(120% 90% at 92% 118%,rgb(227 35 26/.92) 0%,rgb(227 35 26/.35) 32%,transparent 62%),radial-gradient(70% 60% at 108% -10%,rgb(110 13 10/.75) 0%,transparent 60%);color:#fbf6f5;padding:2rem;}.ds-ruta{list-style:none;margin:0;padding:0 0 0 2.4rem;position:relative;display:grid;gap:1.6rem;}.ds-ruta::before{content:'';position:absolute;left:calc(1.05rem/2 - 1.5px);top:.4rem;bottom:.4rem;width:3px;border-radius:2px;background:linear-gradient(180deg,#b4b0b0,#f6f5f5 50%,#b4b0b0);}.ds-parada{position:relative;display:grid;gap:.3rem;color:#fbf6f5;text-decoration:none;border-radius:10px;}.ds-punto{position:absolute;left:-2.4rem;top:.2rem;width:1.05rem;height:1.05rem;border-radius:50%;background:#0b0808;box-shadow:0 0 0 3px #f6f5f5,0 0 0 6px #0b0808;transition:background-color 160ms ease,box-shadow 160ms ease;}.ds-nombre{display:inline-flex;align-items:center;gap:.5rem;font:800 1.3rem/1.1 'Archivo Variable',system-ui,sans-serif;font-stretch:118%;}.ds-nombre svg{color:#e3231a;transition:transform 160ms cubic-bezier(.16,1,.3,1);}.ds-linea{color:#dccbc8;font-size:.975rem;line-height:1.45;max-width:34ch;}.ds-parada:hover .ds-punto,.ds-parada:focus-visible .ds-punto,.ds-parada[aria-current=page] .ds-punto{background:#ffc41f;box-shadow:0 0 0 3px #ffc41f,0 0 0 6px #0b0808,0 0 0 7px #e3231a;}.ds-parada:hover svg,.ds-parada:focus-visible svg{transform:translateX(4px);}.ds-parada:focus-visible{outline:3px solid #ffc41f;outline-offset:3px;}"
+    },
+    {
+      "name": "Canal de contacto",
+      "kind": "card",
+      "refersTo": "canal",
+      "description": "Única tarjeta del sitio; vive en pintura.",
+      "html": "<div class=\"ds-paint\"><a class=\"ds-canal\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.2 21.8l4.9-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.8a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1 1 12 20Z\"/></svg><span><strong>WhatsApp</strong><span>+507 6000-0000</span></span></a></div>",
+      "css": ".ds-paint{background-color:#0b0808;background-image:radial-gradient(120% 90% at 92% 118%,rgb(227 35 26/.92) 0%,rgb(227 35 26/.35) 32%,transparent 62%),radial-gradient(70% 60% at 108% -10%,rgb(110 13 10/.75) 0%,transparent 60%);color:#fbf6f5;padding:2rem;}.ds-canal{display:flex;align-items:center;gap:1rem;padding:1.15rem 1.35rem;border-radius:18px;background:rgb(246 245 245/.06);box-shadow:0 0 0 1.5px rgba(246,245,245,.16) inset;color:#fbf6f5;text-decoration:none;transition:box-shadow 160ms ease,background-color 160ms ease;}.ds-canal:hover{background:rgb(246 245 245/.1);box-shadow:0 0 0 1.5px #f6f5f5 inset;}.ds-canal:focus-visible{outline:3px solid #ffc41f;outline-offset:3px;}.ds-canal svg{width:1.75rem;height:1.75rem;color:#ffc41f;flex:none;}.ds-canal>span{display:grid;gap:.15rem;}.ds-canal strong{font-size:1.1rem;}.ds-canal span span{color:#dccbc8;}"
+    },
+    {
+      "name": "Módulo sobre papel",
+      "kind": "custom",
+      "description": "Renglón con filete superior de 2px en tinta; el papel no lleva tarjetas.",
+      "html": "<dl class=\"ds-modulos\"><div class=\"ds-modulo\"><dt>Facturación electrónica DGI</dt><dd>Emite, consulta y anula ante la DGI desde la misma pantalla.</dd></div><div class=\"ds-modulo\"><dt>Inventario por sucursal</dt><dd>Stock por almacén con kardex y transferencias.</dd></div></dl>",
+      "css": ".ds-modulos{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,22rem),1fr));gap:0 2.5rem;margin:0;padding:1.5rem;background:#fff;color:#161313;}.ds-modulo{padding-block:1.4rem 1.6rem;border-top:2px solid #161313;}.ds-modulo dt{font:750 1.2rem/1.2 'Archivo Variable',system-ui,sans-serif;font-stretch:112%;}.ds-modulo dd{margin:.55rem 0 0;color:#463f3e;font:400 1.0625rem/1.55 'Inter Variable',Inter,sans-serif;}"
+    },
+    {
+      "name": "Filete",
+      "kind": "custom",
+      "description": "Línea de cromo con remate en espiral y rombo rojo; en pareja enfrentada en el pie.",
+      "html": "<div class=\"ds-paint\"><svg class=\"ds-filete\" viewBox=\"0 0 260 44\" fill=\"none\" aria-hidden=\"true\"><defs><linearGradient id=\"dsc\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#5d5858\" stop-opacity=\"0\"/><stop offset=\".35\" stop-color=\"#b4b0b0\"/><stop offset=\".7\" stop-color=\"#f6f5f5\"/><stop offset=\"1\" stop-color=\"#b4b0b0\"/></linearGradient></defs><g stroke=\"url(#dsc)\" stroke-linecap=\"round\"><path stroke-width=\"1.6\" d=\"M0 22H176c16 0 24-12 37-12 12 0 19 9 15 17-4 7-15 7-16-1-1-6 6-8 9-4\"/><path stroke-width=\"1\" d=\"M0 28H168c13 0 20 6 30 7\"/></g><path fill=\"#e3231a\" d=\"M246 22l5-5 5 5-5 5Z\"/></svg></div>",
+      "css": ".ds-paint{background-color:#0b0808;background-image:radial-gradient(120% 90% at 92% 118%,rgb(227 35 26/.92) 0%,rgb(227 35 26/.35) 32%,transparent 62%),radial-gradient(70% 60% at 108% -10%,rgb(110 13 10/.75) 0%,transparent 60%);color:#fbf6f5;padding:2rem;}.ds-filete{display:block;width:100%;max-width:24rem;height:auto;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Ruta Softrix",
+    "overview": "Softrix es una ruta, no un catálogo. La portada es el letrero de destino de un diablo rojo panameño, que anuncia a dónde lleva la suite (FACTURACIÓN, PLANILLA, CONTROL DE ENTRADA). El sitio está hecho de dos materiales. La pintura es la carrocería negra con el rojo del logotipo aerografiado y grano, con cromo en marcos, carriles y filetes. Va en la portada, la cabecera, los menús, las cabezas de página, los cierres y el pie. El papel es blanco y limpio, y en él va el contenido que se lee: los módulos de cada producto, «Para quién es» y «Cómo funciona».\n\nLa letra de rótulo (Bungee) en amarillo de cabina, con sombra roja desplazada, solo aparece dentro de un letrero. Los titulares van en Archivo ancho y pesado, y la lectura en Inter. La densidad es baja y los bloques son pocos y grandes. Cada página arranca en pintura y termina en pintura: cabeza, papel y luego un cierre con «Solicitar cotización».\n\nSe rechaza el hero SaaS genérico, con degradado de fondo, captura flotante y tres tarjetas iguales debajo. Los tres productos se presentan como paradas sobre un carril cromado, nunca como tres tarjetas paralelas.",
+    "keyCharacteristics": [
+      "Dos materiales: pintura (carrocería, fija) y papel (contenido, sigue al tema).",
+      "El letrero de ruta es la pieza firma: marco cromado, vidrio negro y rótulo amarillo con doble sombra roja.",
+      "Amarillo de cabina como única luz sobre la pintura. El azul de acción de las apps (#0066cc) no existe en la landing.",
+      "Cromo para bordes, carriles y filetes con remate en espiral. Nunca gris plano sobre la pintura.",
+      "Listas con filete en vez de tarjetas en el papel.",
+      "Movimiento corto y con salida suave. El letrero se detiene solo y nunca se mueve con movimiento reducido."
+    ],
+    "rules": [
+      {
+        "name": "The Carrocería Rule",
+        "body": "La pintura no sigue al tema. Rojo, rojo profundo, cabina y cromo son fijos. Del lado de la pintura, el tema claro/oscuro solo baja un paso el negro de fondo (`:root[data-theme=\"dark\"]` en `tokens.css`). Todo lo demás que cambia con el tema es papel, tinta e hilo.",
+        "section": "colors"
+      },
+      {
+        "name": "The Una Luz Rule",
+        "body": "El amarillo de cabina solo vive sobre la pintura, y ahí es la luz: el botón primario, el rótulo, el foco y lo activo o señalado. Nunca va como fondo ni como texto sobre el papel. Hay un botón amarillo por bloque: el secundario a su lado es de cromo.",
+        "section": "colors"
+      },
+      {
+        "name": "The Sin Azul Rule",
+        "body": "El azul de acción de las apps de Softrix no se usa en la landing. Aquí la acción es amarilla sobre la pintura y roja de tinta sobre el papel.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rojo en las Esquinas Rule",
+        "body": "El aerografiado rojo se ancla fuera de la caja, en las esquinas (abajo a la derecha, arriba a la derecha y abajo a la izquierda), con una banda diagonal tenue. El centro de la pintura queda negro, que es donde va el texto.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rótulo Enmarcado Rule",
+        "body": "Bungee grande en amarillo con sombra roja solo se usa dentro de un letrero con marco de cromo. Fuera del letrero, Bungee aparece únicamente como etiqueta pequeña en cromo claro.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ancho Rule",
+        "body": "Todos los titulares h1–h4 llevan Archivo ancho (wdth 118 por defecto y 122 en la portada) y `text-wrap: balance`. Un titular en Inter o en Archivo de ancho normal se sale del sistema.",
+        "section": "typography"
+      },
+      {
+        "name": "The Papel Plano Rule",
+        "body": "Sobre el papel no hay sombras ni tarjetas elevadas. La jerarquía se marca con un filete de 2px en tinta encima de cada ítem y con papel-2 en una sección alterna.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** abrir cada página en pintura (cabeza con letrero) y cerrarla en pintura con «Solicitar cotización». El contenido que se lee va en papel entre las dos.",
+      "**Do** poner un solo botón de cabina por bloque y acompañarlo, si hace falta, con el de cromo (casi siempre WhatsApp).",
+      "**Do** dibujar bordes y carriles de cromo como degradado oscuro → claro → medio, o como anillo interior (`box-shadow` inset), en lugar de un `border` gris.",
+      "**Do** usar rojo-tinta para el texto rojo sobre papel, y reservar el rojo del logo para pigmento, iconos, sombras y el anillo de foco.",
+      "**Do** separar el contenido del papel con filetes de 2px en tinta y alternar papel-2 en una sección.",
+      "**Do** detener todo movimiento automático: el letrero da dos vueltas y para, y con `prefers-reduced-motion` no rota.",
+      "**Do** escribir `:global(svg)` cuando un padre estiliza el icono de un hijo que no recibió clase."
+    ],
+    "donts": [
+      "**Don't** construir la portada como el hero SaaS: degradado de fondo genérico, captura flotante y tres tarjetas iguales debajo. Los productos son paradas sobre un carril.",
+      "**Don't** hacer que la pintura siga al tema. Rojo, cabina y cromo no cambian, y el negro de carrocería solo baja un paso en oscuro.",
+      "**Don't** usar el amarillo de cabina sobre el papel, ni como fondo ni como texto.",
+      "**Don't** usar el azul de acción de las apps (#0066cc) en la landing.",
+      "**Don't** usar el rojo del logo (#e3231a) como color de texto sobre la pintura: no alcanza 4.5:1.",
+      "**Don't** usar grises neutros para el texto secundario sobre la pintura. Es sobre-pintura-2, teñido de rojo.",
+      "**Don't** poner letra de rótulo grande (Bungee amarilla con sombra roja) fuera de un letrero enmarcado en cromo.",
+      "**Don't** elevar el contenido del papel con sombras o tarjetas flotantes."
+    ]
+  }
+}
