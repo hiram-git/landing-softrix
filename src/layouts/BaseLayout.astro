@@ -23,6 +23,7 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={descripcion} />
     <link rel="canonical" href={canonica} />
     <meta name="theme-color" content="#0b0808" />
+    {sitio.marcadores && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_PA" />

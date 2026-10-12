@@ -1,5 +1,6 @@
 ---
 import Icono from "@/components/Icono.astro";
+import Letrero from "@/components/Letrero.astro";
 import { enlaceWhatsApp, productos, sitio } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
@@ -8,8 +9,9 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
   titulo="Solicitar cotización"
   descripcion="Pide una cotización de Softrix Facturación, Softrix Planilla o Softrix Control de Entrada."
 >
-  <section class="contacto pintura pintura--quieta" aria-labelledby="contacto-titulo">
+  <section class="contacto pintura" data-oculta-wa aria-labelledby="contacto-titulo">
     <div class="contenedor contacto__rejilla">
+      <Letrero destinos={["COTIZACIÓN"]} tamano="medio" class="contacto__letrero" />
       <div class="contacto__texto">
         <h1 id="contacto-titulo">Solicita tu cotización.</h1>
         <p>
@@ -72,6 +74,11 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     align-items: center;
   }
 
+  .contacto__letrero {
+    grid-column: 1 / -1;
+    max-width: 34rem;
+  }
+
   .contacto h1 {
     font-size: clamp(2.3rem, 5vw, 4rem);
   }
@@ -87,8 +94,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     display: inline-block;
     padding: 0.4rem 0.85rem;
     border-radius: 999px;
-    background: var(--cabina);
-    color: var(--cabina-tinta);
+    box-shadow: 0 0 0 1.5px var(--cromo-medio) inset;
+    color: var(--sobre-pintura);
     font-weight: 700;
     font-size: 0.95rem;
   }

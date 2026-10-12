@@ -1,4 +1,19 @@
 ---
+/*
+  Contrato de dirección «Ruta Softrix» (registrado en DESIGN.md):
+  THESIS: Softrix es una ruta, no un catálogo. La portada es el letrero de destino
+  de un diablo rojo que anuncia a dónde lleva la suite; se rechaza el hero SaaS de
+  degradado + captura flotante + tres tarjetas iguales.
+  OWN-WORLD: carrocería negra con rojo del logo aerografiado y grano; cromo en marcos,
+  bordes y filetes con remate en espiral; letra de rótulo (Bungee) en amarillo de
+  cabina con sombra roja desplazada; Archivo ancho para titulares, Inter para leer;
+  papel blanco limpio para el contenido.
+  STORY: el visitante entiende que es software de gestión hecho para Panamá, ve los
+  tres destinos y toma su parada o pide cotización.
+  FIRST VIEWPORT: letrero de ruta a todo el ancho rotando los tres destinos; debajo,
+  a la izquierda titular y botón amarillo «Solicitar cotización», a la derecha la
+  línea de ruta vertical con las tres paradas sincronizada con el letrero.
+*/
 import Filete from "@/components/Filete.astro";
 import Icono from "@/components/Icono.astro";
 import Letrero from "@/components/Letrero.astro";
@@ -8,26 +23,12 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
 <BaseLayout>
-  <Fragment set:html={`<!--
-    THESIS: Softrix es una ruta, no un catálogo. La portada es el letrero de
-    destino de un diablo rojo que anuncia a dónde lleva la suite; se rechaza el
-    hero SaaS de degradado azul + captura flotante + tres tarjetas iguales.
-    OWN-WORLD: carrocería negra con rojo del logo aerografiado y grano; cromo en
-    marcos y filetes con remate en espiral; letra de rótulo (Bungee) en amarillo
-    de cabina con sombra roja desplazada; Archivo ancho para titulares, Inter
-    para leer; papel blanco limpio para el contenido.
-    STORY: el visitante entiende que es software de gestión hecho para Panamá,
-    ve los tres destinos y toma su parada o pide cotización.
-    FIRST VIEWPORT: letrero de ruta a todo el ancho rotando FACTURACIÓN ·
-    PLANILLA · CONTROL DE ENTRADA; debajo, titular y botón amarillo
-    «Solicitar cotización»; al pie, la línea de ruta con las tres paradas.
-    FORM: Ruta Softrix (diablo rojo), candidato 4 de 7, seed 9cb66914 degradado.
-  -->`} />
-  <section class="portada pintura" data-zona-letrero aria-labelledby="portada-titulo">
-    <div class="portada__filetes" aria-hidden="true">
-      <Filete class="portada__filete portada__filete--der" voltear />
-    </div>
-
+  <section
+    class="portada pintura"
+    data-zona-letrero
+    data-oculta-wa
+    aria-labelledby="portada-titulo"
+  >
     <div class="contenedor portada__rejilla">
       <Letrero
         destinos={productos.map((p) => p.destino)}
@@ -50,11 +51,14 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
             Escríbenos por WhatsApp
           </a>
         </div>
+        <div class="portada__filete" aria-hidden="true">
+          <Filete />
+        </div>
       </div>
 
       <div class="portada__ruta">
         <h2 class="portada__ruta-titulo">Elige tu parada</h2>
-        <RutaProductos orientacion="horizontal" sincroniza="letrero-portada" />
+        <RutaProductos sincroniza="letrero-portada" />
       </div>
     </div>
   </section>
@@ -66,44 +70,36 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     min-height: calc(100svh - var(--alto-cabecera));
     display: flex;
     align-items: center;
-    padding-block: clamp(2rem, 5vw, 4rem) clamp(2.5rem, 6vw, 4.5rem);
-  }
-
-  .portada__filetes {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  .portada__filete {
-    position: absolute;
-    width: min(30rem, 42vw);
-    opacity: 0.85;
-  }
-
-  .portada__filete--der {
-    right: -6rem;
-    bottom: 1.5rem;
+    padding-block: clamp(2rem, 4.5vw, 3.5rem);
   }
 
   .portada__rejilla {
     display: grid;
-    gap: clamp(2rem, 4.5vw, 3.5rem);
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-areas:
+      "letrero letrero"
+      "texto ruta";
+    gap: clamp(2rem, 4vw, 3.25rem) clamp(2rem, 6vw, 6rem);
+    align-items: start;
   }
 
   .portada__letrero {
-    position: relative;
-    z-index: 1;
+    grid-area: letrero;
   }
 
   .portada__texto {
+    grid-area: texto;
     display: grid;
     gap: 1.25rem;
-    max-width: 50rem;
+  }
+
+  .portada__ruta {
+    grid-area: ruta;
+    padding-top: 0.75rem;
   }
 
   .portada h1 {
-    font-size: clamp(2.35rem, 5.6vw, 4.75rem);
+    font-size: clamp(2.35rem, 5.2vw, 4.5rem);
     font-stretch: 122%;
     line-height: 0.98;
     letter-spacing: -0.025em;
@@ -123,8 +119,9 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     margin-top: 0.5rem;
   }
 
-  .portada__ruta {
-    margin-top: clamp(0.5rem, 2vw, 1.5rem);
+  .portada__filete {
+    max-width: 24rem;
+    margin-top: 1.25rem;
   }
 
   .portada__ruta-titulo {
@@ -137,9 +134,19 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     margin-bottom: 1.5rem;
   }
 
-  @media (max-width: 640px) {
-    .portada__filetes {
+  @media (max-width: 899.98px) {
+    .portada__rejilla {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "letrero"
+        "texto"
+        "ruta";
+    }
+    .portada__filete {
       display: none;
+    }
+    .portada__ruta {
+      padding-top: 0;
     }
   }
 </style>

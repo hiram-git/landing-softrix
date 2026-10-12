@@ -1,6 +1,5 @@
 ---
 import { enlaceWhatsApp } from "@/config/site";
-import Filete from "./Filete.astro";
 import Icono from "./Icono.astro";
 
 interface Props {
@@ -15,7 +14,7 @@ const mensaje = producto
   : "Hola, quiero una cotización de Softrix.";
 ---
 
-<section class="cierre pintura" aria-labelledby="cierre-titulo">
+<section class="cierre pintura" data-oculta-wa aria-labelledby="cierre-titulo">
   <div class="contenedor cierre__fila">
     <div class="cierre__texto">
       <h2 id="cierre-titulo">{titulo}</h2>
@@ -29,14 +28,11 @@ const mensaje = producto
       </a>
     </div>
   </div>
-  <div class="contenedor cierre__filete" aria-hidden="true">
-    <Filete />
-  </div>
 </section>
 
 <style>
   .cierre {
-    padding-block: clamp(3.5rem, 8vw, 6rem) 2rem;
+    padding-block: clamp(3.5rem, 8vw, 6rem);
     overflow: hidden;
   }
 
@@ -67,11 +63,5 @@ const mensaje = producto
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-  }
-
-  .cierre__filete {
-    margin-top: clamp(2.5rem, 6vw, 4rem);
-    max-width: 34rem;
-    margin-left: 0;
   }
 </style>

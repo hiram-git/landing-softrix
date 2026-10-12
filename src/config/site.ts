@@ -3,6 +3,8 @@
 // Reemplázalos aquí y todo el sitio (enlaces, metadatos, sitemap) se actualiza.
 
 export const sitio = {
+  // Mientras sea true, el sitio sale con noindex: no debe indexarse con datos de ejemplo.
+  marcadores: true,
   nombre: "Softrix",
   empresa: "RC Group",
   url: "https://softrix.com.pa", // MARCADOR

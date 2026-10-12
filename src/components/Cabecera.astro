@@ -89,8 +89,8 @@ const destinos = productos.map((p) => p.destino);
 
   <div id="menu-movil" class="panel panel--movil pintura" hidden data-panel>
     <div class="contenedor panel__movil">
-      <p class="panel__titulo">Productos</p>
-      <RutaProductos actual={actual} />
+      <Letrero destinos={destinos} tamano="chico" id="letrero-movil" />
+      <RutaProductos sincroniza="letrero-movil" actual={actual} />
       <ul class="panel__enlaces">
         <li><a href="/distribuidores">Distribuidores</a></li>
         <li><a href="/contacto">Contacto</a></li>
@@ -108,7 +108,24 @@ const destinos = productos.map((p) => p.destino);
   }
 
   .cabecera__barra {
-    border-bottom: 1px solid var(--hilo-pintura);
+    position: relative;
+  }
+
+  /* Moldura cromada al borde de la cabecera. */
+  .cabecera__barra::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--cromo-medio) 15%,
+      var(--cromo-claro) 50%,
+      var(--cromo-medio) 85%,
+      transparent
+    );
+    opacity: 0.55;
   }
 
   .cabecera__fila {
@@ -271,17 +288,15 @@ const destinos = productos.map((p) => p.destino);
     color: var(--cabina);
   }
 
-  .panel__movil {
-    display: grid;
-    gap: 1.75rem;
-    padding-block: 1.75rem 2rem;
+  .panel--movil {
+    height: calc(100svh - var(--alto-cabecera));
   }
 
-  .panel__titulo {
-    font-family: var(--f-letrero);
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    color: var(--cromo-claro);
+  .panel__movil {
+    display: grid;
+    align-content: start;
+    gap: 1.75rem;
+    padding-block: 1.5rem 2rem;
   }
 
   .panel__enlaces {
@@ -336,6 +351,7 @@ const destinos = productos.map((p) => p.destino);
       abierto.setAttribute("aria-expanded", "false");
       if (abierto.classList.contains("cabecera__menu")) abierto.setAttribute("aria-label", "Abrir menú");
       panel?.setAttribute("hidden", "");
+      document.documentElement.style.removeProperty("overflow");
       if (devolverFoco) abierto.focus();
       abierto = null;
     };
@@ -346,7 +362,10 @@ const destinos = productos.map((p) => p.destino);
       if (!panel) return;
       panel.removeAttribute("hidden");
       boton.setAttribute("aria-expanded", "true");
-      if (boton.classList.contains("cabecera__menu")) boton.setAttribute("aria-label", "Cerrar menú");
+      if (boton.classList.contains("cabecera__menu")) {
+        boton.setAttribute("aria-label", "Cerrar menú");
+        document.documentElement.style.overflow = "hidden";
+      }
       abierto = boton;
     };
 
