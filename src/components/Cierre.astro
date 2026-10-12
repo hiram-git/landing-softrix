@@ -1,0 +1,77 @@
+---
+import { enlaceWhatsApp } from "@/config/site";
+import Filete from "./Filete.astro";
+import Icono from "./Icono.astro";
+
+interface Props {
+  titulo: string;
+  texto: string;
+  producto?: { slug: string; nombre: string };
+}
+const { titulo, texto, producto } = Astro.props;
+const cotizar = producto ? `/contacto?producto=${producto.slug}` : "/contacto";
+const mensaje = producto
+  ? `Hola, quiero una cotización de ${producto.nombre}.`
+  : "Hola, quiero una cotización de Softrix.";
+---
+
+<section class="cierre pintura" aria-labelledby="cierre-titulo">
+  <div class="contenedor cierre__fila">
+    <div class="cierre__texto">
+      <h2 id="cierre-titulo">{titulo}</h2>
+      <p>{texto}</p>
+    </div>
+    <div class="cierre__acciones">
+      <a class="boton boton--cabina" href={cotizar}>Solicitar cotización</a>
+      <a class="boton boton--cromo" href={enlaceWhatsApp(mensaje)} target="_blank" rel="noopener">
+        <Icono nombre="whatsapp" />
+        WhatsApp
+      </a>
+    </div>
+  </div>
+  <div class="contenedor cierre__filete" aria-hidden="true">
+    <Filete />
+  </div>
+</section>
+
+<style>
+  .cierre {
+    padding-block: clamp(3.5rem, 8vw, 6rem) 2rem;
+    overflow: hidden;
+  }
+
+  .cierre__fila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem 3rem;
+  }
+
+  .cierre__texto {
+    max-width: 40rem;
+  }
+
+  .cierre h2 {
+    font-size: clamp(2rem, 4.4vw, 3.5rem);
+  }
+
+  .cierre p {
+    margin-top: 1rem;
+    color: var(--sobre-pintura-2);
+    font-size: 1.125rem;
+    max-width: 48ch;
+  }
+
+  .cierre__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .cierre__filete {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    max-width: 34rem;
+    margin-left: 0;
+  }
+</style>

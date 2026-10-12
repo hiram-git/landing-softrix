@@ -1,0 +1,376 @@
+---
+import { productos } from "@/config/site";
+import Icono from "./Icono.astro";
+import Letrero from "./Letrero.astro";
+import RutaProductos from "./RutaProductos.astro";
+import SelectorTema from "./SelectorTema.astro";
+
+const ruta = Astro.url.pathname.replace(/\/$/, "") || "/";
+const actual = ruta.slice(1);
+const enProducto = productos.some((p) => p.slug === actual);
+const destinos = productos.map((p) => p.destino);
+---
+
+<header class="cabecera" data-cabecera>
+  <div class="cabecera__barra pintura pintura--quieta">
+    <div class="contenedor cabecera__fila">
+      <a class="cabecera__logo" href="/" aria-label="RC Group Softrix, inicio">
+        <img src="/brand/logo-rcg-softrix-claro.png" alt="" width="1282" height="180" />
+      </a>
+
+      <nav class="cabecera__nav" aria-label="Principal">
+        <ul>
+          <li>
+            <button
+              class="cabecera__vinculo"
+              type="button"
+              aria-expanded="false"
+              aria-controls="panel-productos"
+              data-abre="panel-productos"
+              data-actual={enProducto ? "1" : undefined}
+            >
+              Productos <Icono nombre="chevron" class="cabecera__chevron" />
+            </button>
+          </li>
+          <li>
+            <a
+              class="cabecera__vinculo"
+              href="/distribuidores"
+              aria-current={actual === "distribuidores" ? "page" : undefined}>Distribuidores</a
+            >
+          </li>
+          <li>
+            <a
+              class="cabecera__vinculo"
+              href="/contacto"
+              aria-current={actual === "contacto" ? "page" : undefined}>Contacto</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <div class="cabecera__acciones">
+        <SelectorTema />
+        <a class="boton boton--cabina boton--chico cabecera__cta" href="/contacto">
+          Solicitar cotización
+        </a>
+        <button
+          class="cabecera__menu"
+          type="button"
+          aria-expanded="false"
+          aria-controls="menu-movil"
+          aria-label="Abrir menú"
+          data-abre="menu-movil"
+        >
+          <Icono nombre="menu" class="cabecera__icono-abrir" />
+          <Icono nombre="cerrar" class="cabecera__icono-cerrar" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-productos" class="panel pintura" hidden data-panel data-zona-letrero>
+    <div class="contenedor panel__rejilla">
+      <div class="panel__letrero">
+        <Letrero destinos={destinos} tamano="medio" id="letrero-menu" />
+        <p class="panel__nota">
+          Tres productos, una sola suite. Hechos en Panamá para empresas con una o muchas sucursales.
+        </p>
+      </div>
+      <RutaProductos sincroniza="letrero-menu" actual={actual} />
+    </div>
+    <div class="contenedor">
+      <a class="panel__pie" href="/distribuidores">
+        ¿Vendes software? Conoce el programa de distribuidores
+        <Icono nombre="flecha" />
+      </a>
+    </div>
+  </div>
+
+  <div id="menu-movil" class="panel panel--movil pintura" hidden data-panel>
+    <div class="contenedor panel__movil">
+      <p class="panel__titulo">Productos</p>
+      <RutaProductos actual={actual} />
+      <ul class="panel__enlaces">
+        <li><a href="/distribuidores">Distribuidores</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+      </ul>
+      <a class="boton boton--cabina" href="/contacto">Solicitar cotización</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .cabecera__barra {
+    border-bottom: 1px solid var(--hilo-pintura);
+  }
+
+  .cabecera__fila {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: var(--alto-cabecera);
+  }
+
+  .cabecera__logo {
+    flex: none;
+    display: block;
+    border-radius: 6px;
+  }
+
+  .cabecera__logo img {
+    height: 1.35rem;
+    width: auto;
+  }
+
+  .cabecera__nav {
+    margin-left: auto;
+  }
+
+  .cabecera__nav ul {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cabecera__vinculo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.8rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--sobre-pintura);
+    font: 600 0.975rem / 1 var(--f-texto);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--dur-corta) ease;
+  }
+
+  .cabecera__vinculo:hover,
+  .cabecera__vinculo[aria-expanded="true"] {
+    background: rgb(246 245 245 / 0.1);
+  }
+
+  .cabecera__vinculo[aria-current="page"],
+  .cabecera__vinculo[data-actual] {
+    box-shadow: inset 0 -2px 0 var(--rojo);
+    border-radius: 0;
+  }
+
+  .cabecera__chevron {
+    width: 1rem;
+    height: 1rem;
+    transition: transform var(--dur-media) var(--ease-salida);
+  }
+
+  [aria-expanded="true"] > .cabecera__chevron {
+    transform: rotate(180deg);
+  }
+
+  .cabecera__acciones {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .cabecera__menu {
+    display: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sobre-pintura);
+    cursor: pointer;
+  }
+
+  .cabecera__menu svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    grid-area: 1 / 1;
+  }
+
+  .cabecera__icono-cerrar,
+  .cabecera__menu[aria-expanded="true"] .cabecera__icono-abrir {
+    display: none;
+  }
+
+  .cabecera__menu[aria-expanded="true"] .cabecera__icono-cerrar {
+    display: block;
+  }
+
+  /* ── Paneles ── */
+  .panel {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    border-bottom: 1px solid var(--hilo-pintura);
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.75);
+    max-height: calc(100svh - var(--alto-cabecera));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .panel:not([hidden]) {
+    animation: bajar var(--dur-media) var(--ease-salida);
+  }
+
+  @keyframes bajar {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  .panel__rejilla {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+    padding-block: 2.5rem 2rem;
+  }
+
+  .panel__nota {
+    margin-top: 1.25rem;
+    color: var(--sobre-pintura-2);
+    max-width: 38ch;
+  }
+
+  .panel__pie {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 1.1rem 1.4rem;
+    border-top: 1px solid var(--hilo-pintura);
+    color: var(--sobre-pintura);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .panel__pie :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--cabina);
+  }
+
+  .panel__pie:hover {
+    color: var(--cabina);
+  }
+
+  .panel__movil {
+    display: grid;
+    gap: 1.75rem;
+    padding-block: 1.75rem 2rem;
+  }
+
+  .panel__titulo {
+    font-family: var(--f-letrero);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--cromo-claro);
+  }
+
+  .panel__enlaces {
+    list-style: none;
+    margin: 0;
+    padding: 1.25rem 0 0;
+    border-top: 1px solid var(--hilo-pintura);
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .panel__enlaces a {
+    display: block;
+    padding: 0.6rem 0;
+    color: var(--sobre-pintura);
+    font: 700 1.15rem / 1.2 var(--f-texto);
+    text-decoration: none;
+  }
+
+  @media (max-width: 940px) {
+    .cabecera__nav,
+    .cabecera__cta {
+      display: none;
+    }
+    .cabecera__acciones {
+      margin-left: auto;
+    }
+    .cabecera__menu {
+      display: inline-grid;
+    }
+    #panel-productos {
+      display: none;
+    }
+  }
+
+  @media (min-width: 940.02px) {
+    .panel--movil {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const cabecera = document.querySelector<HTMLElement>("[data-cabecera]");
+  if (cabecera) {
+    const botones = [...cabecera.querySelectorAll<HTMLButtonElement>("[data-abre]")];
+    let abierto: HTMLButtonElement | null = null;
+
+    const cerrar = (devolverFoco = false) => {
+      if (!abierto) return;
+      const panel = document.getElementById(abierto.dataset.abre ?? "");
+      abierto.setAttribute("aria-expanded", "false");
+      if (abierto.classList.contains("cabecera__menu")) abierto.setAttribute("aria-label", "Abrir menú");
+      panel?.setAttribute("hidden", "");
+      if (devolverFoco) abierto.focus();
+      abierto = null;
+    };
+
+    const abrir = (boton: HTMLButtonElement) => {
+      cerrar();
+      const panel = document.getElementById(boton.dataset.abre ?? "");
+      if (!panel) return;
+      panel.removeAttribute("hidden");
+      boton.setAttribute("aria-expanded", "true");
+      if (boton.classList.contains("cabecera__menu")) boton.setAttribute("aria-label", "Cerrar menú");
+      abierto = boton;
+    };
+
+    for (const boton of botones) {
+      boton.addEventListener("click", () => {
+        if (abierto === boton) cerrar();
+        else abrir(boton);
+      });
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && abierto) cerrar(true);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (abierto && !cabecera.contains(e.target as Node)) cerrar();
+    });
+
+    // Tab fuera de la cabecera cierra el panel abierto.
+    cabecera.addEventListener("focusout", (e) => {
+      const destino = e.relatedTarget as Node | null;
+      if (abierto && destino && !cabecera.contains(destino)) cerrar();
+    });
+
+    window.matchMedia("(min-width: 940.02px)").addEventListener("change", () => cerrar());
+  }
+</script>

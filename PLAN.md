@@ -6,6 +6,31 @@
 
 ---
 
+## Decisiones tomadas (12 oct 2026)
+
+Estas decisiones prevalecen sobre lo que diga el resto del documento:
+
+- **Productos y nombres comerciales**: Softrix Facturación, Softrix Planilla y
+  **Softrix Control de Entrada** (el producto técnico SmartGate Control).
+- **Softrix Citas (AttendanceSoft) no va** en la landing. Tampoco Innova Analítica ni
+  Plataforma.
+- **Todo se vende «a cotizar»**: no se publican precios, ni siquiera los bundles de
+  distribuidores.
+- **Dominio, WhatsApp y correo**: marcadores en `src/config/site.ts` hasta que se
+  confirmen.
+- **Respaldo**: hay testimonios pendientes de entregar; no hay clientes ni cifras
+  publicables.
+- **Identidad**: más llamativa que la app, con el mismo logo. Dirección elegida:
+  **«Ruta Softrix»**: lenguaje de los diablos rojos (pintura negra con rojo
+  aerografiado, cromo, filetes, letreros de ruta con letra de rótulo), con el
+  contenido sobre papel blanco. Esto reemplaza la §6.
+- **Rutas**: `/facturacion`, `/planilla`, `/control-de-entrada`, `/distribuidores`,
+  `/contacto` (`/demo` se fusiona con `/contacto?producto=`).
+- **Fase 1: hecha** (base Astro + Bun, tokens, cabecera con menú de productos, pie,
+  tema claro/oscuro, portada y páginas de producto en esqueleto).
+
+---
+
 ## 1. Objetivo
 
 Un sitio que, en menos de 10 segundos, le diga a una pyme o institución de Panamá

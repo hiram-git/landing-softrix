@@ -1,0 +1,214 @@
+---
+import { getCollection } from "astro:content";
+import Cierre from "@/components/Cierre.astro";
+import Icono from "@/components/Icono.astro";
+import Letrero from "@/components/Letrero.astro";
+import { enlaceWhatsApp } from "@/config/site";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const productos = await getCollection("productos");
+  return productos.map((p) => ({ params: { producto: p.id }, props: { producto: p } }));
+}
+
+const { producto } = Astro.props;
+const d = producto.data;
+const slug = producto.id;
+---
+
+<BaseLayout titulo={d.nombre} descripcion={d.descripcion}>
+  <section class="cabeza pintura" aria-labelledby="producto-titulo">
+    <div class="contenedor cabeza__rejilla">
+      <Letrero destinos={[d.destino]} tamano="medio" class="cabeza__letrero" />
+      <div class="cabeza__texto">
+        <p class="cabeza__nombre">{d.nombre}</p>
+        <h1 id="producto-titulo">{d.titular}</h1>
+        <p class="cabeza__resumen">{d.resumen}</p>
+        <div class="cabeza__acciones">
+          <a class="boton boton--cabina" href={`/contacto?producto=${slug}`}>Solicitar cotización</a>
+          <a
+            class="boton boton--cromo"
+            href={enlaceWhatsApp(`Hola, quiero una cotización de ${d.nombre}.`)}
+            target="_blank"
+            rel="noopener"
+          >
+            <Icono nombre="whatsapp" />
+            Escríbenos por WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="incluye-titulo">
+    <div class="contenedor">
+      <h2 id="incluye-titulo" class="titulo-seccion">Qué incluye</h2>
+      <dl class="modulos">
+        {
+          d.modulos.map((m) => (
+            <div class="modulo">
+              <dt>{m.titulo}</dt>
+              <dd>{m.texto}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="seccion seccion--papel-2" aria-labelledby="quien-titulo">
+    <div class="contenedor quien">
+      <h2 id="quien-titulo" class="titulo-seccion">Para quién es</h2>
+      <ul class="quien__lista">
+        {d.paraQuien.map((q) => <li>{q}</li>)}
+      </ul>
+      {
+        d.proximamente.length > 0 && (
+          <div class="quien__pronto">
+            <p class="quien__etiqueta">Próximamente</p>
+            <ul>
+              {d.proximamente.map((x) => (
+                <li>{x}</li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <Cierre
+    titulo="¿Lo vemos con los datos de tu empresa?"
+    texto="Cuéntanos cuántas sucursales y usuarios tienes y te preparamos una cotización a la medida."
+    producto={{ slug, nombre: d.nombre }}
+  />
+</BaseLayout>
+
+<style>
+  .cabeza {
+    overflow: hidden;
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .cabeza__rejilla {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+
+  .cabeza__letrero {
+    max-width: 40rem;
+  }
+
+  .cabeza__texto {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 52rem;
+  }
+
+  .cabeza__nombre {
+    font-weight: 700;
+    color: var(--cabina);
+  }
+
+  .cabeza h1 {
+    font-size: clamp(2.1rem, 4.8vw, 4rem);
+    line-height: 1;
+  }
+
+  .cabeza__resumen {
+    max-width: 52ch;
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    color: var(--sobre-pintura-2);
+  }
+
+  .cabeza__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .titulo-seccion {
+    font-size: clamp(1.8rem, 3.6vw, 2.75rem);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .modulos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+    gap: 0 clamp(2rem, 5vw, 4rem);
+    margin: 0;
+  }
+
+  .modulo {
+    padding-block: 1.4rem 1.6rem;
+    border-top: 2px solid var(--tinta);
+  }
+
+  .modulo dt {
+    font-family: var(--f-display);
+    font-stretch: 112%;
+    font-weight: 750;
+    font-size: 1.2rem;
+    line-height: 1.2;
+  }
+
+  .modulo dd {
+    margin: 0.55rem 0 0;
+    color: var(--tinta-2);
+    max-width: 52ch;
+  }
+
+  .quien {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    gap: 1rem clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .quien .titulo-seccion {
+    margin-bottom: 0;
+  }
+
+  .quien__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  .quien__lista li {
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--hilo-fuerte);
+    font-family: var(--f-display);
+    font-stretch: 112%;
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+  }
+
+  .quien__pronto {
+    grid-column: 2;
+    margin-top: 1.5rem;
+    color: var(--tinta-2);
+  }
+
+  .quien__etiqueta {
+    font-weight: 700;
+    color: var(--rojo-tinta);
+  }
+
+  .quien__pronto ul {
+    margin: 0.35rem 0 0;
+    padding-left: 1.1rem;
+  }
+
+  @media (max-width: 760px) {
+    .quien {
+      grid-template-columns: 1fr;
+    }
+    .quien__pronto {
+      grid-column: 1;
+    }
+  }
+</style>

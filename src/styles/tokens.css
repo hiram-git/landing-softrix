@@ -1,0 +1,69 @@
+/* ════════════════════════════════════════════════════════════════
+   Softrix · Ruta Softrix — tokens
+   Pintura (negro + rojo aerografiado del logo) en portada, letreros y
+   cierres; papel limpio para el contenido. El tema solo cambia el papel:
+   la pintura es la carrocería y no cambia con el tema.
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Tipografía ── */
+  --f-letrero: "Bungee", "Archivo Variable", system-ui, sans-serif;
+  --f-display: "Archivo Variable", "Inter Variable", system-ui, sans-serif;
+  --f-texto: "Inter Variable", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ── Carrocería (no cambia con el tema) ── */
+  --pintura: #0b0808;
+  --pintura-2: #160f0e;
+  --rojo: #e3231a; /* el rojo del logotipo */
+  --rojo-profundo: #6e0d0a;
+  --cabina: #ffc41f; /* luz de cabina: botones primarios */
+  --cabina-hover: #ffd75c;
+  --cabina-tinta: #1a1203;
+  --cromo-claro: #f6f5f5;
+  --cromo-medio: #b4b0b0;
+  --cromo-oscuro: #5d5858;
+  --sobre-pintura: #fbf6f5;
+  --sobre-pintura-2: #dccbc8; /* secundario teñido de rojo, nunca gris */
+  --hilo-pintura: rgba(246, 245, 245, 0.16);
+
+  /* ── Papel (tema claro) ── */
+  --papel: #ffffff;
+  --papel-2: #f3f2f2;
+  --tinta: #161313;
+  --tinta-2: #463f3e;
+  --tinta-3: #665e5d;
+  --rojo-tinta: #b3170f; /* rojo para texto sobre papel */
+  --hilo: rgba(22, 19, 19, 0.12);
+  --hilo-fuerte: rgba(22, 19, 19, 0.24);
+  --foco: #e3231a;
+
+  /* ── Ritmo ── */
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --ancho: 76rem;
+  --ancho-texto: 40rem;
+  --alto-cabecera: 4rem;
+  --radio: 10px;
+  --radio-grande: 18px;
+
+  /* ── Movimiento ── */
+  --ease-salida: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-corta: 160ms;
+  --dur-media: 420ms;
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --papel: #120f0f;
+  --papel-2: #1c1716;
+  --tinta: #f4eeed;
+  --tinta-2: #cbbfbd;
+  --tinta-3: #a59896;
+  --rojo-tinta: #ff6a5f;
+  --hilo: rgba(244, 238, 237, 0.12);
+  --hilo-fuerte: rgba(244, 238, 237, 0.24);
+  --foco: #ff6a5f;
+  --pintura: #070505;
+  color-scheme: dark;
+}

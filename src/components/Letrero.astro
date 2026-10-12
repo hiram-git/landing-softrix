@@ -1,0 +1,200 @@
+---
+// Letrero de ruta: el rótulo de destino del parabrisas. Es decorativo; los
+// destinos reales siempre están también como enlaces en la página.
+interface Props {
+  destinos: string[];
+  rotar?: boolean;
+  tamano?: "grande" | "medio" | "chico";
+  origen?: string;
+  id?: string;
+  class?: string;
+}
+const {
+  destinos,
+  rotar = false,
+  tamano = "grande",
+  origen = "SOFTRIX",
+  id,
+  class: clase,
+} = Astro.props;
+const largo = Math.max(...destinos.map((d) => d.length));
+---
+
+<div
+  class:list={["letrero", `letrero--${tamano}`, clase]}
+  data-letrero
+  data-rotar={rotar ? "1" : undefined}
+  data-destinos={JSON.stringify(destinos)}
+  id={id}
+  style={`--largo:${largo}`}
+>
+  <div class="letrero__marco">
+    <p class="letrero__origen" aria-hidden="true">
+      <span>{origen}</span>
+      <svg viewBox="0 0 40 12" aria-hidden="true" focusable="false">
+        <path d="M0 6h36M30 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="2" />
+      </svg>
+      <span class="letrero__ruta">Ruta</span>
+    </p>
+    <p class="letrero__ventana" aria-hidden="true">
+      <span class="letrero__destino letra-rotulo" data-destino>{destinos[0]}</span>
+    </p>
+  </div>
+  <span class="sr-only">{origen}: {destinos.join(", ")}</span>
+</div>
+
+<style>
+  .letrero {
+    --borde: 2px;
+    position: relative;
+    border-radius: var(--radio-grande);
+    padding: var(--borde);
+    background: linear-gradient(
+      100deg,
+      var(--cromo-oscuro),
+      var(--cromo-claro) 22%,
+      var(--cromo-medio) 46%,
+      var(--cromo-claro) 70%,
+      var(--cromo-oscuro)
+    );
+    box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.8);
+  }
+
+  .letrero__marco {
+    container-type: inline-size;
+    position: relative;
+    border-radius: calc(var(--radio-grande) - var(--borde));
+    padding: clamp(0.75rem, 2.2vw, 1.4rem) clamp(1rem, 3vw, 2rem) clamp(0.9rem, 2.4vw, 1.6rem);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.06), transparent 38%),
+      var(--pintura);
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 0.6) inset,
+      0 0 0 4px var(--pintura) inset,
+      0 0 0 5px rgb(246 245 245 / 0.18) inset;
+    overflow: hidden;
+  }
+
+  .letrero__origen {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.35em;
+    font-family: var(--f-letrero);
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    letter-spacing: 0.08em;
+    color: var(--cromo-claro);
+  }
+
+  .letrero__origen svg {
+    width: 2.2em;
+    height: auto;
+    color: var(--rojo);
+  }
+
+  .letrero__ruta {
+    margin-left: auto;
+    font-family: var(--f-texto);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sobre-pintura-2);
+  }
+
+  .letrero__ventana {
+    position: relative;
+    overflow: hidden;
+    /* espacio para la sombra pintada del rótulo */
+    padding-block: 0.08em 0.16em;
+    padding-right: 0.12em;
+  }
+
+  .letrero__destino {
+    display: block;
+    white-space: nowrap;
+    will-change: auto;
+    font-size: min(var(--max), calc(100cqi / (var(--largo) * 0.78)));
+  }
+
+  .letrero--grande {
+    --max: 5.5rem;
+  }
+  .letrero--medio {
+    --max: 3.25rem;
+  }
+  .letrero--chico {
+    --max: 1.75rem;
+  }
+  .letrero--chico .letrero__origen {
+    font-size: 0.7rem;
+  }
+</style>
+
+<script>
+  const SALIDA = { duration: 220, easing: "cubic-bezier(.4,0,1,1)", fill: "forwards" } as const;
+  const ENTRADA = { duration: 460, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" } as const;
+  const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function montar(letrero: HTMLElement) {
+    const destino = letrero.querySelector<HTMLElement>("[data-destino]");
+    if (!destino) return;
+    const destinos: string[] = JSON.parse(letrero.dataset.destinos ?? "[]");
+    let actual = 0;
+    let girando: Promise<void> = Promise.resolve();
+
+    const mostrar = (indice: number) => {
+      if (indice === actual) return;
+      actual = indice;
+      const texto = destinos[indice] ?? "";
+      girando = girando.then(async () => {
+        if (sinMovimiento.matches) {
+          destino.textContent = texto;
+          return;
+        }
+        await destino.animate(
+          [
+            { transform: "translateY(0)", opacity: 1, filter: "blur(0)" },
+            { transform: "translateY(-70%)", opacity: 0, filter: "blur(3px)" },
+          ],
+          SALIDA,
+        ).finished;
+        destino.textContent = texto;
+        await destino.animate(
+          [
+            { transform: "translateY(80%)", opacity: 0, filter: "blur(3px)" },
+            { transform: "translateY(0)", opacity: 1, filter: "blur(0)" },
+          ],
+          ENTRADA,
+        ).finished;
+      });
+    };
+
+    letrero.addEventListener("letrero:destino", (e) => {
+      mostrar((e as CustomEvent<number>).detail);
+    });
+
+    if (letrero.dataset.rotar && destinos.length > 1) {
+      let pausado = false;
+      const zona = letrero.closest("[data-zona-letrero]") ?? letrero;
+      zona.addEventListener("pointerenter", () => {
+        pausado = true;
+      });
+      zona.addEventListener("pointerleave", () => {
+        pausado = false;
+      });
+      zona.addEventListener("focusin", () => {
+        pausado = true;
+      });
+      zona.addEventListener("focusout", () => {
+        pausado = false;
+      });
+      window.setInterval(() => {
+        if (pausado || document.hidden || sinMovimiento.matches) return;
+        mostrar((actual + 1) % destinos.length);
+      }, 3600);
+    }
+  }
+
+  for (const letrero of document.querySelectorAll<HTMLElement>("[data-letrero]")) montar(letrero);
+</script>

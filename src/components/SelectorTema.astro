@@ -1,0 +1,65 @@
+---
+import Icono from "./Icono.astro";
+---
+
+<button class="tema" type="button" data-selector-tema aria-label="Cambiar a tema oscuro">
+  <Icono nombre="luna" class="tema__luna" />
+  <Icono nombre="sol" class="tema__sol" />
+</button>
+
+<style>
+  .tema {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sobre-pintura);
+    cursor: pointer;
+    box-shadow: 0 0 0 1.5px var(--hilo-pintura) inset;
+    transition: background-color var(--dur-corta) ease;
+  }
+  .tema:hover {
+    background: rgb(246 245 245 / 0.1);
+  }
+  .tema :global(svg) {
+    width: 1.15rem;
+    height: 1.15rem;
+    grid-area: 1 / 1;
+  }
+  .tema__sol {
+    display: none;
+  }
+  :global(:root[data-theme="dark"]) .tema__sol {
+    display: block;
+  }
+  :global(:root[data-theme="dark"]) .tema__luna {
+    display: none;
+  }
+</style>
+
+<script>
+  const CLAVE = "softrix.tema";
+  const raiz = document.documentElement;
+
+  const etiquetar = () => {
+    const oscuro = raiz.dataset.theme === "dark";
+    for (const b of document.querySelectorAll<HTMLButtonElement>("[data-selector-tema]")) {
+      b.setAttribute("aria-label", oscuro ? "Cambiar a tema claro" : "Cambiar a tema oscuro");
+    }
+  };
+
+  for (const boton of document.querySelectorAll<HTMLButtonElement>("[data-selector-tema]")) {
+    boton.addEventListener("click", () => {
+      const siguiente = raiz.dataset.theme === "dark" ? "light" : "dark";
+      raiz.dataset.theme = siguiente;
+      try {
+        localStorage.setItem(CLAVE, siguiente);
+      } catch {}
+      etiquetar();
+    });
+  }
+  etiquetar();
+</script>

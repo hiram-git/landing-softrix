@@ -1,0 +1,207 @@
+---
+// Las paradas de la ruta: un enlace por producto sobre una línea cromada.
+// «vertical» en menús; «horizontal» en la portada (vertical en celular).
+import { productos } from "@/config/site";
+import Icono from "./Icono.astro";
+
+interface Props {
+  orientacion?: "vertical" | "horizontal";
+  sincroniza?: string; // id del letrero que sigue a la parada activa
+  actual?: string;
+}
+const { orientacion = "vertical", sincroniza, actual } = Astro.props;
+---
+
+<ol class:list={["ruta", `ruta--${orientacion}`]} data-sincroniza={sincroniza}>
+  {
+    productos.map((p, i) => (
+      <li class="ruta__parada">
+        <a
+          class="ruta__enlace"
+          href={`/${p.slug}`}
+          data-indice={i}
+          aria-current={actual === p.slug ? "page" : undefined}
+        >
+          <span class="ruta__punto" aria-hidden="true" />
+          <span class="ruta__nombre">
+            {p.nombre.replace("Softrix ", "")}
+            <Icono nombre="flecha" class="ruta__flecha" />
+          </span>
+          <span class="ruta__linea">{p.linea}</span>
+        </a>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .ruta {
+    --punto: 1.05rem;
+    --carril: 3px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    display: grid;
+  }
+
+  /* El carril: la línea cromada que une las paradas. */
+  .ruta::before {
+    content: "";
+    position: absolute;
+    background: linear-gradient(
+      var(--dir, 180deg),
+      var(--cromo-medio),
+      var(--cromo-claro) 50%,
+      var(--cromo-medio)
+    );
+    border-radius: 2px;
+  }
+
+  .ruta__enlace {
+    position: relative;
+    display: grid;
+    gap: 0.3rem;
+    text-decoration: none;
+    color: var(--sobre-pintura);
+    border-radius: var(--radio);
+  }
+
+  .ruta__punto {
+    position: absolute;
+    width: var(--punto);
+    height: var(--punto);
+    border-radius: 50%;
+    background: var(--pintura);
+    box-shadow:
+      0 0 0 3px var(--cromo-claro),
+      0 0 0 6px var(--pintura);
+    transition:
+      background-color var(--dur-corta) ease,
+      box-shadow var(--dur-corta) ease;
+  }
+
+  .ruta__nombre {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--f-display);
+    font-stretch: 118%;
+    font-weight: 800;
+    font-size: 1.3rem;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .ruta__flecha {
+    width: 1.1em;
+    height: 1.1em;
+    color: var(--rojo);
+    transition: transform var(--dur-corta) var(--ease-salida);
+  }
+
+  .ruta__linea {
+    color: var(--sobre-pintura-2);
+    font-size: 0.975rem;
+    line-height: 1.45;
+    max-width: 34ch;
+  }
+
+  .ruta__enlace:hover .ruta__punto,
+  .ruta__enlace:focus-visible .ruta__punto,
+  .ruta__enlace[aria-current="page"] .ruta__punto {
+    background: var(--cabina);
+    box-shadow:
+      0 0 0 3px var(--cabina),
+      0 0 0 6px var(--pintura),
+      0 0 0 7px var(--rojo);
+  }
+
+  .ruta__enlace:hover .ruta__flecha,
+  .ruta__enlace:focus-visible .ruta__flecha {
+    transform: translateX(4px);
+  }
+
+  .ruta__enlace:hover .ruta__nombre {
+    text-decoration: underline;
+    text-decoration-color: var(--rojo);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  /* ── Vertical ── */
+  .ruta--vertical {
+    gap: 1.6rem;
+    padding-left: 2.4rem;
+  }
+  .ruta--vertical::before {
+    left: calc(var(--punto) / 2 - var(--carril) / 2);
+    top: 0.4rem;
+    bottom: 0.4rem;
+    width: var(--carril);
+  }
+  .ruta--vertical .ruta__punto {
+    left: -2.4rem;
+    top: 0.2rem;
+  }
+  .ruta--vertical .ruta__enlace {
+    padding: 0.15rem 0;
+  }
+
+  /* ── Horizontal (portada) ── */
+  @media (min-width: 900px) {
+    .ruta--horizontal {
+      --dir: 90deg;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1.5rem, 3vw, 3rem);
+      padding-top: 2.6rem;
+      padding-left: 0;
+    }
+    .ruta--horizontal::before {
+      left: 0;
+      right: 0;
+      top: calc(var(--punto) / 2 - var(--carril) / 2);
+      height: var(--carril);
+    }
+    .ruta--horizontal .ruta__punto {
+      top: -2.6rem;
+      left: 0;
+    }
+    .ruta--horizontal .ruta__nombre {
+      font-size: clamp(1.3rem, 1.9vw, 1.6rem);
+    }
+  }
+
+  @media (max-width: 899.98px) {
+    .ruta--horizontal {
+      gap: 1.6rem;
+      padding-left: 2.4rem;
+    }
+    .ruta--horizontal::before {
+      left: calc(var(--punto) / 2 - var(--carril) / 2);
+      top: 0.4rem;
+      bottom: 0.4rem;
+      width: var(--carril);
+    }
+    .ruta--horizontal .ruta__punto {
+      left: -2.4rem;
+      top: 0.2rem;
+    }
+  }
+</style>
+
+<script>
+  for (const ruta of document.querySelectorAll<HTMLElement>("ol[data-sincroniza]")) {
+    const letrero = document.getElementById(ruta.dataset.sincroniza ?? "");
+    if (!letrero) continue;
+    const avisar = (e: Event) => {
+      const enlace = (e.target as HTMLElement).closest<HTMLElement>("[data-indice]");
+      if (!enlace) return;
+      letrero.dispatchEvent(
+        new CustomEvent("letrero:destino", { detail: Number(enlace.dataset.indice) }),
+      );
+    };
+    ruta.addEventListener("pointerover", avisar);
+    ruta.addEventListener("focusin", avisar);
+  }
+</script>
