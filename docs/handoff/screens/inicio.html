@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>RC Group Panamá — inicio</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/softrix/tokens.css">
+<link rel="stylesheet" href="ds/softrix/components/bundle.css">
+<script src="ds/softrix/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:var(--surface-000);color:var(--ink);font-family:var(--font-sans)}
+a{color:var(--brand-text)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<div class="sx-root" style="display: flex; flex-direction: column; width: 100%; background: var(--surface-000); color: var(--ink); font-family: var(--font-sans);">
+
+  <!-- Barra superior -->
+  <div style="display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; justify-content: space-between; padding: 8px 32px; background: var(--surface-inverse); color: var(--on-brand-muted); font-size: 12px; line-height: 16px;">
+    <div style="display: flex; flex-wrap: wrap; gap: 8px 24px;"><span>PH Obarrio 60, Panamá</span><span>+(507) 399-2627</span><span>zrivera@rcgpty.com</span></div>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px 24px;"><span>Lunes a viernes, 8:00 a. m. – 5:00 p. m.</span><a href="https://instagram.com/rcgroup_pty" style="color: var(--on-brand-muted); text-decoration: none;">Instagram @rcgroup_pty</a></div>
+  </div>
+
+  <x-import component-from-global-scope="Softrix.Navbar" logo-src="/logos/rcg-softrix-horizontal.png" links="{{ navLinks }}" primary="{{ navPrimary }}" secondary="{{ navSecondary }}"></x-import>
+
+  <!-- Hero con entrada animada -->
+  <section style="padding: 96px 32px; background: var(--surface-000);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 48px; align-items: center;">
+      <div style="flex: 1 1 480px; min-width: 0; max-width: 640px; display: flex; flex-direction: column; gap: 16px;">
+        <div class="sx-enter" style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">RC Group Panamá · RCG Softrix</div>
+        <h1 class="sx-enter sx-enter--2" style="margin: 0; font-family: var(--font-display); font-size: 56px; line-height: 60px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink);">Factura ante la DGI, paga tu planilla y controla tus accesos</h1>
+        <div class="sx-enter--rule" style="width: 64px; height: 4px; background: var(--brand); border-radius: 2px;"></div>
+        <p class="sx-enter sx-enter--3" style="margin: 0; font-size: 18px; line-height: 28px; color: var(--ink-muted);">Software hecho en Panamá para pymes e instituciones, con el respaldo legal y fiscal de RC Group. En la nube o instalado en tu local.</p>
+        <div class="sx-enter sx-enter--4" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px;">
+          <x-import component-from-global-scope="Softrix.Button" variant="primary" size="lg" arrow="{{ yes }}" href="#demo">Solicitar demo</x-import>
+          <x-import component-from-global-scope="Softrix.Button" variant="ghost" size="lg" href="https://wa.me/50761966047?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20RCG%20Softrix">Escribir por WhatsApp</x-import>
+        </div>
+        <div class="sx-enter sx-enter--4" style="font-size: 12px; line-height: 16px; color: var(--ink-muted);">Sin tarjeta. Demo guiada de 30 minutos con un asesor.</div>
+      </div>
+      <img class="sx-enter sx-enter--5" src="/screenshots/facturacion-panel.png" alt="Panel de Softrix Facturación: ventas del día, cuentas por cobrar e inventario" style="flex: 1 1 440px; min-width: 0; display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-100);">
+    </div>
+  </section>
+
+  <!-- Productos RCG Softrix -->
+  <section id="softrix" style="padding: 64px 32px; background: var(--surface-100);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 640px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">RCG Softrix</div>
+        <h2 style="margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.015em;">Tres productos, una sola plataforma</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--ink-muted);">Se instalan por separado y comparten usuarios, empresas y sucursales. Elige lo que eres y te señalamos el tuyo.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <sc-for list="{{ segments }}" as="s" hint-placeholder-count="5">
+          <button type="button" onClick="{{ s.pick }}" style="{{ s.style }}">{{ s.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+        <div style="{{ dim.fact }}"><x-import component-from-global-scope="Softrix.ProductCard" featured="{{ yes }}" icon="{{ icoBox }}" eyebrow="Producto insignia" title="Softrix Facturación" pitch="El ERP para pymes multi-sucursal: vende, factura ante la DGI, controla inventario y caja en un solo sistema." features="{{ fFact }}" badge="Nube o local" badge-tone="info" cta="Ver Facturación" href="/softrix/facturacion"></x-import></div>
+        <div style="{{ dim.rrhh }}"><x-import component-from-global-scope="Softrix.ProductCard" icon="{{ icoUsers }}" eyebrow="Recursos humanos" title="Softrix RRHH" pitch="Planilla, colaboradores y portal del empleado conforme a la legislación panameña." features="{{ fRrhh }}" cta="Ver RRHH" href="/softrix/planilla"></x-import></div>
+        <div style="{{ dim.gate }}"><x-import component-from-global-scope="Softrix.ProductCard" icon="{{ icoGate }}" eyebrow="Control de accesos" title="SmartGate Control" pitch="Controla quién entra y sale de edificios, empresas y entes públicos." features="{{ fGate }}" cta="Ver SmartGate" href="/softrix/smartgate"></x-import></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servicios legales y asesoría fiscal -->
+  <section id="legal" style="padding: 64px 32px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start;">
+      <div style="flex: 1 1 400px; min-width: 0; display: flex; flex-direction: column; gap: 12px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Servicios legales y asesoría fiscal</div>
+        <h2 style="margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.015em;">El software viene con quien sabe de impuestos</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--ink-muted); max-width: 640px;">RC Group acompaña a tu empresa desde la constitución hasta la defensa ante auditorías. La facturación electrónica no es solo un sistema: es cumplir bien.</p>
+        <div style="margin-top: 12px;"><x-import component-from-global-scope="Softrix.Button" variant="ghost" arrow="{{ yes }}" href="#contacto">Hablar con un asesor</x-import></div>
+      </div>
+      <div style="flex: 1 1 560px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+        <x-import component-from-global-scope="Softrix.FeatureCard" icon="{{ icoPen }}" title="Firma electrónica y digital">Gestión de certificados y firma para facturar y contratar con validez legal.</x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" icon="{{ icoCalc }}" title="Asesoría tributaria">Declaraciones de impuestos, revisión y optimización de cargas fiscales, defensa ante autoridades.</x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" icon="{{ icoMark }}" title="Marca y propiedad intelectual">Registro de marca y protección de tus activos intangibles.</x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" icon="{{ icoDoc }}" title="Sociedades y contratos">Constitución y gestión de sociedades, contratos de compraventa y escrituras en Panamá.</x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- Facturación electrónica: beneficios -->
+  <section style="padding: 64px 32px; background: var(--surface-100);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 640px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Expertos en facturación electrónica</div>
+        <h2 style="margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.015em;">Lo que ganas al facturar electrónicamente</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px;">
+        <x-import component-from-global-scope="Softrix.FeatureCard" badge="Ahorrativo" title="Menos papel y archivo">Sin impresión, tintas ni almacenamiento físico de facturas.</x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" badge="Innovador" title="Integrado a tu sistema">Emisión y recepción automáticas desde Softrix Facturación.</x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" badge="Rentable" title="Mejor servicio al cliente">Comprobantes al instante por correo o WhatsApp.</x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" badge="Seguro" title="Menos riesgo">Sin facturas falsas ni pagos duplicados: cada CAFE lleva su CUFE.</x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- Equipos y sector gobierno -->
+  <section style="padding: 64px 32px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+      <div id="equipos" style="display: flex; flex-direction: column; gap: 12px; padding: 32px; border: 1px solid var(--border); border-radius: 14px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Equipos</div>
+        <div style="font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 600;">Impresoras, lectores y terminales listos para Softrix</div>
+        <div style="font-size: 16px; line-height: 24px; color: var(--ink-muted);">Equipos de facturación electrónica probados con el sistema: impresoras de 80 mm, lectores de código y terminales de punto de venta.</div>
+        <div><x-import component-from-global-scope="Softrix.Button" variant="ghost" arrow="{{ yes }}" href="#">Ver equipos</x-import></div>
+      </div>
+      <div id="gobierno" style="display: flex; flex-direction: column; gap: 12px; padding: 32px; background: var(--brand-deep); color: var(--on-brand); border-radius: 14px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--on-brand-muted);">Sector gobierno</div>
+        <div style="font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 600;">Control de visitantes con verificación de antecedentes</div>
+        <div style="font-size: 16px; line-height: 24px; color: var(--on-brand-muted);">SmartGate Control para entes públicos: invitaciones, niveles de aprobación y puesto de control en tableta.</div>
+        <div><x-import component-from-global-scope="Softrix.Button" variant="secondary-inverse" arrow="{{ yes }}" href="/softrix/smartgate">Ver SmartGate Control</x-import></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo / contacto -->
+  <section id="demo" style="padding: 96px 32px; background: var(--surface-100);">
+    <div id="contacto" style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 48px;">
+      <div style="flex: 1 1 400px; min-width: 0; display: flex; flex-direction: column; gap: 16px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Contáctenos</div>
+        <h2 style="margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.015em;">Tres datos y te llamamos</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--ink-muted);">Un asesor te muestra el producto con datos parecidos a los tuyos o te orienta en lo legal y fiscal. Lo demás lo hablamos en la llamada.</p>
+        <div><x-import component-from-global-scope="Softrix.Button" variant="ghost" href="https://wa.me/50761966047?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20RCG%20Softrix">O escríbenos por WhatsApp</x-import></div>
+        <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 20px; color: var(--ink-muted);">
+          <div>PH Obarrio 60, Panamá, Panamá</div>
+          <div>+(507) 399-2627 · WhatsApp +507 6196-6047 · zrivera@rcgpty.com</div>
+          <div>Lunes a viernes, 8:00 a. m. – 5:00 p. m.</div>
+        </div>
+      </div>
+      <div style="flex: 1 1 480px; min-width: 0;">
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <form style="display: flex; flex-direction: column; gap: 16px; padding: 32px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-000);">
+            <x-import component-from-global-scope="Softrix.Input" name="nombre" label="Nombre" required="{{ yes }}"></x-import>
+            <x-import component-from-global-scope="Softrix.Input" name="contacto" label="WhatsApp o correo" required="{{ yes }}" hint="Te respondemos por el medio que pongas aquí"></x-import>
+            <div class="sx-field">
+              <label class="sx-field__label" for="interes">¿Qué te interesa?</label>
+              <select id="interes" name="interes" class="sx-select">
+                <option>Softrix Facturación</option>
+                <option>Softrix RRHH</option>
+                <option>SmartGate Control</option>
+                <option>Servicios legales o asesoría fiscal</option>
+                <option>Equipos</option>
+                <option>Ser distribuidor</option>
+              </select>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;">
+              <div style="font-size: 12px; line-height: 16px; color: var(--ink-muted);">Solo usamos tus datos para contactarte.</div>
+              <x-import component-from-global-scope="Softrix.Button" variant="primary" size="lg" arrow="{{ yes }}" on-click="{{ send }}">Solicitar demo</x-import>
+            </div>
+          </form>
+        </sc-if>
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 12px; padding: 32px; border: 1px solid var(--success); border-radius: 14px; background: var(--success-soft);">
+            <x-import component-from-global-scope="Softrix.Badge" tone="success" pill="{{ yes }}" icon="check">Solicitud enviada</x-import>
+            <div style="font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 600; color: var(--ink);">Listo. Te contactamos en un día hábil.</div>
+            <div style="font-size: 16px; line-height: 24px; color: var(--ink-muted);">Si prefieres no esperar, escríbenos ahora al WhatsApp +507 6196-6047 o llama al +(507) 399-2627.</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+              <x-import component-from-global-scope="Softrix.Button" variant="whatsapp" href="https://wa.me/50761966047?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20RCG%20Softrix">Escribir por WhatsApp</x-import>
+              <x-import component-from-global-scope="Softrix.Button" variant="ghost" on-click="{{ reset }}">Enviar otra solicitud</x-import>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="padding: 48px 32px; background: var(--surface-inverse); color: var(--ink-inverse);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; justify-content: space-between;">
+      <div style="display: flex; flex-direction: column; gap: 12px; flex: 1 1 280px;">
+        <img src="/logos/rcg-softrix-horizontal-inverse.png" alt="RCG Softrix" style="height: 28px; width: auto; align-self: flex-start;">
+        <div style="font-size: 14px; line-height: 20px; color: var(--on-brand-muted);">RCG Softrix es la línea de software de RC Group. PH Obarrio 60, Panamá · +(507) 399-2627 · zrivera@rcgpty.com</div>
+        <div style="font-size: 12px; line-height: 16px; color: var(--on-brand-muted);">Copyright © 2026 RC Group</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 20px;">
+        <div style="font-weight: 600; padding: 8px 0;">RCG Softrix</div>
+        <a href="/softrix/facturacion" style="color: var(--on-brand-muted); text-decoration: none; padding: 8px 0;">Softrix Facturación</a>
+        <a href="/softrix/planilla" style="color: var(--on-brand-muted); text-decoration: none; padding: 8px 0;">Softrix RRHH</a>
+        <a href="/softrix/smartgate" style="color: var(--on-brand-muted); text-decoration: none; padding: 8px 0;">SmartGate Control</a>
+        <a href="#equipos" style="color: var(--on-brand-muted); text-decoration: none; padding: 8px 0;">Equipos</a>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 20px;">
+        <div style="font-weight: 600; padding: 8px 0;">RC Group</div>
+        <a href="#legal" style="color: var(--on-brand-muted); text-decoration: none; padding: 8px 0;">Servicios legales</a>
+        <a href="#legal" style="color: var(--on-brand-muted); text-decoration: none; padding: 8px 0;">Asesoría fiscal</a>
+        <a href="#gobierno" style="color: var(--on-brand-muted); text-decoration: none; padding: 8px 0;">Sector gobierno</a>
+        <a href="#" style="color: var(--on-brand-muted); text-decoration: none; padding: 8px 0;">Blog</a>
+        <a href="#" style="color: var(--on-brand-muted); text-decoration: none; padding: 8px 0;">Iniciar sesión</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1366,"height":4300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { segment: null, sent: false };
+  }
+  renderVals() {
+    var self = this;
+    var R = window.React;
+    var h = R ? R.createElement : null;
+    var ico = function (paths) {
+      if (!h) return null;
+      return h('svg', { viewBox: '0 0 24 24' }, paths.map(function (d, i) { return h('path', { key: i, d: d }); }));
+    };
+    var segs = [
+      { id: 'pyme', label: 'Pyme o comercio', targets: ['fact', 'rrhh'] },
+      { id: 'joyeria', label: 'Joyería o taller', targets: ['fact'] },
+      { id: 'edificio', label: 'Edificio o PH', targets: ['gate'] },
+      { id: 'gobierno', label: 'Ente público', targets: ['gate', 'rrhh'] },
+      { id: 'revendedor', label: 'Revendedor', targets: ['fact', 'rrhh', 'gate'] }
+    ];
+    var active = segs.filter(function (s) { return s.id === self.state.segment; })[0];
+    var base = 'height: 40px; padding: 0 16px; border-radius: 999px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; border: 1px solid ';
+    var dim = {};
+    ['fact', 'rrhh', 'gate'].forEach(function (k) {
+      dim[k] = (active && active.targets.indexOf(k) < 0) ? 'opacity: 0.4; transition: opacity 150ms ease-out;' : 'opacity: 1; transition: opacity 150ms ease-out;';
+    });
+    return {
+      yes: true,
+      sent: this.state.sent,
+      notSent: !this.state.sent,
+      send: function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState({ sent: true }); },
+      reset: function () { self.setState({ sent: false }); },
+      segments: segs.map(function (s) {
+        var on = s.id === self.state.segment;
+        return {
+          label: s.label,
+          style: base + (on ? 'var(--brand); background: var(--brand); color: var(--on-brand);' : 'var(--border-strong); background: var(--surface-000); color: var(--ink);'),
+          pick: function () { self.setState({ segment: on ? null : s.id }); }
+        };
+      }),
+      dim: dim,
+      navLinks: [
+        { label: 'Servicios Legales', children: [
+          { label: 'Firma electrónica y digital', href: '#legal' },
+          { label: 'Asesoría tributaria', href: '#legal' },
+          { label: 'Registro de marca y propiedad intelectual', href: '#legal' },
+          { label: 'Constitución y gestión de sociedades', href: '#legal' },
+          { label: 'Contratos de compraventa y escrituras', href: '#legal' } ] },
+        { label: 'RCG Softrix', current: true, children: [
+          { label: 'Softrix Facturación', href: 'Facturacion.dc.html', hint: 'Vende, factura ante la DGI y controla caja' },
+          { label: 'Softrix RRHH', href: 'Planilla.dc.html', hint: 'Planilla y colaboradores' },
+          { label: 'SmartGate Control', href: 'SmartGate.dc.html', hint: 'Control de accesos' } ] },
+        { label: 'Sector Gobierno', href: '#gobierno' },
+        { label: 'Equipos', href: '#equipos' },
+        { label: 'Blog', href: '#' },
+        { label: 'Contáctenos', href: '#contacto' }
+      ],
+      navPrimary: { label: 'Solicitar demo', href: '#demo' },
+      navSecondary: { label: 'Iniciar sesión', href: '#' },
+      icoBox: ico(['M21 8 12 3 3 8l9 5 9-5z', 'M3 8v8l9 5 9-5V8', 'M12 13v8']),
+      icoUsers: ico(['M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z', 'M2 21a7 7 0 0 1 14 0', 'M17 4a4 4 0 0 1 0 8', 'M22 21a7 7 0 0 0-5-6.7']),
+      icoGate: ico(['M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16', 'M2 21h20', 'M9 21v-6h6v6', 'M15 11h.01']),
+      icoPen: ico(['M12 20h9', 'M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z']),
+      icoCalc: ico(['M4 3h16v18H4z', 'M8 7h8', 'M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 19h.01M12 19h.01M16 19h.01']),
+      icoMark: ico(['M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7z']),
+      icoDoc: ico(['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z', 'M14 2v6h6', 'M8 13h8M8 17h8']),
+      fFact: ['Facturación electrónica DGI (CAFE, CUFE, QR)', 'Stock en tiempo real por almacén', 'Caja con apertura, cierre y supervisor', 'Órdenes de servicio y taller'],
+      fRrhh: ['Planilla y deducciones de ley', 'Ficha y contrato del colaborador', 'Portal del colaborador', 'Multi-empresa'],
+      fGate: ['Invitaciones y aprobaciones', 'Acceso por QR', 'Puesto de control en tableta', 'Empresas públicas y privadas']
+    };
+  }
+}
+</script>
+</body>
+</html>

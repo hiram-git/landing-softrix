@@ -1,0 +1,133 @@
+---
+import { contacto } from "@/data/contacto";
+
+// «completo» es el pie de la landing; «compacto», el de las páginas de producto.
+interface Props {
+  variante?: "completo" | "compacto";
+}
+const { variante = "completo" } = Astro.props;
+const anio = new Date().getFullYear();
+---
+
+<footer class:list={["pie", `pie--${variante}`]}>
+  <div class="pie__inner">
+    {
+      variante === "compacto" ? (
+        <>
+          <img
+            class="pie__logo"
+            src="/logos/rcg-softrix-horizontal-inverse.png"
+            alt="RCG Softrix"
+            width="1282"
+            height="180"
+          />
+          <div class="pie__texto">
+            RCG Softrix es la línea de software de RC Group · {contacto.direccionCorta} ·{" "}
+            {contacto.oficina}
+          </div>
+        </>
+      ) : (
+        <>
+          <div class="pie__marca">
+            <img
+              class="pie__logo"
+              src="/logos/rcg-softrix-horizontal-inverse.png"
+              alt="RCG Softrix"
+              width="1282"
+              height="180"
+            />
+            <div class="pie__texto">
+              RCG Softrix es la línea de software de RC Group. {contacto.direccionCorta} ·{" "}
+              {contacto.oficina} · {contacto.correo}
+            </div>
+            <div class="pie__legal">Copyright © {anio} RC Group</div>
+          </div>
+          <nav class="pie__columna" aria-label="RCG Softrix">
+            <div class="pie__titulo">RCG Softrix</div>
+            <a href="/softrix/facturacion">Softrix Facturación</a>
+            <a href="/softrix/rrhh">Softrix RRHH</a>
+            <a href="/softrix/smartgate">SmartGate Control</a>
+            <a href="/#equipos">Equipos</a>
+          </nav>
+          <nav class="pie__columna" aria-label="RC Group">
+            <div class="pie__titulo">RC Group</div>
+            <a href="/#legal">Servicios legales</a>
+            <a href="/#legal">Asesoría fiscal</a>
+            <a href="/#gobierno">Sector gobierno</a>
+            <a href="#">Blog</a>
+            <a href="#">Iniciar sesión</a>
+          </nav>
+        </>
+      )
+    }
+  </div>
+</footer>
+
+<style>
+  .pie {
+    padding: var(--space-12) var(--space-8);
+    background: var(--surface-inverse);
+    color: var(--ink-inverse);
+  }
+  .pie__inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .pie--compacto .pie__inner {
+    align-items: center;
+  }
+  .pie__marca {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex: 1 1 280px;
+  }
+  .pie__logo {
+    height: 28px;
+    width: auto;
+    align-self: flex-start;
+  }
+  .pie__texto {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--on-brand-muted);
+  }
+  .pie__legal {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--on-brand-muted);
+  }
+  .pie__columna {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .pie__titulo {
+    font-weight: 600;
+    padding: var(--space-2) 0;
+  }
+  .pie__columna a {
+    color: var(--on-brand-muted);
+    text-decoration: none;
+    padding: var(--space-2) 0;
+  }
+  .pie__columna a:hover {
+    color: var(--on-brand);
+    text-decoration: underline;
+  }
+  @media (max-width: 959.98px) {
+    .pie {
+      padding: var(--space-8) var(--space-4);
+    }
+    .pie__logo {
+      height: 24px;
+    }
+  }
+</style>

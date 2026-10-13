@@ -1,5 +1,11 @@
 # Plan — Landing page de Softrix (RC Group)
 
+> **Nota (13 oct 2026):** el handoff de diseño `docs/handoff/` (sitio rcgpty.com, sistema
+> RCG Softrix) reemplaza la dirección «Ruta Softrix» y las rutas de este documento. Los
+> productos son Softrix Facturación, Softrix RRHH y SmartGate Control. La fuente de verdad
+> es ahora `docs/handoff/HANDOFF.md` y `docs/handoff/design-system/BRAND.md`.
+
+
 > Documento de planificación. Define qué productos se presentan, cómo se organiza el
 > sitio, qué dice cada sección, con qué se construye y en qué orden. Todavía no hay
 > código: este documento es el punto de partida del repositorio.

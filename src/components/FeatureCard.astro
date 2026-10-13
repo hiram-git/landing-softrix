@@ -1,0 +1,49 @@
+---
+import Badge from "./Badge.astro";
+import type { BadgeTone } from "./types";
+
+// FeatureCardProps. Icono por el slot «icon» (excluyente con `badge`);
+// el texto de apoyo (children) por el slot por defecto.
+interface Props {
+  title: string;
+  badge?: string;
+  badgeTone?: BadgeTone;
+  items?: string[];
+  class?: string;
+}
+const { title, badge, badgeTone = "neutral", items = [], class: clase } = Astro.props;
+---
+
+<article class:list={["sx-feature", clase]}>
+  {
+    Astro.slots.has("icon") && (
+      <div class="sx-feature__icon" aria-hidden="true">
+        <slot name="icon" />
+      </div>
+    )
+  }
+  {
+    badge && (
+      <div>
+        <Badge tone={badgeTone}>{badge}</Badge>
+      </div>
+    )
+  }
+  <h3 class="sx-feature__title">{title}</h3>
+  {
+    Astro.slots.has("default") && (
+      <p class="sx-feature__body">
+        <slot />
+      </p>
+    )
+  }
+  {
+    items.length > 0 && (
+      <ul class="sx-feature__list">
+        {items.map((it) => (
+          <li>{it}</li>
+        ))}
+      </ul>
+    )
+  }
+</article>

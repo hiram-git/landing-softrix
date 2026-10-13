@@ -1,0 +1,51 @@
+---
+import Icon from "./Icon.astro";
+import type { ButtonVariant } from "./types";
+
+// ButtonProps: con `href` es un <a>; sin él, un <button>.
+interface Props {
+  variant?: ButtonVariant;
+  size?: "md" | "lg";
+  href?: string;
+  type?: "button" | "submit";
+  disabled?: boolean;
+  arrow?: boolean;
+  class?: string;
+  [atributo: `data-${string}`]: string | undefined;
+}
+
+const {
+  variant = "primary",
+  size = "md",
+  href,
+  type = "button",
+  disabled,
+  arrow,
+  class: clase,
+  ...resto
+} = Astro.props;
+const clases = ["sx-btn", `sx-btn--${variant}`, size === "lg" && "sx-btn--lg", clase];
+const externo = href?.startsWith("http");
+---
+
+{
+  href ? (
+    <a
+      class:list={clases}
+      href={href}
+      target={externo ? "_blank" : undefined}
+      rel={externo ? "noopener" : undefined}
+      {...resto}
+    >
+      {variant === "whatsapp" && <Icon name="chat" />}
+      <slot />
+      {arrow && <Icon name="arrow" />}
+    </a>
+  ) : (
+    <button class:list={clases} type={type} disabled={disabled} {...resto}>
+      {variant === "whatsapp" && <Icon name="chat" />}
+      <slot />
+      {arrow && <Icon name="arrow" />}
+    </button>
+  )
+}

@@ -1,0 +1,150 @@
+---
+import CtaFranja from "@/components/CtaFranja.astro";
+import FeatureCard from "@/components/FeatureCard.astro";
+import Hero from "@/components/Hero.astro";
+import Base from "@/layouts/Base.astro";
+
+const modulos = {
+  ventas: [
+    "Cotizaciones y pedidos con reserva de stock",
+    "Facturas, notas de crédito y débito",
+    "Vendedores y comisiones",
+    "Cuentas por cobrar y anticipos",
+    "Caja: apertura, cierre y supervisor",
+  ],
+  inventario: [
+    "Stock en tiempo real por almacén",
+    "Variantes y kits",
+    "Transferencias entre sucursales",
+    "Alertas de mínimo e historial de movimientos",
+    "Proveedores, órdenes de compra y cuentas por pagar",
+  ],
+  servicios: ["Órdenes de servicio con técnicos", "Avance por pieza", "Entregas parciales"],
+  control: [
+    "Reportes gerenciales en PDF y Excel",
+    "Multi-empresa y multi-sucursal",
+    "Permisos por módulo, sucursal y usuario",
+  ],
+};
+---
+
+<Base
+  title="Softrix Facturación · RCG Softrix"
+  description="El ERP para pymes multi-sucursal de Panamá: vende, factura ante la DGI, controla inventario y caja en un solo sistema."
+  seccion="facturacion"
+  topBar={false}
+  footer="compacto"
+>
+  <Hero
+    dark
+    badges={[
+      { label: "Producto insignia", tone: "brand" },
+      { label: "Nube o local", tone: "info" },
+    ]}
+    title="Softrix Facturación"
+    lead="El ERP para pymes multi-sucursal de Panamá: vende, factura ante la DGI, controla inventario y caja en un solo sistema."
+    primary={{ label: "Solicitar demo", href: "/#demo" }}
+    secondary={{ label: "Ver módulos", href: "#modulos" }}
+  >
+    <img
+      class="captura captura--sobre-marca sx-enter sx-enter--5"
+      src="/screenshots/facturacion-panel.png"
+      alt="Panel de Softrix Facturación con ventas, stock y cuentas por cobrar"
+      width="2160"
+      height="3065"
+    />
+  </Hero>
+
+  <!-- Facturación electrónica -->
+  <section class="seccion" aria-labelledby="fe-titulo">
+    <div class="contenedor fila">
+      <img
+        class="captura fe__captura"
+        src="/screenshots/facturacion-factura.png"
+        alt="Nueva factura de venta en Softrix Facturación con desglose de ITBMS"
+        width="2160"
+        height="1509"
+        loading="lazy"
+      />
+      <div class="fe__texto">
+        <div class="eyebrow">Facturación electrónica DGI</div>
+        <h2 id="fe-titulo" class="titulo-seccion">Factura conforme a la DGI sin pensar en el PAC</h2>
+        <p class="texto-apoyo">
+          Cada venta genera su CAFE a través del PAC autorizado, con CUFE, código QR y desglose de
+          ITBMS. Imprime en ticket de 80 mm o en A4 y Carta.
+        </p>
+        <code class="fe__cufe"
+          >CUFE FE0120000000000-0000000-0000000000000000000000000000000000000000000000</code
+        >
+        <p class="leyenda">
+          CAFE: comprobante auxiliar de factura electrónica · CUFE: código único de factura
+          electrónica · PAC: proveedor de autorización calificado.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Módulos -->
+  <section id="modulos" class="seccion seccion--alterna" aria-labelledby="modulos-titulo">
+    <div class="contenedor pila">
+      <div class="encabezado">
+        <div class="eyebrow">Módulos</div>
+        <h2 id="modulos-titulo" class="titulo-seccion">Todo el ciclo comercial en un solo sistema</h2>
+      </div>
+      <div class="rejilla rejilla--2">
+        <FeatureCard title="Ventas y caja" items={modulos.ventas} />
+        <FeatureCard title="Inventario y compras" items={modulos.inventario} />
+        <FeatureCard title="Servicios y taller" items={modulos.servicios} />
+        <FeatureCard title="Control y reportes" items={modulos.control} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Verticales -->
+  <section class="seccion" aria-labelledby="verticales-titulo">
+    <div class="contenedor pila">
+      <div class="encabezado">
+        <div class="eyebrow">Hecho para tu negocio</div>
+        <h2 id="verticales-titulo" class="titulo-seccion">Modos de trabajo por vertical</h2>
+      </div>
+      <div class="rejilla">
+        <FeatureCard badge="Joyerías" title="Precio por peso de oro">
+          Órdenes de servicio con varias piezas y prioridad, y certificados de regalo al portador.
+        </FeatureCard>
+        <FeatureCard badge="Talleres" title="Órdenes con técnicos">
+          Avance por pieza, entregas parciales y seguimiento de cada reparación hasta el cobro.
+        </FeatureCard>
+        <FeatureCard badge="Veterinarias" title="Mascotas por cliente">
+          Cada mascota se atiende desde la orden de servicio, con su historial.
+        </FeatureCard>
+      </div>
+    </div>
+  </section>
+
+  <CtaFranja title="Mira Softrix Facturación con datos parecidos a los tuyos" />
+</Base>
+
+<style>
+  .fe__captura {
+    flex: 1 1 480px;
+    min-width: 0;
+    aspect-ratio: 4 / 3;
+  }
+  .fe__texto {
+    flex: 1 1 440px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .fe__cufe {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface-200);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 20px;
+    overflow-wrap: anywhere;
+  }
+</style>

@@ -1,0 +1,199 @@
+---
+import { navPrimary, navSecondary } from "@/data/nav";
+import Button from "./Button.astro";
+import Icon from "./Icon.astro";
+
+// Cabecera móvil de screens/inicio-movil.html: logo, botón con aria-expanded y
+// un panel con los menús agrupados. Solo existe por debajo de 960 px.
+interface Props {
+  logoSrc: string;
+  logoAlt?: string;
+  homeHref?: string;
+  actual?: string;
+}
+const { logoSrc, logoAlt = "RCG Softrix", homeHref = "/", actual } = Astro.props;
+
+const grupos = [
+  {
+    titulo: "RCG Softrix",
+    enlaces: [
+      { label: "Softrix Facturación", href: "/softrix/facturacion" },
+      { label: "Softrix RRHH", href: "/softrix/rrhh" },
+      { label: "SmartGate Control", href: "/softrix/smartgate" },
+    ],
+  },
+  {
+    titulo: "RC Group",
+    enlaces: [
+      { label: "Servicios legales", href: "/#legal" },
+      { label: "Asesoría fiscal", href: "/#legal" },
+      { label: "Sector gobierno", href: "/#gobierno" },
+      { label: "Equipos", href: "/#equipos" },
+      { label: "Blog", href: "#" },
+      { label: "Contáctenos", href: "/#demo" },
+    ],
+  },
+];
+---
+
+<header class="movil" data-menu-movil>
+  <div class="movil__barra">
+    <a class="movil__logo" href={homeHref}>
+      <img src={logoSrc} alt={logoAlt} width="1282" height="180" />
+    </a>
+    <button
+      type="button"
+      class="movil__boton"
+      aria-label="Abrir o cerrar menú"
+      aria-expanded="false"
+      aria-controls="menu-movil"
+    >
+      <Icon name="menu" class="movil__abrir" />
+      <Icon name="close" class="movil__cerrar" />
+    </button>
+  </div>
+  <nav id="menu-movil" class="movil__panel" aria-label="Principal" hidden>
+    {
+      grupos.map((g) => (
+        <>
+          <div class="movil__grupo">{g.titulo}</div>
+          {g.enlaces.map((e) => (
+            <a
+              class="movil__enlace"
+              href={e.href}
+              aria-current={actual === e.href ? "page" : undefined}
+            >
+              {e.label}
+            </a>
+          ))}
+        </>
+      ))
+    }
+    <a class="movil__enlace movil__enlace--suave" href={navSecondary.href}>{navSecondary.label}</a>
+    <div class="movil__cta">
+      <Button variant="primary" size="lg" href={navPrimary.href} arrow>{navPrimary.label}</Button>
+    </div>
+  </nav>
+</header>
+
+<style>
+  .movil {
+    display: none;
+    flex-direction: column;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-000);
+  }
+  .movil__barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 var(--space-4);
+  }
+  .movil__logo {
+    display: flex;
+    align-items: center;
+    height: 28px;
+  }
+  .movil__logo img {
+    height: 28px;
+    width: auto;
+    display: block;
+  }
+  .movil__boton {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .movil__boton :global(svg) {
+    grid-area: 1 / 1;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+  }
+  .movil__boton :global(.movil__cerrar),
+  .movil__boton[aria-expanded="true"] :global(.movil__abrir) {
+    display: none;
+  }
+  .movil__boton[aria-expanded="true"] :global(.movil__cerrar) {
+    display: block;
+  }
+  .movil__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-4) var(--space-4);
+    border-top: 1px solid var(--border);
+  }
+  .movil__panel[hidden] {
+    display: none;
+  }
+  .movil__grupo {
+    padding: var(--space-3) 0 var(--space-1);
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--brand-text);
+  }
+  .movil__enlace {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .movil__enlace[aria-current="page"] {
+    color: var(--brand-text);
+  }
+  .movil__enlace--suave {
+    color: var(--ink-muted);
+    border-bottom: 0;
+  }
+  .movil__cta {
+    margin-top: var(--space-2);
+    display: flex;
+    flex-direction: column;
+  }
+  @media (max-width: 959.98px) {
+    .movil {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const menu = document.querySelector<HTMLElement>("[data-menu-movil]");
+  const boton = menu?.querySelector<HTMLButtonElement>("button[aria-controls]");
+  const panel = document.getElementById("menu-movil");
+  if (menu && boton && panel) {
+    const poner = (abierto: boolean) => {
+      boton.setAttribute("aria-expanded", String(abierto));
+      panel.hidden = !abierto;
+    };
+    boton.addEventListener("click", () => poner(boton.getAttribute("aria-expanded") !== "true"));
+    // Un enlace del panel (también los anclas de la misma página) cierra el menú.
+    panel.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("a")) poner(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !panel.hidden) {
+        poner(false);
+        boton.focus();
+      }
+    });
+  }
+</script>

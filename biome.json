@@ -7,7 +7,13 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!**/*.astro"]
+    "includes": [
+      "**",
+      "!**/*.astro",
+      "!src/styles/tokens.css",
+      "!src/styles/components.css",
+      "!docs/handoff"
+    ]
   },
   "formatter": {
     "enabled": true,

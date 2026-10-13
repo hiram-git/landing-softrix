@@ -1,0 +1,57 @@
+---
+import Badge from "./Badge.astro";
+import Button from "./Button.astro";
+import type { BadgeTone } from "./types";
+
+// ProductCardProps. El icono (ReactNode en la referencia) llega por el slot «icon».
+interface Props {
+  title: string;
+  pitch?: string;
+  eyebrow?: string;
+  features?: string[];
+  href?: string;
+  cta?: string;
+  badge?: string;
+  badgeTone?: BadgeTone;
+  featured?: boolean;
+  class?: string;
+}
+const {
+  title,
+  pitch,
+  eyebrow,
+  features = [],
+  href = "#",
+  cta = "Ver producto",
+  badge,
+  badgeTone = "info",
+  featured,
+  class: clase,
+} = Astro.props;
+---
+
+<article class:list={["sx-card", featured && "sx-card--featured", clase]}>
+  {
+    Astro.slots.has("icon") && (
+      <div class="sx-card__icon" aria-hidden="true">
+        <slot name="icon" />
+      </div>
+    )
+  }
+  {eyebrow && <div class="sx-card__eyebrow">{eyebrow}</div>}
+  <h3 class="sx-card__title">{title}</h3>
+  {pitch && <p class="sx-card__pitch">{pitch}</p>}
+  {
+    features.length > 0 && (
+      <ul class="sx-card__list">
+        {features.map((f) => (
+          <li>{f}</li>
+        ))}
+      </ul>
+    )
+  }
+  <div class="sx-card__footer">
+    <Button variant="ghost" href={href} arrow>{cta}</Button>
+    {badge && <Badge tone={badgeTone}>{badge}</Badge>}
+  </div>
+</article>

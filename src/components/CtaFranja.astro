@@ -1,0 +1,26 @@
+---
+import { contacto } from "@/data/contacto";
+import Button from "./Button.astro";
+
+// Franja de CTA de las páginas de producto (fondo brand-deep, radius-xl).
+interface Props {
+  title: string;
+  apoyo?: string;
+}
+const { title, apoyo = "Demo guiada de 30 minutos. Sin tarjeta." } = Astro.props;
+---
+
+<section class="seccion--cta" aria-label="Solicitar demo">
+  <div class="cta">
+    <div class="cta__texto">
+      <h2 class="cta__titulo">{title}</h2>
+      <p class="cta__apoyo">{apoyo}</p>
+    </div>
+    <div class="acciones">
+      <Button variant="primary" size="lg" arrow href="/#demo">Solicitar demo</Button>
+      <Button variant="secondary-inverse" size="lg" href={contacto.whatsapp}>
+        Escribir por WhatsApp
+      </Button>
+    </div>
+  </div>
+</section>

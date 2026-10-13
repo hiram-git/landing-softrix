@@ -1,8 +1,5 @@
-@import "@fontsource/bungee/400.css";
-@import "@fontsource-variable/archivo/standard.css";
-@import "@fontsource-variable/inter/index.css";
-@import "@fontsource-variable/jetbrains-mono/index.css";
-@import "./tokens.css";
+/* Reset mínimo y reglas de página. tokens.css y components.css son del design
+   system y no se tocan; lo que hace falta encima vive aquí, siempre con tokens. */
 
 *,
 *::before,
@@ -13,64 +10,41 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scroll-padding-top: calc(var(--alto-cabecera) + 1rem);
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  background: var(--papel);
-  color: var(--tinta);
-  font-family: var(--f-texto);
-  font-size: 1.0625rem;
-  line-height: 1.55;
-  font-feature-settings: "cv11", "ss03";
+  background: var(--surface-000);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
-main {
-  flex: 1;
-}
-
-img,
-svg {
-  display: block;
+img {
   max-width: 100%;
+  height: auto;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  margin: 0;
-  font-family: var(--f-display);
-  font-stretch: 118%;
-  font-weight: 800;
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
+/* Enlaces de texto. Los botones (.sx-btn) llevan su propio color: sin el :not,
+   el hover de `a` pintaba el texto del botón primario del mismo rojo que su fondo.
+   :where() deja la especificidad en cero para que los componentes (.sx-nav__link,
+   .sx-nav__menu a…) conserven su color: estas reglas solo dan el color por defecto. */
+:where(a:not(.sx-btn)) {
+  color: var(--brand-text);
+}
+:where(a:not(.sx-btn)):hover {
+  color: var(--brand-strong);
 }
 
-p {
-  margin: 0;
-  text-wrap: pretty;
+code {
+  font-family: var(--font-mono);
 }
 
-a {
-  color: inherit;
-}
-
-:focus-visible {
-  outline: 3px solid var(--foco);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
-.pintura :focus-visible {
-  outline-color: var(--cabina);
+[hidden] {
+  display: none !important;
 }
 
 .sr-only {
@@ -85,181 +59,171 @@ a {
   border: 0;
 }
 
-.saltar {
-  position: absolute;
-  left: 1rem;
-  top: -4rem;
-  z-index: 100;
-  padding: 0.75rem 1rem;
-  background: var(--cabina);
-  color: var(--cabina-tinta);
-  font-weight: 700;
-  border-radius: var(--radio);
-  text-decoration: none;
-}
-
-.saltar:focus {
-  top: 1rem;
-}
-
-.contenedor {
-  width: 100%;
-  max-width: calc(var(--ancho) + 2 * var(--gutter));
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-}
-
-/* ── Pintura: negro de carrocería con rojo aerografiado ─────────── */
-.pintura {
-  position: relative;
-  isolation: isolate;
-  color: var(--sobre-pintura);
-  background-color: var(--pintura);
-  background-image:
-    radial-gradient(
-      120% 90% at 92% 118%,
-      rgb(227 35 26 / 0.92) 0%,
-      rgb(227 35 26 / 0.35) 32%,
-      transparent 62%
-    ),
-    radial-gradient(70% 60% at 108% -10%, rgb(110 13 10 / 0.75) 0%, transparent 60%),
-    radial-gradient(60% 70% at -10% 110%, rgb(110 13 10 / 0.55) 0%, transparent 65%),
-    linear-gradient(
-      168deg,
-      transparent 52%,
-      rgb(227 35 26 / 0.14) 60%,
-      rgb(227 35 26 / 0.05) 66%,
-      transparent 74%
-    );
-}
-
-/* Grano de aerógrafo: rompe el degradado para que se lea como pintura. */
-.pintura::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.22;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.pintura--quieta {
-  background-image:
-    radial-gradient(90% 140% at 100% 100%, rgb(227 35 26 / 0.55) 0%, transparent 55%),
-    radial-gradient(60% 90% at 0% 0%, rgb(110 13 10 / 0.45) 0%, transparent 60%);
-}
-
-/* ── Letrero pintado: letra de rótulo con sombra roja desplazada ── */
-.letra-rotulo {
-  font-family: var(--f-letrero);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  line-height: 0.95;
-  color: var(--cabina);
-  text-shadow:
-    0.045em 0.055em 0 var(--rojo),
-    0.09em 0.11em 0 var(--rojo-profundo);
-}
-
-/* ── Botones ───────────────────────────────────────────────────── */
-.boton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  min-height: 3rem;
-  padding: 0.75rem 1.35rem;
-  border: 0;
-  border-radius: 999px;
-  font-family: var(--f-texto);
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1.1;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background-color var(--dur-corta) ease,
-    box-shadow var(--dur-corta) ease,
-    transform var(--dur-corta) ease;
-}
-
-.boton svg {
-  width: 1.15em;
-  height: 1.15em;
-  flex: none;
-}
-
-.boton--cabina {
-  background: var(--cabina);
-  color: var(--cabina-tinta);
-  box-shadow:
-    0 1px 0 rgb(255 255 255 / 0.55) inset,
-    0 -2px 0 rgb(0 0 0 / 0.18) inset,
-    0 6px 18px -6px rgb(255 196 31 / 0.55);
-}
-
-.boton--cabina:hover {
-  background: var(--cabina-hover);
-  transform: translateY(-1px);
-}
-
-.boton--cromo {
-  background: transparent;
-  color: var(--sobre-pintura);
-  box-shadow: 0 0 0 1.5px var(--cromo-medio) inset;
-}
-
-.boton--cromo:hover {
-  background: rgb(246 245 245 / 0.08);
-  box-shadow: 0 0 0 1.5px var(--cromo-claro) inset;
-}
-
-.boton--tinta {
-  background: var(--tinta);
-  color: var(--papel);
-}
-
-.boton--tinta:hover {
-  background: var(--rojo-tinta);
-  color: #fff;
-}
-
-.boton--chico {
-  min-height: 2.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.9375rem;
-}
-
-/* ── Contenido sobre papel ─────────────────────────────────────── */
+/* ── Secciones de página (screens/*.html) ─────────────────────────────── */
 .seccion {
-  padding-block: clamp(4rem, 9vw, 7.5rem);
+  padding: var(--space-16) var(--space-8);
 }
-
-.seccion--papel-2 {
-  background: var(--papel-2);
+.seccion--alterna {
+  background: var(--surface-100);
 }
-
-.enlace {
-  color: var(--rojo-tinta);
+.seccion--cta {
+  padding: 0 var(--space-8) var(--space-24);
+}
+.seccion--demo {
+  padding: var(--space-24) var(--space-8);
+}
+.contenedor {
+  max-width: var(--container);
+  margin: 0 auto;
+}
+.pila {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  align-items: center;
+}
+.encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: var(--measure);
+}
+.eyebrow {
+  font-size: 13px;
+  line-height: 16px;
   font-weight: 600;
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 0.2em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand-text);
+}
+.titulo-seccion {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 44px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.texto-apoyo {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--ink-muted);
+}
+.leyenda {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-muted);
+}
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+}
+.rejilla--4 {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.captura {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-100);
+}
+.captura--sobre-marca {
+  border-color: var(--on-brand-muted);
+  background: var(--surface-inverse);
 }
 
-.enlace:hover {
-  text-decoration-thickness: 2.5px;
+/* Franja de CTA de las páginas de producto */
+.cta {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-12);
+  background: var(--brand-deep);
+  color: var(--on-brand);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  align-items: center;
+  justify-content: space-between;
+}
+.cta__texto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: var(--measure);
+}
+.cta__titulo {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 600;
+}
+.cta__apoyo {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--on-brand-muted);
+}
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+/* ── El único breakpoint: el menú (HANDOFF.md, regla 7) ───────────────────
+   Por debajo de 960 px la Navbar cede su lugar a MobileMenu, y la primera
+   pantalla y las secciones toman las medidas de screens/inicio-movil.html. */
+@media (max-width: 959.98px) {
+  .sx-nav {
+    display: none;
   }
+  .sx-hero {
+    padding: var(--space-16) var(--space-4) var(--space-12);
+  }
+  .sx-hero__title {
+    font-size: 40px;
+    line-height: 44px;
+    letter-spacing: -0.015em;
+  }
+  .sx-hero__lead {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .seccion,
+  .seccion--demo {
+    padding: var(--space-12) var(--space-4);
+  }
+  .seccion--cta {
+    padding: 0 var(--space-4) var(--space-12);
+  }
+  .titulo-seccion {
+    font-size: 28px;
+    line-height: 34px;
+  }
+  .cta {
+    padding: var(--space-8) var(--space-6);
+  }
+}
+
+/* Rejilla de dos columnas de las pantallas, sin breakpoint: baja a una sola
+   cuando cada columna no alcanza 300 px. */
+.rejilla--2 {
+  grid-template-columns: repeat(
+      auto-fit,
+      minmax(max(300px, calc((100% - var(--space-6)) / 2)), 1fr)
+    );
 }

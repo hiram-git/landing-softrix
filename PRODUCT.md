@@ -1,5 +1,11 @@
 # Product
 
+> **Nota (13 oct 2026):** el handoff de diseño `docs/handoff/` (sitio rcgpty.com, sistema
+> RCG Softrix) reemplaza la dirección «Ruta Softrix» y las rutas de este documento. Los
+> productos son Softrix Facturación, Softrix RRHH y SmartGate Control. La fuente de verdad
+> es ahora `docs/handoff/HANDOFF.md` y `docs/handoff/design-system/BRAND.md`.
+
+
 <!-- impeccable:product-schema 1 -->
 
 ## Platform
