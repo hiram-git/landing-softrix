@@ -10,7 +10,28 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scroll-behavior: smooth;
+}
+
+/* Las anclas no quedan debajo de la barra fija (el desplazamiento animado
+   lo resuelve animaciones.ts; esto cubre el salto nativo). */
+[id] {
+  scroll-margin-top: calc(72px + var(--space-4));
+}
+
+/* GSAP revela estos bloques al entrar en pantalla; mientras carga, el <head>
+   los oculta con .anima para que no parpadeen (ver Base.astro). */
+.anima [data-revelar],
+.anima [data-revelar-grupo] > * {
+  visibility: hidden;
+}
+
+/* Barra fija: por encima del contenido, y con su sombra shadow-md solo
+   cuando ya hay contenido debajo (animaciones.ts pone data-desplazada). */
+.sx-nav--sticky {
+  z-index: 30;
+}
+.sx-nav--sticky:not([data-desplazada]) {
+  box-shadow: none;
 }
 
 body {

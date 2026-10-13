@@ -35,7 +35,7 @@ import Base from "@/layouts/Base.astro";
   <!-- Productos RCG Softrix -->
   <section id="softrix" class="seccion seccion--alterna" aria-labelledby="softrix-titulo">
     <div class="contenedor pila">
-      <div class="encabezado">
+      <div class="encabezado" data-revelar>
         <div class="eyebrow">RCG Softrix</div>
         <h2 id="softrix-titulo" class="titulo-seccion">Tres productos, una sola plataforma</h2>
         <p class="texto-apoyo">
@@ -43,7 +43,7 @@ import Base from "@/layouts/Base.astro";
           te señalamos el tuyo.
         </p>
       </div>
-      <div class="segmentos" role="group" aria-label="Elige lo que eres" data-segmentos>
+      <div class="segmentos" data-revelar role="group" aria-label="Elige lo que eres" data-segmentos>
         {
           segmentos.map((s) => (
             <button
@@ -57,7 +57,7 @@ import Base from "@/layouts/Base.astro";
           ))
         }
       </div>
-      <div class="rejilla">
+      <div class="rejilla" data-revelar-grupo>
         {
           productos.map((p) => (
             <div class="producto" data-producto={p.id}>
@@ -84,7 +84,7 @@ import Base from "@/layouts/Base.astro";
   <!-- Servicios legales y asesoría fiscal -->
   <section id="legal" class="seccion" aria-labelledby="legal-titulo">
     <div class="contenedor legal">
-      <div class="legal__texto">
+      <div class="legal__texto" data-revelar>
         <div class="eyebrow">Servicios legales y asesoría fiscal</div>
         <h2 id="legal-titulo" class="titulo-seccion">
           El software viene con quien sabe de impuestos
@@ -97,7 +97,7 @@ import Base from "@/layouts/Base.astro";
           <Button variant="ghost" arrow href="#contacto">Hablar con un asesor</Button>
         </div>
       </div>
-      <div class="legal__rejilla">
+      <div class="legal__rejilla" data-revelar-grupo>
         <FeatureCard title="Firma electrónica y digital">
           <Icon slot="icon" name="pen" />
           Gestión de certificados y firma para facturar y contratar con validez legal.
@@ -121,11 +121,11 @@ import Base from "@/layouts/Base.astro";
   <!-- Facturación electrónica: beneficios -->
   <section class="seccion seccion--alterna" aria-labelledby="fe-titulo">
     <div class="contenedor pila">
-      <div class="encabezado">
+      <div class="encabezado" data-revelar>
         <div class="eyebrow">Expertos en facturación electrónica</div>
         <h2 id="fe-titulo" class="titulo-seccion">Lo que ganas al facturar electrónicamente</h2>
       </div>
-      <div class="rejilla rejilla--4">
+      <div class="rejilla rejilla--4" data-revelar-grupo>
         <FeatureCard badge="Ahorrativo" title="Menos papel y archivo">
           Sin impresión, tintas ni almacenamiento físico de facturas.
         </FeatureCard>
@@ -148,7 +148,7 @@ import Base from "@/layouts/Base.astro";
 
   <!-- Equipos y sector gobierno -->
   <section class="seccion" aria-label="Equipos y sector gobierno">
-    <div class="contenedor rejilla">
+    <div class="contenedor rejilla" data-revelar-grupo>
       <div id="equipos" class="panel">
         <div class="eyebrow">Equipos</div>
         <h2 class="panel__titulo">Impresoras, lectores y terminales listos para Softrix</h2>
@@ -176,8 +176,8 @@ import Base from "@/layouts/Base.astro";
 
   <!-- Distribuidores (screens/inicio-movil.html) -->
   <section id="distribuidores" class="seccion distribuidores" aria-labelledby="dist-titulo">
-    <div class="contenedor distribuidores__fila">
-      <div class="encabezado">
+    <div class="contenedor distribuidores__fila" data-revelar-grupo>
+      <div class="encabezado" data-revelar>
         <div class="eyebrow distribuidores__eyebrow">Programa de distribuidores</div>
         <h2 id="dist-titulo" class="titulo-seccion">Vende Softrix en tu zona con margen propio</h2>
         <p class="distribuidores__apoyo">
@@ -192,7 +192,7 @@ import Base from "@/layouts/Base.astro";
 
   <!-- Demo / contacto -->
   <section id="demo" class="seccion--demo seccion--alterna" aria-labelledby="demo-titulo">
-    <div id="contacto" class="contenedor demo-fila">
+    <div id="contacto" class="contenedor demo-fila" data-revelar-grupo>
       <div class="demo-fila__texto">
         <div class="eyebrow">Contáctenos</div>
         <h2 id="demo-titulo" class="titulo-seccion">Tres datos y te llamamos</h2>

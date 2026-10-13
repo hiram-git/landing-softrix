@@ -50,6 +50,32 @@ consola. Falta decidir a dónde va la solicitud (correo, CRM). En desarrollo y e
 Vite reenvía `/api` al puerto 3001. En producción, el servidor que sirva el sitio tiene que
 hacer lo mismo.
 
+## Animaciones (GSAP)
+
+`src/scripts/animaciones.ts`, cargado en `Base.astro`, usa GSAP 3 con ScrollTrigger y
+ScrollToPlugin. **Se aparta a propósito de la regla 3 de HANDOFF.md** («animación solo en la
+primera pantalla, sin librerías»): se pidió explícitamente mejorar transiciones, navegación y
+botones con GSAP. Se conserva el lenguaje del brand: entradas de 16 px con la curva de
+`sx-enter`, sin rebotes largos.
+
+- **Secciones**: `data-revelar` (un bloque) y `data-revelar-grupo` (sus hijos, en cascada)
+  aparecen al entrar en pantalla, una sola vez. El `<head>` los oculta antes del primer
+  pintado (`.anima`) y los muestra solo si el script no corre en 2,5 s.
+- **Navegación**:
+  - Barra fija con sombra solo al desplazarse.
+  - Submenús que se deslizan.
+  - Desplazamiento suave a anclas, descontando la barra.
+  - Menú móvil que se despliega en cascada.
+  - Fundido de salida al cambiar de página.
+- **Botones**:
+  - La flecha avanza al pasar el cursor.
+  - El botón se hunde al pulsar.
+  - El icono de WhatsApp se balancea.
+  - La tarjeta de producto se eleva 2 px.
+- **Formulario**: el estado de éxito entra animado.
+- **Movimiento reducido**: con `prefers-reduced-motion: reduce` no se anima nada. El hero
+  sigue usando las clases CSS `sx-enter` del design system.
+
 ## Pendientes del handoff (no inventar)
 
 - Los módulos de Softrix RRHH llevan la nota «[CONFIRMAR CON PRODUCTO]».

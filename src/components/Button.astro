@@ -39,13 +39,13 @@ const externo = href?.startsWith("http");
     >
       {variant === "whatsapp" && <Icon name="chat" />}
       <slot />
-      {arrow && <Icon name="arrow" />}
+      {arrow && <Icon name="arrow" class="sx-btn__flecha" />}
     </a>
   ) : (
     <button class:list={clases} type={type} disabled={disabled} {...resto}>
       {variant === "whatsapp" && <Icon name="chat" />}
       <slot />
-      {arrow && <Icon name="arrow" />}
+      {arrow && <Icon name="arrow" class="sx-btn__flecha" />}
     </button>
   )
 }

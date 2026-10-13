@@ -42,6 +42,17 @@ const logo = "/logos/rcg-softrix-horizontal.png";
       href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap"
       rel="stylesheet"
     />
+    <script is:inline>
+      // Antes del primer pintado: oculta lo que GSAP va a revelar, para que no
+      // parpadee. Si el script de animaciones no llega a correr, se muestra igual.
+      if (matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+        const raiz = document.documentElement;
+        raiz.classList.add("anima");
+        setTimeout(() => {
+          if (!("animListo" in raiz.dataset)) raiz.classList.remove("anima");
+        }, 2500);
+      }
+    </script>
   </head>
   <body class="sx-root">
     {topBar && <TopBar />}
@@ -50,11 +61,15 @@ const logo = "/logos/rcg-softrix-horizontal.png";
       links={navLinks(seccion)}
       primary={navPrimary}
       secondary={navSecondary}
+      sticky
     />
     <MobileMenu logoSrc={logo} actual={Astro.url.pathname} />
     <main>
       <slot />
     </main>
     <Footer variante={footer} />
+    <script>
+      import "@/scripts/animaciones";
+    </script>
   </body>
 </html>

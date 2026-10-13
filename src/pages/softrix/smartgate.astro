@@ -48,18 +48,18 @@ const pasos = {
 
   <section id="modulos" class="seccion seccion--alterna" aria-labelledby="como-titulo">
     <div class="contenedor pila">
-      <div class="encabezado">
+      <div class="encabezado" data-revelar>
         <div class="eyebrow">Cómo funciona</div>
         <h2 id="como-titulo" class="titulo-seccion">
           De la invitación al ingreso, con el nivel de aprobación que tu entidad exige
         </h2>
       </div>
-      <div class="rejilla">
+      <div class="rejilla" data-revelar-grupo>
         <FeatureCard title="Invitación" items={pasos.invitacion} />
         <FeatureCard title="Aprobación" items={pasos.aprobacion} />
         <FeatureCard title="Puesto de control" items={pasos.puesto} />
       </div>
-      <div class="rejilla rejilla--2">
+      <div class="rejilla rejilla--2" data-revelar-grupo>
         <FeatureCard badge="Entes públicos" title="Con verificación de antecedentes">
           Nivel de aprobación adicional que revisa antecedentes antes de autorizar el ingreso, con
           vigencia configurable.
@@ -73,7 +73,7 @@ const pasos = {
   </section>
 
   <section class="seccion" aria-label="Pantallas de SmartGate Control">
-    <div class="contenedor rejilla rejilla--2">
+    <div class="contenedor rejilla rejilla--2" data-revelar-grupo>
       <figure class="pantalla">
         <img
           class="captura pantalla__captura"
