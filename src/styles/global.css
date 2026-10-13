@@ -34,9 +34,16 @@ html {
   box-shadow: none;
 }
 
+html {
+  background: var(--surface-000);
+}
+
+/* El fondo interactivo (canvas fijo, z-index -1) se ve donde nadie pinta
+   fondo: el cuerpo y el hero claro quedan transparentes; las secciones
+   alternas (surface-100), las tarjetas y el pie siguen opacos. */
 body {
   margin: 0;
-  background: var(--surface-000);
+  background: transparent;
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 16px;
@@ -47,6 +54,81 @@ body {
 img {
   max-width: 100%;
   height: auto;
+}
+
+body.sx-root {
+  background: transparent;
+}
+
+/* ── Fondo interactivo (src/scripts/fondo.ts) ────────────────────────── */
+.fondo {
+  display: block;
+  pointer-events: none;
+}
+.fondo--pagina {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.fondo--local {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.sx-hero {
+  position: relative;
+  isolation: isolate;
+}
+.sx-hero:not(.sx-hero--dark) {
+  background: transparent;
+}
+
+/* Titular del hero por palabras: animaciones.ts las hace entrar una a una y
+   dibuja la línea roja (--regla) creciendo desde la izquierda. */
+.sx-hero__palabra {
+  display: inline-block;
+}
+.anima .sx-hero__palabra {
+  visibility: hidden;
+}
+.sx-hero__title::after {
+  transform: scaleX(var(--regla, 1));
+  transform-origin: left;
+}
+.anima .sx-hero__title {
+  --regla: 0;
+}
+
+/* Foco de luz que sigue al puntero dentro de las tarjetas (--mx/--my los
+   pone animaciones.ts). Va debajo del contenido gracias a isolation. */
+.sx-card,
+.sx-feature {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.sx-card::before,
+.sx-feature::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    280px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--brand) 10%, transparent),
+    transparent 62%
+  );
+  transition: opacity 150ms ease-out;
+}
+.sx-card:hover::before,
+.sx-feature:hover::before {
+  opacity: 1;
 }
 
 /* Enlaces de texto. Los botones (.sx-btn) llevan su propio color: sin el :not,

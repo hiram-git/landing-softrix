@@ -8,6 +8,31 @@ import ProductCard from "@/components/ProductCard.astro";
 import { contacto } from "@/data/contacto";
 import { productos, segmentos } from "@/data/productos";
 import Base from "@/layouts/Base.astro";
+
+// Vitrina del hero: las capturas reales de los tres productos, en rotación.
+const vitrina = [
+  {
+    nombre: "Softrix Facturación",
+    src: "/screenshots/facturacion-panel.png",
+    alt: "Panel de Softrix Facturación: ventas del día, cuentas por cobrar e inventario",
+    ancho: 2160,
+    alto: 3065,
+  },
+  {
+    nombre: "Softrix RRHH",
+    src: "/screenshots/rrhh-panel.png",
+    alt: "Panel de Softrix RRHH: planilla en curso, empleados activos y asistencia",
+    ancho: 1280,
+    alto: 800,
+  },
+  {
+    nombre: "SmartGate Control",
+    src: "/screenshots/smartgate-tablero.png",
+    alt: "Tablero de SmartGate Control: personas esperadas, autorizadas y cola de trabajo",
+    ancho: 1366,
+    alto: 824,
+  },
+];
 ---
 
 <Base
@@ -23,13 +48,38 @@ import Base from "@/layouts/Base.astro";
     secondary={{ label: "Escribir por WhatsApp", href: contacto.whatsapp }}
     note="Sin tarjeta. Demo guiada de 30 minutos con un asesor."
   >
-    <img
-      class="captura sx-enter sx-enter--5"
-      src="/screenshots/facturacion-panel.png"
-      alt="Panel de Softrix Facturación: ventas del día, cuentas por cobrar e inventario"
-      width="2160"
-      height="3065"
-    />
+    <div class="muestra sx-enter sx-enter--5" data-muestra>
+      <div class="muestra__marco" data-tilt>
+        {
+          vitrina.map((v, i) => (
+            <img
+              class="captura muestra__captura"
+              src={v.src}
+              alt={v.alt}
+              width={v.ancho}
+              height={v.alto}
+              loading={i === 0 ? undefined : "lazy"}
+              aria-hidden={i === 0 ? undefined : "true"}
+              data-muestra-item
+            />
+          ))
+        }
+      </div>
+      <div class="muestra__pestanas" role="group" aria-label="Producto en pantalla">
+        {
+          vitrina.map((v, i) => (
+            <button
+              type="button"
+              class="pastilla"
+              aria-pressed={i === 0 ? "true" : "false"}
+              data-muestra-tab={i}
+            >
+              {v.nombre}
+            </button>
+          ))
+        }
+      </div>
+    </div>
   </Hero>
 
   <!-- Productos RCG Softrix -->
@@ -48,7 +98,7 @@ import Base from "@/layouts/Base.astro";
           segmentos.map((s) => (
             <button
               type="button"
-              class="segmento"
+              class="pastilla"
               aria-pressed="false"
               data-objetivos={s.targets.join(" ")}
             >
@@ -217,13 +267,48 @@ import Base from "@/layouts/Base.astro";
 </Base>
 
 <style>
+  /* Vitrina del hero: tres capturas apiladas que se alternan, y sus pestañas. */
+  .muestra {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    perspective: 1200px;
+  }
+  .muestra__marco {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-100);
+    transform-style: preserve-3d;
+  }
+  .muestra__captura {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .muestra__captura[aria-hidden="true"] {
+    opacity: 0;
+  }
+  .muestra__pestanas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
   /* Selector de segmento: atenúa los productos que no corresponden. */
   .segmentos {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
   }
-  .segmento {
+
+  /* Pastilla conmutable (segmentos y pestañas de la vitrina). */
+  .pastilla {
     height: var(--control-md);
     padding: 0 var(--space-4);
     border-radius: var(--radius-pill);
@@ -239,10 +324,10 @@ import Base from "@/layouts/Base.astro";
       border-color 150ms ease-out,
       color 150ms ease-out;
   }
-  .segmento:hover {
+  .pastilla:hover {
     background: var(--surface-100);
   }
-  .segmento[aria-pressed="true"] {
+  .pastilla[aria-pressed="true"] {
     border-color: var(--brand);
     background: var(--brand);
     color: var(--on-brand);
@@ -364,6 +449,72 @@ import Base from "@/layouts/Base.astro";
 </style>
 
 <script>
+  import { gsap } from "gsap";
+
+  const animar = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+
+  // ── Vitrina del hero ───────────────────────────────────────────────────
+  const muestra = document.querySelector<HTMLElement>("[data-muestra]");
+  if (muestra) {
+    const items = [...muestra.querySelectorAll<HTMLElement>("[data-muestra-item]")];
+    const tabs = [...muestra.querySelectorAll<HTMLButtonElement>("[data-muestra-tab]")];
+    const PAUSA = 5000;
+    const VUELTAS = 2; // rota sola dos vueltas y se detiene; las pestañas siguen activas
+    let actual = 0;
+    let pasos = 0;
+    let reloj = 0;
+
+    const mostrar = (i: number) => {
+      if (i === actual) return;
+      const sale = items[actual];
+      const entra = items[i];
+      actual = i;
+      tabs.forEach((t, k) => t.setAttribute("aria-pressed", String(k === i)));
+      for (const [k, it] of items.entries()) {
+        if (k === i) it.removeAttribute("aria-hidden");
+        else it.setAttribute("aria-hidden", "true");
+      }
+      gsap.killTweensOf([sale, entra]);
+      if (!animar) {
+        gsap.set(sale, { opacity: 0 });
+        gsap.set(entra, { opacity: 1, scale: 1 });
+        return;
+      }
+      gsap.to(sale, { opacity: 0, duration: 0.45, ease: "power2.inOut" });
+      gsap.fromTo(
+        entra,
+        { opacity: 0, scale: 1.04 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" },
+      );
+    };
+
+    const detener = () => window.clearInterval(reloj);
+    const programar = () => {
+      detener();
+      if (!animar || pasos >= items.length * VUELTAS) return;
+      reloj = window.setInterval(() => {
+        pasos += 1;
+        mostrar((actual + 1) % items.length);
+        if (pasos >= items.length * VUELTAS) detener();
+      }, PAUSA);
+    };
+
+    tabs.forEach((t, i) =>
+      t.addEventListener("click", () => {
+        mostrar(i);
+        pasos = 0;
+        programar();
+      }),
+    );
+    muestra.addEventListener("pointerenter", detener);
+    muestra.addEventListener("pointerleave", programar);
+    muestra.addEventListener("focusin", detener);
+    muestra.addEventListener("focusout", programar);
+    document.addEventListener("visibilitychange", () => (document.hidden ? detener() : programar()));
+    programar();
+  }
+
+  // ── Selector de segmento ───────────────────────────────────────────────
   const grupo = document.querySelector<HTMLElement>("[data-segmentos]");
   const tarjetas = document.querySelectorAll<HTMLElement>("[data-producto]");
   if (grupo) {
@@ -374,8 +525,19 @@ import Base from "@/layouts/Base.astro";
       const activo = boton.getAttribute("aria-pressed") !== "true";
       for (const b of botones) b.setAttribute("aria-pressed", String(b === boton && activo));
       const objetivos = activo ? (boton.dataset.objetivos ?? "").split(" ") : null;
+      const elegidas: HTMLElement[] = [];
       for (const t of tarjetas) {
-        t.toggleAttribute("data-atenuado", Boolean(objetivos && !objetivos.includes(t.dataset.producto ?? "")));
+        const fuera = Boolean(objetivos && !objetivos.includes(t.dataset.producto ?? ""));
+        t.toggleAttribute("data-atenuado", fuera);
+        if (objetivos && !fuera) elegidas.push(t);
+      }
+      // Las tarjetas que corresponden dan un pequeño pulso para señalarse.
+      if (animar && elegidas.length) {
+        gsap.fromTo(
+          elegidas,
+          { scale: 0.975 },
+          { scale: 1, duration: 0.45, ease: "back.out(2.5)", stagger: 0.06, clearProps: "scale" },
+        );
       }
     });
   }

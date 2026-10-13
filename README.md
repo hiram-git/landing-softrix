@@ -73,8 +73,33 @@ botones con GSAP. Se conserva el lenguaje del brand: entradas de 16 px con la cu
   - El icono de WhatsApp se balancea.
   - La tarjeta de producto se eleva 2 px.
 - **Formulario**: el estado de éxito entra animado.
+- **Titular del hero**: entra palabra por palabra y la línea roja crece desde la izquierda.
+- **Puntero** (solo con `pointer: fine`): la captura del hero se inclina hacia el cursor,
+  los botones grandes se acercan unos píxeles cuando está cerca, y las tarjetas muestran
+  un foco de luz que lo sigue (`--mx`/`--my`).
 - **Movimiento reducido**: con `prefers-reduced-motion: reduce` no se anima nada. El hero
   sigue usando las clases CSS `sx-enter` del design system.
+
+## Fondo interactivo (canvas)
+
+`src/scripts/fondo.ts` pinta cada `<canvas data-fondo>` (`FondoInteractivo.astro`): una
+retícula de puntos, como papel técnico, que se aparta, se tiñe de `brand` y se enlaza en
+malla alrededor del puntero, con un halo suave debajo. Sin puntero (o en pantallas
+táctiles) un punto virtual recorre el campo despacio. Con movimiento reducido la retícula
+se pinta quieta.
+
+- `modo="pagina"` (en `Base.astro`): fijo detrás de todo el documento. Para que se vea, el
+  cuerpo y el hero claro son transparentes (`global.css`); las secciones `surface-100`, las
+  tarjetas y el pie siguen opacos.
+- `modo="local" tono="oscuro"` (en el hero de las páginas de producto): dentro del hero
+  `brand-deep`, con puntos en `on-brand-muted`.
+- Los colores se leen de los tokens en tiempo de ejecución; no hay hex en el script.
+- Se detiene cuando la pestaña está oculta o el canvas sale de pantalla.
+
+## Vitrina del hero (portada)
+
+Las capturas reales de los tres productos rotan en el hero (5 s, dos vueltas y se detiene;
+se pausa con el puntero o el foco encima). Las pestañas de abajo eligen el producto.
 
 ## Pendientes del handoff (no inventar)
 

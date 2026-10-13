@@ -178,6 +178,104 @@ function botones() {
   }
 }
 
+// ── Titular del hero: las palabras entran una a una y la línea roja crece ─
+function titular() {
+  for (const h1 of document.querySelectorAll<HTMLElement>(".sx-hero__title")) {
+    const palabras = h1.querySelectorAll(".sx-hero__palabra");
+    if (!palabras.length) continue;
+    gsap.fromTo(
+      palabras,
+      { autoAlpha: 0, y: 18 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.55,
+        ease: SALIDA,
+        stagger: 0.05,
+        delay: 0.1,
+        clearProps: "transform,opacity,visibility",
+      },
+    );
+    gsap.fromTo(h1, { "--regla": 0 }, { "--regla": 1, duration: 0.56, ease: SALIDA, delay: 0.35 });
+  }
+}
+
+// ── La captura del hero se inclina hacia el puntero ─────────────────────
+function inclinacion() {
+  const limitar = (v: number) => Math.max(-0.75, Math.min(0.75, v));
+  for (const el of document.querySelectorAll<HTMLElement>("[data-tilt]")) {
+    const zona = el.closest<HTMLElement>(".sx-hero") ?? el;
+    gsap.set(el, { transformPerspective: 1200 });
+    const rotX = gsap.quickTo(el, "rotationX", { duration: 0.6, ease: "power3.out" });
+    const rotY = gsap.quickTo(el, "rotationY", { duration: 0.6, ease: "power3.out" });
+    zona.addEventListener(
+      "pointermove",
+      (e) => {
+        const r = el.getBoundingClientRect();
+        const px = limitar((e.clientX - r.left) / r.width - 0.5);
+        const py = limitar((e.clientY - r.top) / r.height - 0.5);
+        rotY(px * 10);
+        rotX(-py * 8);
+      },
+      { passive: true },
+    );
+    zona.addEventListener("pointerleave", () => {
+      rotX(0);
+      rotY(0);
+    });
+  }
+}
+
+// ── Botones grandes magnéticos: se acercan al puntero cuando está cerca ──
+function magneticos() {
+  const ALCANCE = 40;
+  const TOPE = 10;
+  const botones = [...document.querySelectorAll<HTMLElement>(".sx-btn--lg")].map((b) => ({
+    b,
+    x: gsap.quickTo(b, "x", { duration: 0.45, ease: "power3.out" }),
+    y: gsap.quickTo(b, "y", { duration: 0.45, ease: "power3.out" }),
+    cerca: false,
+  }));
+  if (!botones.length) return;
+  window.addEventListener(
+    "pointermove",
+    (e) => {
+      for (const m of botones) {
+        const r = m.b.getBoundingClientRect();
+        if (!r.width) continue;
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        const cerca = Math.abs(dx) < r.width / 2 + ALCANCE && Math.abs(dy) < r.height / 2 + ALCANCE;
+        if (cerca) {
+          // Proporcional a la distancia, con tope: un gesto, no un salto.
+          m.x(Math.max(-TOPE, Math.min(TOPE, dx * 0.16)));
+          m.y(Math.max(-TOPE, Math.min(TOPE, dy * 0.16)));
+        } else if (m.cerca) {
+          m.x(0);
+          m.y(0);
+        }
+        m.cerca = cerca;
+      }
+    },
+    { passive: true },
+  );
+}
+
+// ── Foco de luz dentro de las tarjetas (ver .sx-card::before en global.css) ─
+function focoEnTarjetas() {
+  document.addEventListener(
+    "pointermove",
+    (e) => {
+      const tarjeta = (e.target as HTMLElement).closest?.<HTMLElement>(".sx-card, .sx-feature");
+      if (!tarjeta) return;
+      const r = tarjeta.getBoundingClientRect();
+      tarjeta.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      tarjeta.style.setProperty("--my", `${e.clientY - r.top}px`);
+    },
+    { passive: true },
+  );
+}
+
 // ── Transición entre páginas: el contenido sale antes de navegar ────────
 function transicionDePagina() {
   const main = document.querySelector("main");
@@ -239,13 +337,20 @@ mm.add(
 );
 
 const animar = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+const punteroFino = window.matchMedia("(pointer: fine)").matches;
 cabeceraFija();
 anclas(animar);
 if (animar) {
+  titular();
   submenus();
   botones();
   transicionDePagina();
   demo();
+  if (punteroFino) {
+    inclinacion();
+    magneticos();
+    focoEnTarjetas();
+  }
 }
 
 // Las animaciones tomaron el control: el <head> ya no necesita su respaldo.
