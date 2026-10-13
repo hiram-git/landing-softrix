@@ -1,12 +1,23 @@
 ---
 // Escena Three.js del hero: una «red de cumplimiento», esfera de puntos
-// enlazados en malla (azul marino, esmeralda y cian) con dos anillos orbitales
-// y satélites que los recorren. Rota sola y se inclina hacia el puntero.
+// enlazados en malla con dos anillos orbitales y satélites que los recorren.
+// Rota sola y se inclina hacia el puntero.
+//
+// Paletas: «rojos» (el rojo de RC Group y sus tonos), «verdes» (esmeralda y
+// menta) o «rojos-verdes» (las dos familias juntas). Para comparar sin tocar
+// código: /rc-group?paleta=rojos | verdes | rojos-verdes.
 //
 // Three.js se carga aparte y solo cuando el navegador está libre, así el
 // primer pintado y la cascada GSAP del hero no esperan por él. Sin WebGL
 // quedan los chips y las órbitas en CSS; con «reducir movimiento» se pinta
 // un solo cuadro quieto.
+export type Paleta = "rojos" | "verdes" | "rojos-verdes";
+
+interface Props {
+  paleta?: Paleta;
+}
+const { paleta = "rojos-verdes" } = Astro.props;
+
 const chips = [
   { texto: "Facturación electrónica activa", pos: "a" },
   { texto: "Certificado de firma vigente", pos: "b" },
@@ -17,6 +28,7 @@ const chips = [
 <div
   class="escena"
   data-escena
+  data-paleta={paleta}
   role="img"
   aria-label="Red de cumplimiento: facturación electrónica, firma digital y equipos homologados conectados"
 >
@@ -35,18 +47,35 @@ const chips = [
 
 <style>
   .escena {
+    /* Colores de la paleta para lo que vive en CSS (resplandor, órbitas de respaldo, chips). */
+    --p-a: #e5231a;
+    --p-b: #10b981;
+    --p-a-suave: rgba(229, 35, 26, 0.16);
+    --p-b-suave: rgba(16, 185, 129, 0.16);
     position: relative;
     width: min(100%, 520px);
     aspect-ratio: 1 / 1;
     margin-inline: auto;
+  }
+  .escena[data-paleta="rojos"] {
+    --p-a: #e5231a;
+    --p-b: #ff8a7a;
+    --p-a-suave: rgba(229, 35, 26, 0.16);
+    --p-b-suave: rgba(255, 138, 122, 0.18);
+  }
+  .escena[data-paleta="verdes"] {
+    --p-a: #059669;
+    --p-b: #6ee7b7;
+    --p-a-suave: rgba(5, 150, 105, 0.16);
+    --p-b-suave: rgba(110, 231, 183, 0.22);
   }
   .escena__resplandor {
     position: absolute;
     inset: 8%;
     border-radius: 50%;
     background:
-      radial-gradient(closest-side, rgba(6, 182, 212, 0.18), transparent 70%),
-      radial-gradient(closest-side at 30% 35%, rgba(16, 185, 129, 0.16), transparent 60%);
+      radial-gradient(closest-side, var(--p-b-suave), transparent 70%),
+      radial-gradient(closest-side at 30% 35%, var(--p-a-suave), transparent 60%);
     filter: blur(18px);
   }
   .escena__canvas {
@@ -73,12 +102,13 @@ const chips = [
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 1.5px solid rgba(6, 182, 212, 0.45);
+    border: 1.5px solid var(--p-b);
+    opacity: 0.55;
     transform: rotateX(68deg);
   }
   .escena__orbitas i + i {
     inset: 18%;
-    border-color: rgba(16, 185, 129, 0.45);
+    border-color: var(--p-a);
     transform: rotateX(68deg) rotateZ(50deg);
   }
   .escena__chip {
@@ -155,6 +185,36 @@ const chips = [
 <script>
   import { gsap } from "gsap";
 
+  // Colores de cada paleta: puntos en reposo (base), dos acentos para los
+  // puntos «activos», los dos anillos y los tres satélites.
+  const PALETAS = {
+    rojos: {
+      base: "#7a1a14",
+      acentoA: "#e5231a",
+      acentoB: "#ff8a7a",
+      anilloA: "#e5231a",
+      anilloB: "#ff9a8c",
+      satelites: ["#ff6a5f", "#e5231a", "#ffb3a7"],
+    },
+    verdes: {
+      base: "#0f5132",
+      acentoA: "#10b981",
+      acentoB: "#6ee7b7",
+      anilloA: "#059669",
+      anilloB: "#34d399",
+      satelites: ["#34d399", "#059669", "#a7f3d0"],
+    },
+    "rojos-verdes": {
+      base: "#6e1410",
+      acentoA: "#10b981",
+      acentoB: "#e5231a",
+      anilloA: "#10b981",
+      anilloB: "#e5231a",
+      satelites: ["#10b981", "#e5231a", "#34d399"],
+    },
+  } as const;
+  type NombrePaleta = keyof typeof PALETAS;
+
   const contenedor = document.querySelector<HTMLElement>("[data-escena]");
   const canvas = contenedor?.querySelector<HTMLCanvasElement>("[data-escena-canvas]");
 
@@ -178,6 +238,15 @@ const chips = [
     });
 
   async function iniciar(cont: HTMLElement, lienzo: HTMLCanvasElement) {
+    // ?paleta= en la URL permite previsualizar otra paleta sin tocar código.
+    const pedida = new URLSearchParams(location.search).get("paleta");
+    const nombre: NombrePaleta =
+      pedida && pedida in PALETAS
+        ? (pedida as NombrePaleta)
+        : ((cont.dataset.paleta as NombrePaleta | undefined) ?? "rojos-verdes");
+    cont.dataset.paleta = nombre;
+    const pal = PALETAS[nombre];
+
     if (!hayWebGL()) {
       cont.classList.add("escena--sin-webgl");
       return;
@@ -218,9 +287,9 @@ const chips = [
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, fino ? 2 : 1.5));
     renderer.setClearColor(0x000000, 0);
 
-    const marino = new Color("#16305a");
-    const esmeralda = new Color("#10b981");
-    const cian = new Color("#06b6d4");
+    const base = new Color(pal.base);
+    const acentoA = new Color(pal.acentoA);
+    const acentoB = new Color(pal.acentoB);
 
     // ── Esfera de puntos (distribución de Fibonacci) ─────────────────────
     const N = 900;
@@ -235,9 +304,9 @@ const chips = [
       posiciones[i * 3] = Math.cos(th) * r * RADIO;
       posiciones[i * 3 + 1] = y * RADIO;
       posiciones[i * 3 + 2] = Math.sin(th) * r * RADIO;
-      // Un 14 % esmeralda y un 8 % cian: puntos «activos» en la red.
+      // Un 14 % con el primer acento y un 8 % con el segundo: puntos «activos».
       const azar = (i * 7919) % 100;
-      const c = azar < 14 ? esmeralda : azar < 22 ? cian : marino;
+      const c = azar < 14 ? acentoA : azar < 22 ? acentoB : base;
       colores[i * 3] = c.r;
       colores[i * 3 + 1] = c.g;
       colores[i * 3 + 2] = c.b;
@@ -277,13 +346,13 @@ const chips = [
     geoLineas.setAttribute("position", new Float32BufferAttribute(segmentos, 3));
     const lineas = new LineSegments(
       geoLineas,
-      new LineBasicMaterial({ color: marino, transparent: true, opacity: 0.13, depthWrite: false }),
+      new LineBasicMaterial({ color: base, transparent: true, opacity: 0.14, depthWrite: false }),
     );
 
     // Núcleo: icosaedro en alambre, apenas visible, para dar profundidad.
     const nucleo = new Mesh(
       new IcosahedronGeometry(1.12, 2),
-      new MeshBasicMaterial({ color: cian, wireframe: true, transparent: true, opacity: 0.08 }),
+      new MeshBasicMaterial({ color: acentoA, wireframe: true, transparent: true, opacity: 0.08 }),
     );
 
     const mundo = new Group();
@@ -293,23 +362,26 @@ const chips = [
     // ── Anillos orbitales y satélites ────────────────────────────────────
     const anillos = new Group();
     const ORBITA = 2.05;
-    const hacerAnillo = (color: InstanceType<typeof Color>, rx: number, ry: number) => {
+    const hacerAnillo = (color: string, rx: number, ry: number) => {
       const anillo = new Mesh(
         new TorusGeometry(ORBITA, 0.009, 8, 180),
-        new MeshBasicMaterial({ color, transparent: true, opacity: 0.5 }),
+        new MeshBasicMaterial({ color: new Color(color), transparent: true, opacity: 0.5 }),
       );
       anillo.rotation.set(rx, ry, 0);
       anillos.add(anillo);
       return anillo;
     };
-    const anilloA = hacerAnillo(cian, Math.PI / 2 + 0.38, 0.1);
-    const anilloB = hacerAnillo(esmeralda, Math.PI / 2 - 0.42, 0.7);
+    const anilloA = hacerAnillo(pal.anilloA, Math.PI / 2 + 0.38, 0.1);
+    const anilloB = hacerAnillo(pal.anilloB, Math.PI / 2 - 0.42, 0.7);
     const satelites = [
-      { padre: anilloA, fase: 0, vel: 0.36, color: esmeralda },
-      { padre: anilloA, fase: Math.PI, vel: 0.36, color: cian },
-      { padre: anilloB, fase: 1.1, vel: -0.29, color: cian },
+      { padre: anilloA, fase: 0, vel: 0.36, color: pal.satelites[0] },
+      { padre: anilloA, fase: Math.PI, vel: 0.36, color: pal.satelites[1] },
+      { padre: anilloB, fase: 1.1, vel: -0.29, color: pal.satelites[2] },
     ].map((s) => {
-      const malla = new Mesh(new SphereGeometry(0.05, 14, 14), new MeshBasicMaterial({ color: s.color }));
+      const malla = new Mesh(
+        new SphereGeometry(0.05, 14, 14),
+        new MeshBasicMaterial({ color: new Color(s.color) }),
+      );
       s.padre.add(malla);
       return { ...s, malla };
     });
@@ -390,8 +462,16 @@ const chips = [
       renderer.render(escena, camara);
       return;
     }
-    gsap.fromTo(mundo.scale, { x: 0.6, y: 0.6, z: 0.6 }, { x: 1, y: 1, z: 1, duration: 1.6, ease: "power3.out" });
-    gsap.fromTo(anillos.scale, { x: 0.4, y: 0.4, z: 0.4 }, { x: 1, y: 1, z: 1, duration: 1.8, ease: "power3.out", delay: 0.15 });
+    gsap.fromTo(
+      mundo.scale,
+      { x: 0.6, y: 0.6, z: 0.6 },
+      { x: 1, y: 1, z: 1, duration: 1.6, ease: "power3.out" },
+    );
+    gsap.fromTo(
+      anillos.scale,
+      { x: 0.4, y: 0.4, z: 0.4 },
+      { x: 1, y: 1, z: 1, duration: 1.8, ease: "power3.out", delay: 0.15 },
+    );
     arrancar();
   }
 

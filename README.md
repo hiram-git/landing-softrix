@@ -117,8 +117,10 @@ secciones en `src/components/corporativa/`. Cada sección trae su markup, su CSS
 | `Metricas` | Contadores de 0 al valor en 2 s con `snap: { textContent: 1 }` |
 
 **Escena Three.js del hero** (`EscenaHero.astro`): una «red de cumplimiento», esfera de 900
-puntos enlazados en malla (azul marino, esmeralda y cian) con dos anillos orbitales y
-satélites; rota sola, se inclina hacia el puntero y entra creciendo desde el centro con
+puntos enlazados en malla con dos anillos orbitales y satélites. La prop `paleta` elige los
+colores: `rojos` (el rojo de RC Group y sus tonos), `verdes` (esmeralda y menta) o
+`rojos-verdes` (las dos familias, la que usa el hero); `/rc-group?paleta=verdes` previsualiza
+otra sin tocar código. Rota sola, se inclina hacia el puntero y entra creciendo desde el centro con
 GSAP. Three.js se carga en un chunk aparte y solo cuando el navegador está libre
 (`requestIdleCallback`), así la cascada del hero no espera por él. Sin WebGL quedan los chips
 y dos órbitas en CSS; con «reducir movimiento» se pinta un solo cuadro quieto; se pausa fuera
