@@ -1,0 +1,223 @@
+---
+import { contacto, intereses } from "@/data/contacto";
+import Badge from "./Badge.astro";
+import Button from "./Button.astro";
+import Icon from "./Icon.astro";
+import Input from "./Input.astro";
+
+// Formulario de demo de screens/inicio.html: nombre, contacto e interés, con
+// su estado de éxito. Envía a POST /api/demo; sin JavaScript también funciona
+// (envío normal del formulario).
+---
+
+<div class="demo" data-demo>
+  <form class="demo__form" action="/api/demo" method="post" novalidate data-demo-form>
+    <Input name="nombre" label="Nombre" required autocomplete="name" />
+    <Input
+      name="contacto"
+      label="WhatsApp o correo"
+      required
+      hint="Te respondemos por el medio que pongas aquí"
+    />
+    <div class="sx-field">
+      <label class="sx-field__label" for="interes">¿Qué te interesa?</label>
+      <select id="interes" name="interes" class="sx-select">
+        {intereses.map((i) => <option>{i}</option>)}
+      </select>
+    </div>
+    <div class="demo__error" role="alert" hidden data-demo-error>
+      <Icon name="alert" />
+      <span data-demo-error-texto>No pudimos enviar tu solicitud. Inténtalo de nuevo o escríbenos por WhatsApp.</span>
+    </div>
+    <div class="demo__pie">
+      <div class="demo__nota">Solo usamos tus datos para contactarte.</div>
+      <Button variant="primary" size="lg" type="submit" arrow data-demo-enviar>Solicitar demo</Button>
+    </div>
+  </form>
+
+  <div class="demo__exito" hidden tabindex="-1" data-demo-exito>
+    <div><Badge tone="success" pill icon="check">Solicitud enviada</Badge></div>
+    <div class="demo__exito-titulo">Listo. Te contactamos en un día hábil.</div>
+    <div class="demo__exito-texto">
+      Si prefieres no esperar, escríbenos ahora al WhatsApp {contacto.whatsappVisible} o llama al{" "}
+      {contacto.oficina}.
+    </div>
+    <div class="demo__exito-acciones">
+      <Button variant="whatsapp" href={contacto.whatsapp}>Escribir por WhatsApp</Button>
+      <Button variant="ghost" data-demo-otra>Enviar otra solicitud</Button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .demo__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-8);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-000);
+  }
+  .demo__pie {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+    justify-content: space-between;
+  }
+  .demo__nota {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--ink-muted);
+  }
+  .demo__error {
+    display: flex;
+    gap: var(--space-2);
+    align-items: flex-start;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--danger-soft);
+    color: var(--danger);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+  }
+  .demo__error[hidden] {
+    display: none;
+  }
+  .demo__error :global(svg) {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .demo__exito {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-8);
+    border: 1px solid var(--success);
+    border-radius: var(--radius-lg);
+    background: var(--success-soft);
+  }
+  .demo__exito[hidden] {
+    display: none;
+  }
+  .demo__exito-titulo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 34px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .demo__exito-texto {
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--ink-muted);
+  }
+  .demo__exito-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  @media (max-width: 959.98px) {
+    .demo__form,
+    .demo__exito {
+      padding: var(--space-6);
+    }
+  }
+</style>
+
+<script>
+  const MENSAJES = {
+    nombre: "Escribe tu nombre",
+    contacto: "Escribe un WhatsApp o un correo",
+  } as const;
+
+  const raiz = document.querySelector<HTMLElement>("[data-demo]");
+  const form = raiz?.querySelector<HTMLFormElement>("[data-demo-form]");
+  const exito = raiz?.querySelector<HTMLElement>("[data-demo-exito]");
+  const aviso = raiz?.querySelector<HTMLElement>("[data-demo-error]");
+  const enviar = raiz?.querySelector<HTMLButtonElement>("[data-demo-enviar]");
+
+  // Mismo markup que Input.astro con `error`: borde danger, icono y texto.
+  function marcar(campo: HTMLInputElement, mensaje: string | null) {
+    const caja = campo.closest(".sx-field");
+    if (!caja) return;
+    caja.querySelector(".sx-field__error")?.remove();
+    const pista = caja.querySelector<HTMLElement>(".sx-field__hint");
+    caja.classList.toggle("sx-field--error", Boolean(mensaje));
+    if (!mensaje) {
+      campo.removeAttribute("aria-invalid");
+      if (pista) {
+        pista.hidden = false;
+        campo.setAttribute("aria-describedby", pista.id);
+      } else campo.removeAttribute("aria-describedby");
+      return;
+    }
+    const error = document.createElement("div");
+    error.className = "sx-field__error";
+    error.id = `${campo.id}-err`;
+    const icono = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    icono.setAttribute("viewBox", "0 0 24 24");
+    icono.setAttribute("aria-hidden", "true");
+    icono.innerHTML = '<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>';
+    error.append(icono, mensaje);
+    if (pista) pista.hidden = true;
+    caja.append(error);
+    campo.setAttribute("aria-invalid", "true");
+    campo.setAttribute("aria-describedby", error.id);
+  }
+
+  if (form && exito && aviso && enviar) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      aviso.hidden = true;
+      const datos = Object.fromEntries(new FormData(form)) as Record<string, string>;
+
+      let primero: HTMLInputElement | null = null;
+      for (const nombre of Object.keys(MENSAJES) as (keyof typeof MENSAJES)[]) {
+        const campo = form.elements.namedItem(nombre) as HTMLInputElement;
+        const vacio = !String(datos[nombre] ?? "").trim();
+        marcar(campo, vacio ? MENSAJES[nombre] : null);
+        if (vacio && !primero) primero = campo;
+      }
+      if (primero) {
+        primero.focus();
+        return;
+      }
+
+      enviar.disabled = true;
+      enviar.setAttribute("aria-busy", "true");
+      try {
+        const r = await fetch(form.action, {
+          method: "POST",
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify(datos),
+        });
+        if (!r.ok) throw new Error(String(r.status));
+        form.hidden = true;
+        exito.hidden = false;
+        exito.focus();
+      } catch {
+        aviso.hidden = false;
+      } finally {
+        enviar.disabled = false;
+        enviar.removeAttribute("aria-busy");
+      }
+    });
+
+    raiz?.querySelector("[data-demo-otra]")?.addEventListener("click", () => {
+      form.reset();
+      exito.hidden = true;
+      form.hidden = false;
+      (form.elements.namedItem("nombre") as HTMLInputElement).focus();
+    });
+  }
+</script>

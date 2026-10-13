@@ -1,0 +1,72 @@
+---
+import Button from "./Button.astro";
+import Icon from "./Icon.astro";
+import type { Accion, NavLink } from "./types";
+
+// NavbarProps. Cubre tableta y escritorio; en móvil la reemplaza MobileMenu.
+interface Props {
+  logoSrc: string;
+  logoAlt?: string;
+  homeHref?: string;
+  links?: NavLink[];
+  primary?: Accion;
+  secondary?: Accion;
+  sticky?: boolean;
+  class?: string;
+}
+const {
+  logoSrc,
+  logoAlt = "RCG Softrix",
+  homeHref = "/",
+  links = [],
+  primary,
+  secondary,
+  sticky,
+  class: clase,
+} = Astro.props;
+---
+
+<nav class:list={["sx-nav", sticky && "sx-nav--sticky", clase]} aria-label="Principal">
+  <a class="sx-nav__logo" href={homeHref}>
+    <img src={logoSrc} alt={logoAlt} width="1282" height="180" />
+  </a>
+  <ul class="sx-nav__links">
+    {
+      links.map((l) =>
+        l.children?.length ? (
+          <li class="sx-nav__item">
+            <button
+              type="button"
+              class="sx-nav__link"
+              aria-haspopup="true"
+              aria-current={l.current ? "page" : undefined}
+            >
+              {l.label}
+              <Icon name="chevron" />
+            </button>
+            <ul class="sx-nav__menu">
+              {l.children.map((c) => (
+                <li>
+                  <a href={c.href} aria-current={c.current ? "page" : undefined}>
+                    {c.label}
+                    {c.hint && <small>{c.hint}</small>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ) : (
+          <li class="sx-nav__item">
+            <a class="sx-nav__link" href={l.href} aria-current={l.current ? "page" : undefined}>
+              {l.label}
+            </a>
+          </li>
+        ),
+      )
+    }
+  </ul>
+  <div class="sx-nav__actions">
+    {secondary && <Button variant="secondary" href={secondary.href}>{secondary.label}</Button>}
+    {primary && <Button variant="primary" href={primary.href}>{primary.label}</Button>}
+  </div>
+</nav>

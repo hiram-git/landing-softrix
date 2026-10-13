@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Softrix Facturación — página de producto</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/softrix/tokens.css">
+<link rel="stylesheet" href="ds/softrix/components/bundle.css">
+<script src="ds/softrix/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:var(--surface-000);color:var(--ink);font-family:var(--font-sans)}
+a{color:var(--brand-text)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<div class="sx-root" style="display: flex; flex-direction: column; width: 100%; background: var(--surface-000); color: var(--ink); font-family: var(--font-sans);">
+
+  <x-import component-from-global-scope="Softrix.Navbar" logo-src="/logos/rcg-softrix-horizontal.png" home-href="/" links="{{ navLinks }}" primary="{{ navPrimary }}" secondary="{{ navSecondary }}"></x-import>
+
+  <x-import component-from-global-scope="Softrix.Hero" dark="{{ yes }}" badges="{{ badges }}" title="Softrix Facturación" lead="El ERP para pymes multi-sucursal de Panamá: vende, factura ante la DGI, controla inventario y caja en un solo sistema." primary="{{ heroPrimary }}" secondary="{{ heroSecondary }}">
+    <img class="sx-enter sx-enter--5" src="/screenshots/facturacion-panel.png" alt="Panel de Softrix Facturación con ventas, stock y cuentas por cobrar" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border: 1px solid var(--on-brand-muted); border-radius: 14px; background: var(--surface-inverse);">
+  </x-import>
+
+  <!-- Facturación electrónica -->
+  <section style="padding: 64px 32px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 48px; align-items: center;">
+      <img src="/screenshots/facturacion-factura.png" alt="Nueva factura de venta en Softrix Facturación con desglose de ITBMS" style="flex: 1 1 480px; min-width: 0; display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: top; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-100);">
+      <div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 16px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Facturación electrónica DGI</div>
+        <h2 style="margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.015em;">Factura conforme a la DGI sin pensar en el PAC</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--ink-muted);">Cada venta genera su CAFE a través del PAC autorizado, con CUFE, código QR y desglose de ITBMS. Imprime en ticket de 80 mm o en A4 y Carta.</p>
+        <div style="font-family: var(--font-mono); font-size: 14px; line-height: 20px; padding: 12px 16px; background: var(--surface-200); border-radius: 4px; color: var(--ink); overflow-wrap: anywhere;">CUFE FE0120000000000-0000000-0000000000000000000000000000000000000000000000</div>
+        <div style="font-size: 12px; line-height: 16px; color: var(--ink-muted);">CAFE: comprobante auxiliar de factura electrónica · CUFE: código único de factura electrónica · PAC: proveedor de autorización calificado.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Módulos -->
+  <section id="modulos" style="padding: 64px 32px; background: var(--surface-100);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 640px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Módulos</div>
+        <h2 style="margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.015em;">Todo el ciclo comercial en un solo sistema</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+        <x-import component-from-global-scope="Softrix.FeatureCard" title="Ventas y caja" items="{{ mVentas }}"></x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" title="Inventario y compras" items="{{ mInventario }}"></x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" title="Servicios y taller" items="{{ mServicios }}"></x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" title="Control y reportes" items="{{ mControl }}"></x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verticales -->
+  <section style="padding: 64px 32px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 640px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Hecho para tu negocio</div>
+        <h2 style="margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.015em;">Modos de trabajo por vertical</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;">
+        <x-import component-from-global-scope="Softrix.FeatureCard" badge="Joyerías" title="Precio por peso de oro">Órdenes de servicio con varias piezas y prioridad, y certificados de regalo al portador.</x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" badge="Talleres" title="Órdenes con técnicos">Avance por pieza, entregas parciales y seguimiento de cada reparación hasta el cobro.</x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" badge="Veterinarias" title="Mascotas por cliente">Cada mascota se atiende desde la orden de servicio, con su historial.</x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding: 0 32px 96px;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 48px; background: var(--brand-deep); color: var(--on-brand); border-radius: 24px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
+      <div style="display: flex; flex-direction: column; gap: 8px; max-width: 640px;">
+        <div style="font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 600;">Mira Softrix Facturación con datos parecidos a los tuyos</div>
+        <div style="font-size: 16px; line-height: 24px; color: var(--on-brand-muted);">Demo guiada de 30 minutos. Sin tarjeta.</div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <x-import component-from-global-scope="Softrix.Button" variant="primary" size="lg" arrow="{{ yes }}" href="/#demo">Solicitar demo</x-import>
+        <x-import component-from-global-scope="Softrix.Button" variant="secondary-inverse" size="lg" href="https://wa.me/50761966047?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20RCG%20Softrix">Escribir por WhatsApp</x-import>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding: 48px 32px; background: var(--surface-inverse); color: var(--ink-inverse);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
+      <img src="/logos/rcg-softrix-horizontal-inverse.png" alt="RCG Softrix" style="height: 28px; width: auto;">
+      <div style="font-size: 14px; line-height: 20px; color: var(--on-brand-muted);">RCG Softrix es la línea de software de RC Group · PH Obarrio 60, Panamá · +(507) 399-2627</div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1366,"height":2700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      yes: true,
+      badges: [{ label: 'Producto insignia', tone: 'brand' }, { label: 'Nube o local', tone: 'info' }],
+      navLinks: [
+        { label: 'Servicios Legales', children: [
+          { label: 'Firma electrónica y digital', href: 'Main#legal' },
+          { label: 'Asesoría tributaria', href: 'Main#legal' },
+          { label: 'Registro de marca y propiedad intelectual', href: 'Main#legal' },
+          { label: 'Constitución y gestión de sociedades', href: 'Main#legal' },
+          { label: 'Contratos de compraventa y escrituras', href: 'Main#legal' } ] },
+        { label: 'RCG Softrix', current: true, children: [
+          { label: 'Softrix Facturación', href: 'Facturacion.dc.html', hint: 'Vende, factura ante la DGI y controla caja' },
+          { label: 'Softrix RRHH', href: 'Planilla.dc.html', hint: 'Planilla y colaboradores' },
+          { label: 'SmartGate Control', href: 'SmartGate.dc.html', hint: 'Control de accesos' } ] },
+        { label: 'Sector Gobierno', href: 'Main#gobierno' },
+        { label: 'Equipos', href: 'Main#equipos' },
+        { label: 'Blog', href: '#' },
+        { label: 'Contáctenos', href: 'Main#contacto' }
+      ],
+      navPrimary: { label: 'Solicitar demo', href: 'Main#demo' },
+      navSecondary: { label: 'Iniciar sesión', href: '#' },
+      heroPrimary: { label: 'Solicitar demo', href: 'Main#demo' },
+      heroSecondary: { label: 'Ver módulos', href: '#modulos' },
+      mVentas: ['Cotizaciones y pedidos con reserva de stock', 'Facturas, notas de crédito y débito', 'Vendedores y comisiones', 'Cuentas por cobrar y anticipos', 'Caja: apertura, cierre y supervisor'],
+      mInventario: ['Stock en tiempo real por almacén', 'Variantes y kits', 'Transferencias entre sucursales', 'Alertas de mínimo e historial de movimientos', 'Proveedores, órdenes de compra y cuentas por pagar'],
+      mServicios: ['Órdenes de servicio con técnicos', 'Avance por pieza', 'Entregas parciales'],
+      mControl: ['Reportes gerenciales en PDF y Excel', 'Multi-empresa y multi-sucursal', 'Permisos por módulo, sucursal y usuario']
+    };
+  }
+}
+</script>
+</body>
+</html>

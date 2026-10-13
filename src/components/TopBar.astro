@@ -1,0 +1,51 @@
+---
+import { contacto } from "@/data/contacto";
+---
+
+<div class="topbar">
+  <div class="topbar__grupo">
+    <span>{contacto.direccionCorta}</span>
+    <a href="tel:+5073992627">{contacto.oficina}</a>
+    <a href={`mailto:${contacto.correo}`}>{contacto.correo}</a>
+  </div>
+  <div class="topbar__grupo">
+    <span>{contacto.horario}</span>
+    <a href={contacto.instagram.url} target="_blank" rel="noopener">
+      Instagram {contacto.instagram.usuario}
+    </a>
+  </div>
+</div>
+
+<style>
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-8);
+    background: var(--surface-inverse);
+    color: var(--on-brand-muted);
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .topbar__grupo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+  }
+  .topbar a {
+    color: var(--on-brand-muted);
+    text-decoration: none;
+  }
+  .topbar a:hover {
+    color: var(--on-brand);
+    text-decoration: underline;
+  }
+  /* En móvil la franja no existe (screens/inicio-movil.html): los datos están en #contacto. */
+  @media (max-width: 959.98px) {
+    .topbar {
+      display: none;
+    }
+  }
+</style>

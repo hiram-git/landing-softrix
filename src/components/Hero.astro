@@ -1,0 +1,76 @@
+---
+import Badge from "./Badge.astro";
+import Button from "./Button.astro";
+import type { Accion, BadgeTone, ButtonVariant } from "./types";
+
+// HeroProps. La captura (children) llega por el slot por defecto y ocupa la
+// columna derecha; la entrada escalonada sx-enter es solo de esta primera pantalla.
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  primary?: Accion;
+  secondary?: Accion;
+  secondaryVariant?: ButtonVariant;
+  badges?: { label: string; tone?: BadgeTone }[];
+  note?: string;
+  dark?: boolean;
+  class?: string;
+}
+const {
+  eyebrow,
+  title,
+  lead,
+  primary,
+  secondary,
+  secondaryVariant,
+  badges = [],
+  note,
+  dark,
+  class: clase,
+} = Astro.props;
+const varianteSecundaria = dark ? "secondary-inverse" : (secondaryVariant ?? "ghost");
+---
+
+<section class:list={["sx-hero", dark && "sx-hero--dark", clase]}>
+  <div class="sx-hero__inner">
+    <div class="sx-hero__text">
+      {
+        badges.length > 0 && (
+          <div class="sx-hero__badges sx-enter">
+            {badges.map((b) => (
+              <Badge tone={b.tone ?? "neutral"}>{b.label}</Badge>
+            ))}
+          </div>
+        )
+      }
+      {eyebrow && <div class="sx-hero__eyebrow sx-enter">{eyebrow}</div>}
+      <h1 class="sx-hero__title sx-enter sx-enter--2">{title}</h1>
+      {lead && <p class="sx-hero__lead sx-enter sx-enter--3">{lead}</p>}
+      <div class="sx-hero__actions sx-enter sx-enter--4">
+        {
+          primary && (
+            <Button variant="primary" size="lg" href={primary.href} arrow>
+              {primary.label}
+            </Button>
+          )
+        }
+        {
+          secondary && (
+            <Button variant={varianteSecundaria} size="lg" href={secondary.href}>
+              {secondary.label}
+            </Button>
+          )
+        }
+      </div>
+      {note && <div class="sx-hero__note sx-enter sx-enter--4">{note}</div>}
+    </div>
+    {
+      Astro.slots.has("default") && (
+        <div class="sx-hero__aside">
+          <slot />
+        </div>
+      )
+    }
+  </div>
+</section>

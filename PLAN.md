@@ -1,8 +1,39 @@
 # Plan — Landing page de Softrix (RC Group)
 
+> **Nota (13 oct 2026):** el handoff de diseño `docs/handoff/` (sitio rcgpty.com, sistema
+> RCG Softrix) reemplaza la dirección «Ruta Softrix» y las rutas de este documento. Los
+> productos son Softrix Facturación, Softrix RRHH y SmartGate Control. La fuente de verdad
+> es ahora `docs/handoff/HANDOFF.md` y `docs/handoff/design-system/BRAND.md`.
+
+
 > Documento de planificación. Define qué productos se presentan, cómo se organiza el
 > sitio, qué dice cada sección, con qué se construye y en qué orden. Todavía no hay
 > código: este documento es el punto de partida del repositorio.
+
+---
+
+## Decisiones tomadas (12 oct 2026)
+
+Estas decisiones prevalecen sobre lo que diga el resto del documento:
+
+- **Productos y nombres comerciales**: Softrix Facturación, Softrix Planilla y
+  **Softrix Control de Entrada** (el producto técnico SmartGate Control).
+- **Softrix Citas (AttendanceSoft) no va** en la landing. Tampoco Innova Analítica ni
+  Plataforma.
+- **Todo se vende «a cotizar»**: no se publican precios, ni siquiera los bundles de
+  distribuidores.
+- **Dominio, WhatsApp y correo**: marcadores en `src/config/site.ts` hasta que se
+  confirmen.
+- **Respaldo**: hay testimonios pendientes de entregar; no hay clientes ni cifras
+  publicables.
+- **Identidad**: más llamativa que la app, con el mismo logo. Dirección elegida:
+  **«Ruta Softrix»**: lenguaje de los diablos rojos (pintura negra con rojo
+  aerografiado, cromo, filetes, letreros de ruta con letra de rótulo), con el
+  contenido sobre papel blanco. Esto reemplaza la §6.
+- **Rutas**: `/facturacion`, `/planilla`, `/control-de-entrada`, `/distribuidores`,
+  `/contacto` (`/demo` se fusiona con `/contacto?producto=`).
+- **Fase 1: hecha** (base Astro + Bun, tokens, cabecera con menú de productos, pie,
+  tema claro/oscuro, portada y páginas de producto en esqueleto).
 
 ---
 

@@ -1,0 +1,96 @@
+---
+import Icon from "./Icon.astro";
+
+// InputProps (sin onChange: el comportamiento va en el script del formulario).
+interface Props {
+  name: string;
+  id?: string;
+  label?: string;
+  type?: "text" | "email" | "tel" | "number" | "password";
+  multiline?: boolean;
+  placeholder?: string;
+  value?: string;
+  defaultValue?: string;
+  hint?: string;
+  error?: string;
+  optional?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  autocomplete?: string;
+  class?: string;
+}
+const {
+  name,
+  id = `sx-${name || "field"}`,
+  label,
+  type = "text",
+  multiline,
+  placeholder,
+  value,
+  defaultValue,
+  hint,
+  error,
+  optional,
+  required,
+  disabled,
+  autocomplete,
+  class: clase,
+} = Astro.props;
+const described = error ? `${id}-err` : hint ? `${id}-hint` : undefined;
+const valor = value ?? defaultValue;
+---
+
+<div class:list={["sx-field", error && "sx-field--error", clase]}>
+  {
+    label && (
+      <label class="sx-field__label" for={id}>
+        {label}
+        {optional && <small> (opcional)</small>}
+      </label>
+    )
+  }
+  {
+    multiline ? (
+      <textarea
+        id={id}
+        name={name}
+        class="sx-textarea"
+        placeholder={placeholder}
+        disabled={disabled}
+        required={required}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={described}
+      >
+        {valor}
+      </textarea>
+    ) : (
+      <input
+        id={id}
+        name={name}
+        type={type}
+        class="sx-input"
+        placeholder={placeholder}
+        value={valor}
+        disabled={disabled}
+        required={required}
+        autocomplete={autocomplete}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={described}
+      />
+    )
+  }
+  {
+    error ? (
+      <div class="sx-field__error" id={`${id}-err`}>
+        <Icon name="alert" />
+        {error}
+      </div>
+    ) : (
+      hint && (
+        <div class="sx-field__hint" id={`${id}-hint`}>
+          {hint}
+        </div>
+      )
+    )
+  }
+</div>

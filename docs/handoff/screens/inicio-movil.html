@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>RC Group Panamá — inicio móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/softrix/tokens.css">
+<link rel="stylesheet" href="ds/softrix/components/bundle.css">
+<script src="ds/softrix/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:var(--surface-000);color:var(--ink);font-family:var(--font-sans)}
+a{color:var(--brand-text)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<div class="sx-root" style="display: flex; flex-direction: column; width: 100%; background: var(--surface-000); color: var(--ink); font-family: var(--font-sans);">
+
+  <!-- Cabecera móvil -->
+  <header style="display: flex; flex-direction: column; border-bottom: 1px solid var(--border);">
+    <div style="display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 16px;">
+      <a href="#" style="display: flex; align-items: center; height: 28px;"><img src="/logos/rcg-softrix-horizontal.png" alt="RCG Softrix" style="height: 28px; width: auto; display: block;"></a>
+      <button type="button" aria-label="Abrir o cerrar menú" aria-expanded="{{ menuOpen }}" onClick="{{ toggleMenu }}" style="width: 44px; height: 44px; display: grid; place-items: center; background: transparent; border: 1px solid var(--border-strong); border-radius: 8px; color: var(--ink); cursor: pointer;">
+        <sc-if value="{{ menuClosed }}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></sc-if>
+        <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></sc-if>
+      </button>
+    </div>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <nav aria-label="Principal" style="display: flex; flex-direction: column; gap: 4px; padding: 8px 16px 16px; background: var(--surface-000); border-top: 1px solid var(--border);">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text); padding: 12px 0 4px;">RCG Softrix</div>
+        <a href="/softrix/facturacion" onClick="{{ closeMenu }}" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border);">Softrix Facturación</a>
+        <a href="/softrix/planilla" onClick="{{ closeMenu }}" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border);">Softrix RRHH</a>
+        <a href="/softrix/smartgate" onClick="{{ closeMenu }}" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border);">SmartGate Control</a>
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text); padding: 12px 0 4px;">RC Group</div>
+        <a href="#legal" onClick="{{ closeMenu }}" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border);">Servicios legales</a>
+        <a href="#legal" onClick="{{ closeMenu }}" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border);">Asesoría fiscal</a>
+        <a href="#gobierno" onClick="{{ closeMenu }}" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border);">Sector gobierno</a>
+        <a href="#equipos" onClick="{{ closeMenu }}" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border);">Equipos</a>
+        <a href="#" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border);">Blog</a>
+        <a href="#demo" onClick="{{ closeMenu }}" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border);">Contáctenos</a>
+        <a href="#" style="display: flex; align-items: center; min-height: 48px; font-size: 16px; font-weight: 600; color: var(--ink-muted); text-decoration: none;">Iniciar sesión</a>
+        <div style="margin-top: 8px;"><x-import component-from-global-scope="Softrix.Button" variant="primary" size="lg" arrow="{{ yes }}" href="#demo" on-click="{{ closeMenu }}">Solicitar demo</x-import></div>
+      </nav>
+    </sc-if>
+  </header>
+
+  <!-- Hero -->
+  <section style="padding: 64px 16px 48px; display: flex; flex-direction: column; gap: 16px;">
+    <div class="sx-enter" style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">RC Group Panamá · RCG Softrix</div>
+    <h1 class="sx-enter sx-enter--2" style="margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.015em;">Factura ante la DGI, paga tu planilla y controla tus accesos</h1>
+    <div class="sx-enter--rule" style="width: 64px; height: 4px; background: var(--brand); border-radius: 2px;"></div>
+    <p class="sx-enter sx-enter--3" style="margin: 0; font-size: 16px; line-height: 24px; color: var(--ink-muted);">Software hecho en Panamá para pymes e instituciones, con el respaldo legal y fiscal de RC Group. En la nube o en tu local.</p>
+    <div class="sx-enter sx-enter--4" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+      <x-import component-from-global-scope="Softrix.Button" variant="primary" size="lg" arrow="{{ yes }}" href="#demo">Solicitar demo</x-import>
+      <x-import component-from-global-scope="Softrix.Button" variant="ghost" size="lg" href="https://wa.me/50761966047?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20RCG%20Softrix">Escribir por WhatsApp</x-import>
+    </div>
+    <div style="font-size: 12px; line-height: 16px; color: var(--ink-muted); text-align: center;">Sin tarjeta. Demo guiada de 30 minutos.</div>
+    <img class="sx-enter sx-enter--5" src="/screenshots/facturacion-panel.png" alt="Panel de Softrix Facturación" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-100);">
+  </section>
+
+  <!-- Productos -->
+  <section id="productos" style="padding: 48px 16px; background: var(--surface-100); display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">RCG Softrix</div>
+      <h2 style="margin: 0; font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 700;">¿Cuál necesita tu negocio?</h2>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <x-import component-from-global-scope="Softrix.ProductCard" featured="{{ yes }}" eyebrow="Producto insignia" title="Softrix Facturación" pitch="Vende, factura ante la DGI y controla inventario y caja." features="{{ fFact }}" badge="Nube o local" badge-tone="info" cta="Ver Facturación" href="/softrix/facturacion"></x-import>
+      <x-import component-from-global-scope="Softrix.ProductCard" eyebrow="Recursos humanos" title="Softrix RRHH" pitch="Planilla, colaboradores y portal del empleado conforme a la ley panameña." features="{{ fPlan }}" cta="Ver RRHH" href="/softrix/planilla"></x-import>
+      <x-import component-from-global-scope="Softrix.ProductCard" eyebrow="Control de accesos" title="SmartGate Control" pitch="Controla quién entra y sale de edificios, empresas y entes públicos." features="{{ fGate }}" cta="Ver SmartGate" href="/softrix/smartgate"></x-import>
+    </div>
+  </section>
+
+  <!-- RC Group: legal, fiscal, equipos, gobierno -->
+  <section id="legal" style="padding: 48px 16px; display: flex; flex-direction: column; gap: 16px;">
+    <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Servicios legales y asesoría fiscal</div>
+    <h2 style="margin: 0; font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 700;">El software viene con quien sabe de impuestos</h2>
+    <x-import component-from-global-scope="Softrix.FeatureCard" title="Servicios legales" items="{{ legalItems }}"></x-import>
+    <x-import component-from-global-scope="Softrix.FeatureCard" title="Asesoría tributaria" items="{{ fiscalItems }}"></x-import>
+    <div id="equipos"><x-import component-from-global-scope="Softrix.FeatureCard" badge="Equipos" title="Impresoras, lectores y terminales">Equipos de facturación electrónica probados con Softrix.</x-import></div>
+    <div id="gobierno"><x-import component-from-global-scope="Softrix.FeatureCard" badge="Sector gobierno" title="Control de visitantes para entes públicos">SmartGate Control con verificación de antecedentes y niveles de aprobación.</x-import></div>
+  </section>
+
+  <!-- Distribuidores -->
+  <section id="distribuidores" style="padding: 48px 16px; background: var(--brand-deep); color: var(--on-brand); display: flex; flex-direction: column; gap: 16px;">
+    <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--on-brand-muted);">Programa de distribuidores</div>
+    <h2 style="margin: 0; font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 700;">Vende Softrix en tu zona con margen propio</h2>
+    <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--on-brand-muted);">Activa, renueva y controla las licencias de tus clientes desde un solo panel.</p>
+    <x-import component-from-global-scope="Softrix.Button" variant="secondary-inverse" size="lg" arrow="{{ yes }}" href="#demo">Quiero ser distribuidor</x-import>
+  </section>
+
+  <!-- Demo -->
+  <section id="demo" style="padding: 48px 16px; display: flex; flex-direction: column; gap: 16px;">
+    <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Solicitar demo</div>
+    <h2 style="margin: 0; font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 700;">Tres datos y te llamamos</h2>
+    <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+      <form style="display: flex; flex-direction: column; gap: 16px; padding: 24px; border: 1px solid var(--border); border-radius: 14px;">
+        <x-import component-from-global-scope="Softrix.Input" name="nombre" label="Nombre" required="{{ yes }}"></x-import>
+        <x-import component-from-global-scope="Softrix.Input" name="contacto" label="WhatsApp o correo" required="{{ yes }}"></x-import>
+        <div class="sx-field">
+          <label class="sx-field__label" for="interes-m">¿Qué te interesa?</label>
+          <select id="interes-m" name="interes" class="sx-select">
+            <option>Softrix Facturación</option>
+            <option>Softrix RRHH</option>
+            <option>SmartGate Control</option>
+            <option>Servicios legales o asesoría fiscal</option>
+            <option>Equipos</option>
+            <option>Ser distribuidor</option>
+          </select>
+        </div>
+        <x-import component-from-global-scope="Softrix.Button" variant="primary" size="lg" arrow="{{ yes }}" on-click="{{ send }}">Solicitar demo</x-import>
+        <div style="font-size: 12px; line-height: 16px; color: var(--ink-muted); text-align: center;">Solo usamos tus datos para contactarte.</div>
+      </form>
+    </sc-if>
+    <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 12px; padding: 24px; border: 1px solid var(--success); border-radius: 14px; background: var(--success-soft);">
+        <x-import component-from-global-scope="Softrix.Badge" tone="success" pill="{{ yes }}" icon="check">Solicitud enviada</x-import>
+        <div style="font-family: var(--font-display); font-size: 22px; line-height: 28px; font-weight: 600; color: var(--ink);">Listo. Te contactamos en un día hábil.</div>
+        <div style="font-size: 14px; line-height: 20px; color: var(--ink-muted);">Si prefieres no esperar, escríbenos ahora por WhatsApp.</div>
+        <x-import component-from-global-scope="Softrix.Button" variant="whatsapp" href="https://wa.me/50761966047?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20RCG%20Softrix">Escribir por WhatsApp</x-import>
+        <x-import component-from-global-scope="Softrix.Button" variant="ghost" on-click="{{ reset }}">Enviar otra solicitud</x-import>
+      </div>
+    </sc-if>
+    <div style="display: flex; justify-content: center;"><x-import component-from-global-scope="Softrix.Button" variant="ghost" href="https://wa.me/50761966047?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20RCG%20Softrix">O escríbenos por WhatsApp</x-import></div>
+  </section>
+
+  <footer style="padding: 32px 16px; background: var(--surface-inverse); color: var(--ink-inverse); display: flex; flex-direction: column; gap: 12px;">
+    <img src="/logos/rcg-softrix-horizontal-inverse.png" alt="RCG Softrix" style="height: 24px; width: auto; align-self: flex-start;">
+    <div style="font-size: 14px; line-height: 20px; color: var(--on-brand-muted);">RCG Softrix es la línea de software de RC Group · PH Obarrio 60, Panamá · +(507) 399-2627</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":3700}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { menu: false, sent: false };
+  }
+  renderVals() {
+    var self = this;
+    return {
+      yes: true,
+      menuOpen: this.state.menu,
+      menuClosed: !this.state.menu,
+      toggleMenu: function () { self.setState({ menu: !self.state.menu }); },
+      closeMenu: function () { self.setState({ menu: false }); },
+      sent: this.state.sent,
+      notSent: !this.state.sent,
+      send: function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState({ sent: true }); },
+      reset: function () { self.setState({ sent: false }); },
+      fFact: ['Facturación electrónica DGI', 'Stock por almacén', 'Caja con supervisor', 'Joyería, taller y veterinaria'],
+      fPlan: ['Planilla y deducciones', 'Multi-empresa', 'Portal del colaborador'],
+      fGate: ['Invitaciones y aprobaciones', 'Acceso por QR', 'Puesto de control en tableta'],
+      legalItems: ['Firma electrónica y digital', 'Registro de marca y propiedad intelectual', 'Sociedades, contratos y escrituras'],
+      fiscalItems: ['Declaraciones de impuestos', 'Revisión y optimización', 'Defensa ante autoridades']
+    };
+  }
+}
+</script>
+</body>
+</html>

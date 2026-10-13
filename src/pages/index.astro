@@ -1,0 +1,390 @@
+---
+import Button from "@/components/Button.astro";
+import DemoForm from "@/components/DemoForm.astro";
+import FeatureCard from "@/components/FeatureCard.astro";
+import Hero from "@/components/Hero.astro";
+import Icon from "@/components/Icon.astro";
+import ProductCard from "@/components/ProductCard.astro";
+import { contacto } from "@/data/contacto";
+import { productos, segmentos } from "@/data/productos";
+import Base from "@/layouts/Base.astro";
+---
+
+<Base
+  title="RC Group Panamá · RCG Softrix"
+  description="Software hecho en Panamá para pymes e instituciones: facturación electrónica DGI, planilla y control de accesos, con el respaldo legal y fiscal de RC Group."
+  seccion="inicio"
+>
+  <Hero
+    eyebrow="RC Group Panamá · RCG Softrix"
+    title="Factura ante la DGI, paga tu planilla y controla tus accesos"
+    lead="Software hecho en Panamá para pymes e instituciones, con el respaldo legal y fiscal de RC Group. En la nube o instalado en tu local."
+    primary={{ label: "Solicitar demo", href: "#demo" }}
+    secondary={{ label: "Escribir por WhatsApp", href: contacto.whatsapp }}
+    note="Sin tarjeta. Demo guiada de 30 minutos con un asesor."
+  >
+    <img
+      class="captura sx-enter sx-enter--5"
+      src="/screenshots/facturacion-panel.png"
+      alt="Panel de Softrix Facturación: ventas del día, cuentas por cobrar e inventario"
+      width="2160"
+      height="3065"
+    />
+  </Hero>
+
+  <!-- Productos RCG Softrix -->
+  <section id="softrix" class="seccion seccion--alterna" aria-labelledby="softrix-titulo">
+    <div class="contenedor pila">
+      <div class="encabezado">
+        <div class="eyebrow">RCG Softrix</div>
+        <h2 id="softrix-titulo" class="titulo-seccion">Tres productos, una sola plataforma</h2>
+        <p class="texto-apoyo">
+          Se instalan por separado y comparten usuarios, empresas y sucursales. Elige lo que eres y
+          te señalamos el tuyo.
+        </p>
+      </div>
+      <div class="segmentos" role="group" aria-label="Elige lo que eres" data-segmentos>
+        {
+          segmentos.map((s) => (
+            <button
+              type="button"
+              class="segmento"
+              aria-pressed="false"
+              data-objetivos={s.targets.join(" ")}
+            >
+              {s.label}
+            </button>
+          ))
+        }
+      </div>
+      <div class="rejilla">
+        {
+          productos.map((p) => (
+            <div class="producto" data-producto={p.id}>
+              <ProductCard
+                featured={p.featured}
+                eyebrow={p.eyebrow}
+                title={p.title}
+                pitch={p.pitch}
+                features={p.features}
+                badge={p.badge}
+                badgeTone={p.badgeTone}
+                cta={p.cta}
+                href={p.href}
+              >
+                <Icon slot="icon" name={p.icon} />
+              </ProductCard>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Servicios legales y asesoría fiscal -->
+  <section id="legal" class="seccion" aria-labelledby="legal-titulo">
+    <div class="contenedor legal">
+      <div class="legal__texto">
+        <div class="eyebrow">Servicios legales y asesoría fiscal</div>
+        <h2 id="legal-titulo" class="titulo-seccion">
+          El software viene con quien sabe de impuestos
+        </h2>
+        <p class="texto-apoyo legal__apoyo">
+          RC Group acompaña a tu empresa desde la constitución hasta la defensa ante auditorías. La
+          facturación electrónica no es solo un sistema: es cumplir bien.
+        </p>
+        <div class="legal__accion">
+          <Button variant="ghost" arrow href="#contacto">Hablar con un asesor</Button>
+        </div>
+      </div>
+      <div class="legal__rejilla">
+        <FeatureCard title="Firma electrónica y digital">
+          <Icon slot="icon" name="pen" />
+          Gestión de certificados y firma para facturar y contratar con validez legal.
+        </FeatureCard>
+        <FeatureCard title="Asesoría tributaria">
+          <Icon slot="icon" name="calc" />
+          Declaraciones de impuestos, revisión y optimización de cargas fiscales, defensa ante autoridades.
+        </FeatureCard>
+        <FeatureCard title="Marca y propiedad intelectual">
+          <Icon slot="icon" name="mark" />
+          Registro de marca y protección de tus activos intangibles.
+        </FeatureCard>
+        <FeatureCard title="Sociedades y contratos">
+          <Icon slot="icon" name="doc" />
+          Constitución y gestión de sociedades, contratos de compraventa y escrituras en Panamá.
+        </FeatureCard>
+      </div>
+    </div>
+  </section>
+
+  <!-- Facturación electrónica: beneficios -->
+  <section class="seccion seccion--alterna" aria-labelledby="fe-titulo">
+    <div class="contenedor pila">
+      <div class="encabezado">
+        <div class="eyebrow">Expertos en facturación electrónica</div>
+        <h2 id="fe-titulo" class="titulo-seccion">Lo que ganas al facturar electrónicamente</h2>
+      </div>
+      <div class="rejilla rejilla--4">
+        <FeatureCard badge="Ahorrativo" title="Menos papel y archivo">
+          Sin impresión, tintas ni almacenamiento físico de facturas.
+        </FeatureCard>
+        <FeatureCard badge="Innovador" title="Integrado a tu sistema">
+          Emisión y recepción automáticas desde Softrix Facturación.
+        </FeatureCard>
+        <FeatureCard badge="Rentable" title="Mejor servicio al cliente">
+          Comprobantes al instante por correo o WhatsApp.
+        </FeatureCard>
+        <FeatureCard badge="Seguro" title="Menos riesgo">
+          Sin facturas falsas ni pagos duplicados: cada CAFE lleva su CUFE.
+        </FeatureCard>
+      </div>
+      <p class="leyenda">
+        CAFE: comprobante auxiliar de factura electrónica · CUFE: código único de factura
+        electrónica.
+      </p>
+    </div>
+  </section>
+
+  <!-- Equipos y sector gobierno -->
+  <section class="seccion" aria-label="Equipos y sector gobierno">
+    <div class="contenedor rejilla">
+      <div id="equipos" class="panel">
+        <div class="eyebrow">Equipos</div>
+        <h2 class="panel__titulo">Impresoras, lectores y terminales listos para Softrix</h2>
+        <p class="texto-apoyo">
+          Equipos de facturación electrónica probados con el sistema: impresoras de 80 mm, lectores
+          de código y terminales de punto de venta.
+        </p>
+        <div><Button variant="ghost" arrow href="#">Ver equipos</Button></div>
+      </div>
+      <div id="gobierno" class="panel panel--marca">
+        <div class="eyebrow panel__eyebrow-marca">Sector gobierno</div>
+        <h2 class="panel__titulo">Control de visitantes con verificación de antecedentes</h2>
+        <p class="panel__apoyo-marca">
+          SmartGate Control para entes públicos: invitaciones, niveles de aprobación y puesto de
+          control en tableta.
+        </p>
+        <div>
+          <Button variant="secondary-inverse" arrow href="/softrix/smartgate">
+            Ver SmartGate Control
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Distribuidores (screens/inicio-movil.html) -->
+  <section id="distribuidores" class="seccion distribuidores" aria-labelledby="dist-titulo">
+    <div class="contenedor distribuidores__fila">
+      <div class="encabezado">
+        <div class="eyebrow distribuidores__eyebrow">Programa de distribuidores</div>
+        <h2 id="dist-titulo" class="titulo-seccion">Vende Softrix en tu zona con margen propio</h2>
+        <p class="distribuidores__apoyo">
+          Activa, renueva y controla las licencias de tus clientes desde un solo panel.
+        </p>
+      </div>
+      <Button variant="secondary-inverse" size="lg" arrow href="#demo" data-interes="Ser distribuidor">
+        Quiero ser distribuidor
+      </Button>
+    </div>
+  </section>
+
+  <!-- Demo / contacto -->
+  <section id="demo" class="seccion--demo seccion--alterna" aria-labelledby="demo-titulo">
+    <div id="contacto" class="contenedor demo-fila">
+      <div class="demo-fila__texto">
+        <div class="eyebrow">Contáctenos</div>
+        <h2 id="demo-titulo" class="titulo-seccion">Tres datos y te llamamos</h2>
+        <p class="texto-apoyo">
+          Un asesor te muestra el producto con datos parecidos a los tuyos o te orienta en lo legal
+          y fiscal. Lo demás lo hablamos en la llamada.
+        </p>
+        <div><Button variant="ghost" href={contacto.whatsapp}>O escríbenos por WhatsApp</Button></div>
+        <address class="demo-fila__datos">
+          <div>{contacto.direccion}</div>
+          <div>
+            {contacto.oficina} · WhatsApp {contacto.whatsappVisible} · {contacto.correo}
+          </div>
+          <div>{contacto.horario}</div>
+        </address>
+      </div>
+      <div class="demo-fila__form">
+        <DemoForm />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Selector de segmento: atenúa los productos que no corresponden. */
+  .segmentos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .segmento {
+    height: var(--control-md);
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-000);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color 150ms ease-out,
+      border-color 150ms ease-out,
+      color 150ms ease-out;
+  }
+  .segmento:hover {
+    background: var(--surface-100);
+  }
+  .segmento[aria-pressed="true"] {
+    border-color: var(--brand);
+    background: var(--brand);
+    color: var(--on-brand);
+  }
+  .producto {
+    display: flex;
+    transition: opacity 150ms ease-out;
+  }
+  .producto > :global(.sx-card) {
+    flex: 1;
+  }
+  .producto[data-atenuado] {
+    opacity: 0.4;
+  }
+
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    align-items: flex-start;
+  }
+  .legal__texto {
+    flex: 1 1 400px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .legal__apoyo {
+    max-width: var(--measure);
+  }
+  .legal__accion {
+    margin-top: var(--space-3);
+  }
+  .legal__rejilla {
+    flex: 1 1 560px;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-8);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .panel--marca {
+    background: var(--brand-deep);
+    color: var(--on-brand);
+    border-color: var(--brand-deep);
+  }
+  .panel__titulo {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 34px;
+    font-weight: 600;
+  }
+  .panel__eyebrow-marca,
+  .panel__apoyo-marca {
+    color: var(--on-brand-muted);
+  }
+  .panel__apoyo-marca {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .distribuidores {
+    background: var(--brand-deep);
+    color: var(--on-brand);
+  }
+  .distribuidores__fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6) var(--space-12);
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .distribuidores__eyebrow {
+    color: var(--on-brand-muted);
+  }
+  .distribuidores__apoyo {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--on-brand-muted);
+  }
+
+  .demo-fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+  }
+  .demo-fila__texto {
+    flex: 1 1 400px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .demo-fila__form {
+    flex: 1 1 480px;
+    min-width: 0;
+  }
+  .demo-fila__datos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-style: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--ink-muted);
+  }
+</style>
+
+<script>
+  const grupo = document.querySelector<HTMLElement>("[data-segmentos]");
+  const tarjetas = document.querySelectorAll<HTMLElement>("[data-producto]");
+  if (grupo) {
+    const botones = [...grupo.querySelectorAll<HTMLButtonElement>("button")];
+    grupo.addEventListener("click", (e) => {
+      const boton = (e.target as HTMLElement).closest<HTMLButtonElement>("button");
+      if (!boton) return;
+      const activo = boton.getAttribute("aria-pressed") !== "true";
+      for (const b of botones) b.setAttribute("aria-pressed", String(b === boton && activo));
+      const objetivos = activo ? (boton.dataset.objetivos ?? "").split(" ") : null;
+      for (const t of tarjetas) {
+        t.toggleAttribute("data-atenuado", Boolean(objetivos && !objetivos.includes(t.dataset.producto ?? "")));
+      }
+    });
+  }
+
+  // «Quiero ser distribuidor» lleva al formulario con ese interés ya elegido.
+  for (const enlace of document.querySelectorAll<HTMLElement>("[data-interes]")) {
+    enlace.addEventListener("click", () => {
+      const select = document.querySelector<HTMLSelectElement>("#interes");
+      if (select) select.value = enlace.dataset.interes ?? select.value;
+    });
+  }
+</script>

@@ -1,0 +1,144 @@
+---
+import CtaFranja from "@/components/CtaFranja.astro";
+import FeatureCard from "@/components/FeatureCard.astro";
+import Hero from "@/components/Hero.astro";
+import Base from "@/layouts/Base.astro";
+
+const pasos = {
+  invitacion: [
+    "Invitación desde la app o el backoffice",
+    "Visitas individuales y grupales",
+    "QR con vigencia de 24 horas",
+  ],
+  aprobacion: [
+    "Flujos configurables por tipo de visita",
+    "Niveles de aprobación por entidad",
+    "Notificación al puesto de control",
+  ],
+  puesto: ["Tableta 24/7 en tema oscuro", "Validación por QR", "Registro de entradas y salidas"],
+};
+---
+
+<Base
+  title="SmartGate Control · RCG Softrix"
+  description="Controla quién entra y sale de edificios, empresas y entes públicos: invitaciones, aprobaciones y acceso por QR desde el puesto de control."
+  seccion="smartgate"
+  topBar={false}
+  footer="compacto"
+>
+  <Hero
+    dark
+    badges={[
+      { label: "Control de accesos", tone: "neutral" },
+      { label: "Pública y privada", tone: "info" },
+    ]}
+    title="SmartGate Control"
+    lead="Controla quién entra y sale de edificios, empresas y entes públicos: invitaciones, aprobaciones y acceso por QR desde el puesto de control."
+    primary={{ label: "Solicitar demo", href: "/#demo" }}
+    secondary={{ label: "Cómo funciona", href: "#modulos" }}
+  >
+    <img
+      class="captura captura--sobre-marca sx-enter sx-enter--5"
+      src="/screenshots/smartgate-tablero.png"
+      alt="Tablero de SmartGate Control: personas esperadas, autorizadas y cola de trabajo"
+      width="1366"
+      height="824"
+    />
+  </Hero>
+
+  <section id="modulos" class="seccion seccion--alterna" aria-labelledby="como-titulo">
+    <div class="contenedor pila">
+      <div class="encabezado">
+        <div class="eyebrow">Cómo funciona</div>
+        <h2 id="como-titulo" class="titulo-seccion">
+          De la invitación al ingreso, con el nivel de aprobación que tu entidad exige
+        </h2>
+      </div>
+      <div class="rejilla">
+        <FeatureCard title="Invitación" items={pasos.invitacion} />
+        <FeatureCard title="Aprobación" items={pasos.aprobacion} />
+        <FeatureCard title="Puesto de control" items={pasos.puesto} />
+      </div>
+      <div class="rejilla rejilla--2">
+        <FeatureCard badge="Entes públicos" title="Con verificación de antecedentes">
+          Nivel de aprobación adicional que revisa antecedentes antes de autorizar el ingreso, con
+          vigencia configurable.
+        </FeatureCard>
+        <FeatureCard badge="Edificios, PH y hoteles" title="Solo invitación o aprobación del personal">
+          El residente o el personal del local invita; el puesto de control valida el QR y registra
+          el ingreso.
+        </FeatureCard>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-label="Pantallas de SmartGate Control">
+    <div class="contenedor rejilla rejilla--2">
+      <figure class="pantalla">
+        <img
+          class="captura pantalla__captura"
+          src="/screenshots/smartgate-accesos.png"
+          alt="Departamento de Accesos de SmartGate Control: solicitudes por decidir con verificación de antecedentes"
+          width="1366"
+          height="1431"
+          loading="lazy"
+        />
+        <figcaption>
+          <h3 class="pantalla__titulo">Departamento de Accesos</h3>
+          <p class="pantalla__texto">
+            Autoriza o deniega con la evidencia delante: con hallazgos no se deniega solo, decide
+            una persona.
+          </p>
+        </figcaption>
+      </figure>
+      <figure class="pantalla">
+        <img
+          class="captura pantalla__captura"
+          src="/screenshots/smartgate-visitante.png"
+          alt="Formulario de visitante de SmartGate Control en el teléfono: a quién visita y quién es usted"
+          width="828"
+          height="2288"
+          loading="lazy"
+        />
+        <figcaption>
+          <h3 class="pantalla__titulo">Registro del visitante desde su teléfono</h3>
+          <p class="pantalla__texto">
+            Sin crear cuenta: sus datos van a la persona que visita y al puesto de control.
+          </p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <CtaFranja title="Mira SmartGate Control con el flujo de visitas de tu entidad" />
+</Base>
+
+<style>
+  .pantalla {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .pantalla figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .pantalla__captura {
+    aspect-ratio: 16 / 11;
+  }
+  .pantalla__titulo {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 600;
+  }
+  .pantalla__texto {
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--ink-muted);
+  }
+</style>

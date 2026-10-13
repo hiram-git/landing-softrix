@@ -1,0 +1,106 @@
+---
+import CtaFranja from "@/components/CtaFranja.astro";
+import FeatureCard from "@/components/FeatureCard.astro";
+import Hero from "@/components/Hero.astro";
+import Base from "@/layouts/Base.astro";
+
+const modulos = {
+  colaboradores: [
+    "Ficha del colaborador y contrato",
+    "Puestos, departamentos y sucursales",
+    "Vacaciones y ausencias",
+  ],
+  calculo: [
+    "Planilla quincenal y mensual",
+    "Deducciones de ley y descuentos",
+    "Horas extra y bonificaciones",
+    "Recibos de pago",
+  ],
+  portal: ["Consulta de recibos", "Solicitudes y aprobaciones", "Flujos configurables"],
+  control: ["Reportes exportables", "Multi-empresa", "Permisos por rol"],
+};
+---
+
+<Base
+  title="Softrix RRHH · RCG Softrix"
+  description="Planilla, colaboradores y portal del empleado conforme a la legislación panameña, en la misma plataforma que tu facturación."
+  seccion="rrhh"
+  topBar={false}
+  footer="compacto"
+>
+  <Hero
+    dark
+    badges={[
+      { label: "Recursos humanos", tone: "neutral" },
+      { label: "Multi-empresa", tone: "info" },
+    ]}
+    title="Softrix RRHH"
+    lead="Planilla, colaboradores y portal del empleado conforme a la legislación panameña, en la misma plataforma que tu facturación."
+    primary={{ label: "Solicitar demo", href: "/#demo" }}
+    secondary={{ label: "Ver módulos", href: "#modulos" }}
+  >
+    <img
+      class="captura captura--sobre-marca sx-enter sx-enter--5"
+      src="/screenshots/rrhh-panel.png"
+      alt="Panel de Softrix RRHH: planilla en curso, empleados activos y asistencia"
+      width="1280"
+      height="800"
+    />
+  </Hero>
+
+  <section id="modulos" class="seccion seccion--alterna" aria-labelledby="modulos-titulo">
+    <div class="contenedor pila">
+      <div class="encabezado">
+        <div class="eyebrow">Módulos</div>
+        <h2 id="modulos-titulo" class="titulo-seccion">De la ficha del colaborador al recibo de pago</h2>
+        <!-- Pendiente del handoff: validar el alcance de cada módulo antes de publicar. -->
+        <p class="texto-apoyo">
+          [CONFIRMAR CON PRODUCTO: alcance exacto de cada módulo antes de publicar.]
+        </p>
+      </div>
+      <div class="rejilla rejilla--2">
+        <FeatureCard title="Colaboradores" items={modulos.colaboradores} />
+        <FeatureCard title="Cálculo de planilla" items={modulos.calculo} />
+        <FeatureCard title="Portal del colaborador" items={modulos.portal} />
+        <FeatureCard title="Control y reportes" items={modulos.control} />
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="ficha-titulo">
+    <div class="contenedor fila">
+      <div class="ficha__texto">
+        <div class="eyebrow">Ficha del colaborador</div>
+        <h2 id="ficha-titulo" class="titulo-seccion">Todo el expediente en una sola pantalla</h2>
+        <p class="texto-apoyo">
+          Datos personales, laborales, bancarios, calendario, préstamos, tipos de planilla,
+          expedientes, dependientes y acceso al portal, en pestañas sobre la misma ficha.
+        </p>
+      </div>
+      <img
+        class="captura ficha__captura"
+        src="/screenshots/rrhh-empleado.png"
+        alt="Ficha de empleado de Softrix RRHH con pestañas de datos personales, laborales y bancarios"
+        width="1280"
+        height="800"
+        loading="lazy"
+      />
+    </div>
+  </section>
+
+  <CtaFranja title="Mira Softrix RRHH con una planilla parecida a la tuya" />
+</Base>
+
+<style>
+  .ficha__texto {
+    flex: 1 1 440px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .ficha__captura {
+    flex: 1 1 480px;
+    min-width: 0;
+  }
+</style>

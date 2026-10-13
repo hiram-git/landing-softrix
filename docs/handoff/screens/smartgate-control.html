@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>SmartGate Control — página de producto</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/softrix/tokens.css">
+<link rel="stylesheet" href="ds/softrix/components/bundle.css">
+<script src="ds/softrix/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:var(--surface-000);color:var(--ink);font-family:var(--font-sans)}
+a{color:var(--brand-text)}a:hover{color:var(--brand-strong)}
+</style>
+</helmet>
+<div class="sx-root" style="display: flex; flex-direction: column; width: 100%; background: var(--surface-000); color: var(--ink); font-family: var(--font-sans);">
+
+  <x-import component-from-global-scope="Softrix.Navbar" logo-src="/logos/rcg-softrix-horizontal.png" home-href="/" links="{{ navLinks }}" primary="{{ navPrimary }}" secondary="{{ navSecondary }}"></x-import>
+
+  <x-import component-from-global-scope="Softrix.Hero" dark="{{ yes }}" badges="{{ badges }}" title="SmartGate Control" lead="Controla quién entra y sale de edificios, empresas y entes públicos: invitaciones, aprobaciones y acceso por QR desde el puesto de control." primary="{{ heroPrimary }}" secondary="{{ heroSecondary }}">
+    <img class="sx-enter sx-enter--5" src="/screenshots/smartgate-tablero.png" alt="Tablero de SmartGate Control: personas esperadas, autorizadas y cola de trabajo" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border: 1px solid var(--on-brand-muted); border-radius: 14px; background: var(--surface-inverse);">
+  </x-import>
+
+  <section id="modulos" style="padding: 64px 32px; background: var(--surface-100);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 640px;">
+        <div style="font-size: 13px; line-height: 16px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-text);">Cómo funciona</div>
+        <h2 style="margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.015em;">De la invitación al ingreso, con el nivel de aprobación que tu entidad exige</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;">
+        <x-import component-from-global-scope="Softrix.FeatureCard" title="Invitación" items="{{ mInv }}"></x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" title="Aprobación" items="{{ mApr }}"></x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" title="Puesto de control" items="{{ mPuesto }}"></x-import>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+        <x-import component-from-global-scope="Softrix.FeatureCard" badge="Entes públicos" title="Con verificación de antecedentes">Nivel de aprobación adicional que revisa antecedentes antes de autorizar el ingreso, con vigencia configurable.</x-import>
+        <x-import component-from-global-scope="Softrix.FeatureCard" badge="Edificios, PH y hoteles" title="Solo invitación o aprobación del personal">El residente o el personal del local invita; el puesto de control valida el QR y registra el ingreso.</x-import>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: 64px 32px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <img src="/screenshots/smartgate-accesos.png" alt="Departamento de Accesos de SmartGate Control: solicitudes por decidir con verificación de antecedentes" style="display: block; width: 100%; aspect-ratio: 16 / 11; object-fit: cover; object-position: top; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-100);">
+        <div style="font-family: var(--font-display); font-size: 22px; line-height: 28px; font-weight: 600;">Departamento de Accesos</div>
+        <div style="font-size: 14px; line-height: 20px; color: var(--ink-muted);">Autoriza o deniega con la evidencia delante: con hallazgos no se deniega solo, decide una persona.</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <img src="/screenshots/smartgate-visitante.png" alt="Formulario de visitante de SmartGate Control en el teléfono: a quién visita y quién es usted" style="display: block; width: 100%; aspect-ratio: 16 / 11; object-fit: cover; object-position: top; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-100);">
+        <div style="font-family: var(--font-display); font-size: 22px; line-height: 28px; font-weight: 600;">Registro del visitante desde su teléfono</div>
+        <div style="font-size: 14px; line-height: 20px; color: var(--ink-muted);">Sin crear cuenta: sus datos van a la persona que visita y al puesto de control.</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: 0 32px 96px; margin-top: 0;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 48px; background: var(--brand-deep); color: var(--on-brand); border-radius: 24px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
+      <div style="display: flex; flex-direction: column; gap: 8px; max-width: 640px;">
+        <div style="font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 600;">Mira SmartGate Control con el flujo de visitas de tu entidad</div>
+        <div style="font-size: 16px; line-height: 24px; color: var(--on-brand-muted);">Demo guiada de 30 minutos. Sin tarjeta.</div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <x-import component-from-global-scope="Softrix.Button" variant="primary" size="lg" arrow="{{ yes }}" href="/#demo">Solicitar demo</x-import>
+        <x-import component-from-global-scope="Softrix.Button" variant="secondary-inverse" size="lg" href="https://wa.me/50761966047?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20RCG%20Softrix">Escribir por WhatsApp</x-import>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding: 48px 32px; background: var(--surface-inverse); color: var(--ink-inverse);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
+      <img src="/logos/rcg-softrix-horizontal-inverse.png" alt="RCG Softrix" style="height: 28px; width: auto;">
+      <div style="font-size: 14px; line-height: 20px; color: var(--on-brand-muted);">RCG Softrix es la línea de software de RC Group · PH Obarrio 60, Panamá · +(507) 399-2627</div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1366,"height":2800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      yes: true,
+      badges: [{ label: 'Control de accesos', tone: 'neutral' }, { label: 'Pública y privada', tone: 'info' }],
+      navLinks: [
+        { label: 'Servicios Legales', children: [
+          { label: 'Firma electrónica y digital', href: 'Main#legal' },
+          { label: 'Asesoría tributaria', href: 'Main#legal' },
+          { label: 'Registro de marca y propiedad intelectual', href: 'Main#legal' },
+          { label: 'Constitución y gestión de sociedades', href: 'Main#legal' },
+          { label: 'Contratos de compraventa y escrituras', href: 'Main#legal' } ] },
+        { label: 'RCG Softrix', current: true, children: [
+          { label: 'Softrix Facturación', href: 'Facturacion.dc.html', hint: 'Vende, factura ante la DGI y controla caja' },
+          { label: 'Softrix RRHH', href: 'Planilla.dc.html', hint: 'Planilla y colaboradores' },
+          { label: 'SmartGate Control', href: 'SmartGate.dc.html', hint: 'Control de accesos' } ] },
+        { label: 'Sector Gobierno', href: 'Main#gobierno' },
+        { label: 'Equipos', href: 'Main#equipos' },
+        { label: 'Blog', href: '#' },
+        { label: 'Contáctenos', href: 'Main#contacto' }
+      ],
+      navPrimary: { label: 'Solicitar demo', href: 'Main#demo' },
+      navSecondary: { label: 'Iniciar sesión', href: '#' },
+      heroPrimary: { label: 'Solicitar demo', href: 'Main#demo' },
+      heroSecondary: { label: 'Cómo funciona', href: '#modulos' },
+      mInv: ['Invitación desde la app o el backoffice', 'Visitas individuales y grupales', 'QR con vigencia de 24 horas'],
+      mApr: ['Flujos configurables por tipo de visita', 'Niveles de aprobación por entidad', 'Notificación al puesto de control'],
+      mPuesto: ['Tableta 24/7 en tema oscuro', 'Validación por QR', 'Registro de entradas y salidas']
+    };
+  }
+}
+</script>
+</body>
+</html>

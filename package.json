@@ -1,0 +1,30 @@
+{
+  "name": "rcgpty-web",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "bun scripts/dev.ts",
+    "dev:web": "astro dev",
+    "dev:api": "bun --watch api/index.ts",
+    "build": "astro build",
+    "preview": "astro preview",
+    "api": "bun api/index.ts",
+    "check": "astro check",
+    "lint": "biome check ."
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "7.3.8",
+    "elysia": "^1.4.30"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@biomejs/biome": "^2.5.15",
+    "@types/bun": "^1.4.3",
+    "typescript": "~5.9"
+  }
+}

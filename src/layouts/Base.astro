@@ -1,0 +1,60 @@
+---
+import "@/styles/tokens.css";
+import "@/styles/components.css";
+import "@/styles/global.css";
+import Footer from "@/components/Footer.astro";
+import MobileMenu from "@/components/MobileMenu.astro";
+import Navbar from "@/components/Navbar.astro";
+import TopBar from "@/components/TopBar.astro";
+import { navLinks, navPrimary, navSecondary, type Seccion } from "@/data/nav";
+
+interface Props {
+  title: string;
+  description: string;
+  seccion: Seccion;
+  /** La franja superior y el pie completo son de la landing; las páginas de producto no los llevan. */
+  topBar?: boolean;
+  footer?: "completo" | "compacto";
+}
+const { title, description, seccion, topBar = true, footer = "completo" } = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const logo = "/logos/rcg-softrix-horizontal.png";
+---
+
+<!doctype html>
+<html lang="es" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonica} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_PA" />
+    <meta property="og:site_name" content="RC Group Panamá" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonica} />
+    <link rel="icon" type="image/png" href="/logos/rcg-mark.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="sx-root">
+    {topBar && <TopBar />}
+    <Navbar
+      logoSrc={logo}
+      links={navLinks(seccion)}
+      primary={navPrimary}
+      secondary={navSecondary}
+    />
+    <MobileMenu logoSrc={logo} actual={Astro.url.pathname} />
+    <main>
+      <slot />
+    </main>
+    <Footer variante={footer} />
+  </body>
+</html>
