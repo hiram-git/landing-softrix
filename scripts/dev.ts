@@ -1,9 +1,15 @@
 export {};
 
 // Levanta la API (Elysia) y el sitio (Astro) juntos; Ctrl+C detiene los dos.
+//
+// Se usa process.execPath (el mismo bun que corre este script) en vez de "bun" o
+// "bunx" por nombre: en Windows, Bun.spawn no encuentra "bunx" en el PATH
+// (ENOENT, uv_spawn 'bunx'). `bun x` es el equivalente de `bunx`.
+const bun = process.execPath;
+
 const procesos = [
-  Bun.spawn(["bun", "--watch", "api/index.ts"], { stdout: "inherit", stderr: "inherit" }),
-  Bun.spawn(["bunx", "astro", "dev", ...process.argv.slice(2)], {
+  Bun.spawn([bun, "--watch", "api/index.ts"], { stdout: "inherit", stderr: "inherit" }),
+  Bun.spawn([bun, "x", "astro", "dev", ...process.argv.slice(2)], {
     stdout: "inherit",
     stderr: "inherit",
     stdin: "inherit",
