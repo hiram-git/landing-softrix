@@ -1,0 +1,240 @@
+---
+// 2. REVELADO 3D CON SCROLLTRIGGER: el terminal FYJ-F1 gira en el eje Y y se
+// desliza de izquierda a derecha, atado al scroll con scrub: true.
+//
+// La ilustración del equipo es un SVG propio; si hay fotografía real, va en el
+// slot «foto» y reemplaza al dibujo. Las características son de ejemplo:
+// confirmar con la ficha técnica del equipo antes de publicar.
+const caracteristicas = [
+  "Homologado por la DGI para facturación electrónica",
+  "Impresión térmica de 58 / 80 mm con corte automático",
+  "Conectividad Wi-Fi, 4G y Bluetooth",
+  "Batería para toda la jornada y pantalla táctil",
+];
+---
+
+<section id="equipos" class="seccion pos" aria-labelledby="pos-titulo" data-pos>
+  <div class="contenedor pos__rejilla">
+    <div class="pos__escena">
+      <div class="pos__dispositivo" data-pos-dispositivo>
+        {
+          Astro.slots.has("foto") ? (
+            <slot name="foto" />
+          ) : (
+            <svg class="pos__svg" viewBox="0 0 320 440" role="img" aria-label="Terminal de facturación FYJ-F1">
+              <defs>
+                <linearGradient id="pos-cuerpo" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#1b3a66" />
+                  <stop offset="1" stop-color="#0b1f3a" />
+                </linearGradient>
+                <linearGradient id="pos-pantalla" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#ffffff" />
+                  <stop offset="1" stop-color="#eef6fb" />
+                </linearGradient>
+                <linearGradient id="pos-brillo" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#fff" stop-opacity="0.18" />
+                  <stop offset="1" stop-color="#fff" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <!-- Papel del recibo saliendo del equipo -->
+              <path d="M104 22 l8 8 8-8 8 8 8-8 8 8 8-8 8 8 8-8 8 8 8-8 8 8 8-8 8 8 8-8 8 8 v96 h-112 z" fill="#fff" stroke="#dbe3ee" />
+              <rect x="118" y="48" width="56" height="6" rx="3" fill="#0b1f3a" />
+              <rect x="118" y="62" width="82" height="4" rx="2" fill="#cbd5e1" />
+              <rect x="118" y="72" width="70" height="4" rx="2" fill="#cbd5e1" />
+              <rect x="118" y="82" width="84" height="4" rx="2" fill="#cbd5e1" />
+              <rect x="118" y="96" width="40" height="5" rx="2" fill="#059669" />
+              <!-- Cuerpo -->
+              <rect x="56" y="118" width="208" height="306" rx="30" fill="url(#pos-cuerpo)" />
+              <rect x="56" y="118" width="208" height="306" rx="30" fill="url(#pos-brillo)" />
+              <rect x="100" y="132" width="120" height="7" rx="3.5" fill="#061427" />
+              <!-- Pantalla -->
+              <rect x="80" y="154" width="160" height="126" rx="14" fill="url(#pos-pantalla)" />
+              <rect x="94" y="170" width="64" height="9" rx="4" fill="#0b1f3a" />
+              <rect x="94" y="188" width="118" height="6" rx="3" fill="#cbd5e1" />
+              <rect x="94" y="200" width="96" height="6" rx="3" fill="#cbd5e1" />
+              <rect x="94" y="212" width="110" height="6" rx="3" fill="#cbd5e1" />
+              <rect x="94" y="236" width="132" height="28" rx="8" fill="#059669" />
+              <text x="160" y="255" text-anchor="middle" font-family="Manrope, sans-serif" font-size="13" font-weight="800" fill="#fff">TOTAL B/. 134.18</text>
+              <!-- Teclado -->
+              <g fill="#17325a" stroke="#22406e">
+                <rect x="84" y="300" width="44" height="26" rx="7" /><rect x="138" y="300" width="44" height="26" rx="7" /><rect x="192" y="300" width="44" height="26" rx="7" />
+                <rect x="84" y="334" width="44" height="26" rx="7" /><rect x="138" y="334" width="44" height="26" rx="7" /><rect x="192" y="334" width="44" height="26" rx="7" />
+                <rect x="84" y="368" width="44" height="26" rx="7" /><rect x="138" y="368" width="44" height="26" rx="7" />
+              </g>
+              <rect x="192" y="368" width="44" height="26" rx="7" fill="#10b981" />
+              <text x="214" y="386" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#fff">OK</text>
+              <text x="160" y="412" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" letter-spacing="3" fill="#9fb3c8">FYJ-F1</text>
+            </svg>
+          )
+        }
+        <span class="pos__chip">Homologado DGI</span>
+      </div>
+      <div class="pos__sombra" aria-hidden="true"></div>
+    </div>
+
+    <div class="pos__texto g-oculto" data-pos-texto>
+      <span class="eyebrow">Equipos fiscales</span>
+      <h2 id="pos-titulo" class="titulo">Terminal FYJ-F1: factura, imprime y cumple en un solo equipo</h2>
+      <p class="texto">
+        Hardware probado con la facturación electrónica de Panamá: emite el comprobante, lo
+        imprime en el momento y lo deja listo para la DGI sin pasos extra.
+      </p>
+      <ul class="pos__lista">
+        {
+          caracteristicas.map((c) => (
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4L19 7" /></svg>
+              {c}
+            </li>
+          ))
+        }
+      </ul>
+      <div class="pos__acciones">
+        <a class="btn btn--primario" href="#contacto">Cotizar equipo</a>
+        <a class="btn btn--secundario" href="#facturacion">Ver facturación electrónica</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pos__rejilla {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .pos__escena {
+    position: relative;
+    perspective: 1400px; /* profundidad para la rotación en Y */
+    padding: 1rem 0 2.5rem;
+  }
+  .pos__dispositivo {
+    position: relative;
+    width: min(100%, 360px);
+    margin-inline: auto;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .pos__svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 30px 40px rgba(11, 31, 58, 0.25));
+  }
+  .pos__dispositivo :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radio-grande);
+    box-shadow: var(--sombra-grande);
+  }
+  .pos__chip {
+    position: absolute;
+    right: -8px;
+    top: 36%;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--c-esmeralda);
+    font: 700 0.78rem/1 var(--f-texto);
+    letter-spacing: 0.04em;
+    box-shadow: var(--sombra);
+    border: 1px solid var(--c-esmeralda-suave);
+  }
+  .pos__sombra {
+    position: absolute;
+    left: 50%;
+    bottom: 0.5rem;
+    width: 60%;
+    height: 22px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(11, 31, 58, 0.18), transparent);
+  }
+  .pos__texto {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+  .pos__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+    color: var(--c-marino);
+    font-weight: 500;
+  }
+  .pos__lista li {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+  }
+  .pos__lista svg {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    padding: 3px;
+    border-radius: 50%;
+    background: var(--c-esmeralda-suave);
+    color: var(--c-esmeralda);
+    margin-top: 2px;
+  }
+  .pos__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  @media (max-width: 900px) {
+    .pos__rejilla {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const seccion = document.querySelector<HTMLElement>("[data-pos]");
+  const dispositivo = seccion?.querySelector<HTMLElement>("[data-pos-dispositivo]");
+  const texto = seccion?.querySelector<HTMLElement>("[data-pos-texto]");
+
+  if (seccion && dispositivo && texto) {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(texto, { clearProps: "all" });
+    } else {
+      // El equipo entra girado y desplazado a la izquierda; el scroll lo endereza
+      // y lo trae a su sitio (scrub: true = progreso ligado al desplazamiento).
+      gsap.set(dispositivo, { transformPerspective: 1400 });
+      gsap.fromTo(
+        dispositivo,
+        { rotationY: -32, x: -160, autoAlpha: 0.1 },
+        {
+          rotationY: 0,
+          x: 0,
+          autoAlpha: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: seccion,
+            start: "top 85%",
+            end: "center 45%",
+            scrub: true,
+          },
+        },
+      );
+      gsap.set(texto, { autoAlpha: 0, y: 32 });
+      texto.classList.remove("g-oculto");
+      gsap.to(texto, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        clearProps: "transform,opacity,visibility",
+        scrollTrigger: { trigger: seccion, start: "top 75%", once: true },
+      });
+    }
+  }
+</script>

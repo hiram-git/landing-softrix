@@ -1,0 +1,274 @@
+---
+// 1. HERO CASCADE: eyebrow, título, subtítulo, los dos botones y el panel
+// visual entran en secuencia con un timeline de GSAP (ease: power4.out).
+import { contacto } from "@/data/contacto";
+---
+
+<section class="hero" data-hero aria-labelledby="hero-titulo">
+  <div class="hero__fondo" aria-hidden="true"></div>
+  <div class="contenedor hero__rejilla">
+    <div class="hero__texto">
+      <span class="eyebrow g-oculto" data-hero="eyebrow">RC Group Panamá</span>
+      <h1 id="hero-titulo" class="hero__titulo g-oculto" data-hero="titulo">
+        Equipos fiscales, facturación electrónica y
+        <span class="hero__resalte">respaldo legal</span> en un solo lugar.
+      </h1>
+      <p class="hero__subtitulo g-oculto" data-hero="subtitulo">
+        Terminales homologadas por la DGI, firma digital y asesoría tributaria y legal para que
+        tu empresa cumpla bien desde el primer día.
+      </p>
+      <div class="hero__acciones">
+        <a class="btn btn--primario g-oculto" data-hero="cta" href="#equipos">
+          Ver Equipos Fiscales
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a class="btn btn--secundario g-oculto" data-hero="cta" href="#servicios">Asesoría Legal</a>
+      </div>
+      <p class="hero__nota g-oculto" data-hero="nota">
+        Demo guiada de 30 minutos · WhatsApp {contacto.whatsappVisible}
+      </p>
+    </div>
+
+    <!-- Panel visual: tarjeta de estado de cumplimiento (ilustrativa) -->
+    <div class="hero__visual g-oculto" data-hero="visual" aria-hidden="true">
+      <div class="panel">
+        <div class="panel__barra">
+          <span class="panel__punto"></span><span class="panel__punto"></span><span class="panel__punto"></span>
+          <span class="panel__titulo">Estado de cumplimiento</span>
+        </div>
+        <ul class="panel__lista">
+          <li><span class="panel__ok">✓</span> Facturación electrónica activa</li>
+          <li><span class="panel__ok">✓</span> Certificado de firma digital vigente</li>
+          <li><span class="panel__ok">✓</span> Equipo fiscal homologado por la DGI</li>
+          <li><span class="panel__ok">✓</span> Declaraciones al día</li>
+        </ul>
+        <div class="panel__pie">
+          <span class="panel__chip">DGI · Panamá</span>
+          <span class="panel__chip panel__chip--cian">Tiempo real</span>
+        </div>
+      </div>
+      <div class="hero__flotante hero__flotante--a">
+        <strong>CUFE</strong><span>FE01…A3F9</span>
+      </div>
+      <div class="hero__flotante hero__flotante--b">
+        <strong>ITBMS 7 %</strong><span>calculado</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(4rem, 9vw, 7.5rem) clamp(3.5rem, 7vw, 6rem);
+  }
+  /* Halos suaves esmeralda/cian sobre blanco: tecnología sin ruido. */
+  .hero__fondo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(60% 50% at 85% 10%, rgba(6, 182, 212, 0.14), transparent 70%),
+      radial-gradient(45% 45% at 10% 90%, rgba(16, 185, 129, 0.12), transparent 70%),
+      linear-gradient(180deg, #fff, var(--c-fondo-2));
+  }
+  .hero__rejilla {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+  .hero__texto {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+  .hero__titulo {
+    font-size: clamp(2.3rem, 5vw, 3.9rem);
+    font-weight: 800;
+    line-height: 1.04;
+  }
+  .hero__resalte {
+    color: var(--c-esmeralda);
+    position: relative;
+    white-space: nowrap;
+  }
+  .hero__resalte::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.06em;
+    height: 0.16em;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.25), rgba(6, 182, 212, 0.25));
+    z-index: -1;
+  }
+  .hero__subtitulo {
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+    color: var(--c-texto-2);
+    max-width: 52ch;
+  }
+  .hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .hero__nota {
+    font-size: 0.9rem;
+    color: var(--c-texto-2);
+  }
+
+  .hero__visual {
+    position: relative;
+    justify-self: center;
+    width: min(100%, 420px);
+  }
+  .panel {
+    background: #fff;
+    border: 1px solid var(--c-borde);
+    border-radius: var(--radio-grande);
+    box-shadow: var(--sombra-grande);
+    overflow: hidden;
+  }
+  .panel__barra {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    background: var(--c-fondo-2);
+    border-bottom: 1px solid var(--c-borde);
+  }
+  .panel__punto {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--c-borde);
+  }
+  .panel__titulo {
+    margin-left: 10px;
+    font: 600 0.85rem/1 var(--f-texto);
+    color: var(--c-texto-2);
+  }
+  .panel__lista {
+    list-style: none;
+    margin: 0;
+    padding: 18px 20px 8px;
+    display: grid;
+    gap: 12px;
+    font-weight: 500;
+    color: var(--c-marino);
+  }
+  .panel__lista li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .panel__ok {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--c-esmeralda-suave);
+    color: var(--c-esmeralda);
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+  .panel__pie {
+    display: flex;
+    gap: 8px;
+    padding: 12px 20px 18px;
+  }
+  .panel__chip {
+    font: 600 0.75rem/1 var(--f-texto);
+    letter-spacing: 0.04em;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--c-esmeralda-suave);
+    color: var(--c-esmeralda);
+  }
+  .panel__chip--cian {
+    background: var(--c-cian-suave);
+    color: #0e7490;
+  }
+  .hero__flotante {
+    position: absolute;
+    display: grid;
+    gap: 2px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid var(--c-borde);
+    border-radius: 12px;
+    box-shadow: var(--sombra);
+    font-size: 0.8rem;
+    color: var(--c-texto-2);
+  }
+  .hero__flotante strong {
+    color: var(--c-marino);
+    font-family: var(--f-display);
+  }
+  .hero__flotante--a {
+    top: -18px;
+    right: -22px;
+  }
+  .hero__flotante--b {
+    bottom: -60px; /* debajo del panel, sin pisar sus chips */
+    left: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .hero__rejilla {
+      grid-template-columns: 1fr;
+    }
+    .hero__visual {
+      margin-top: 1.5rem;
+    }
+    .hero__flotante--a {
+      right: 0;
+    }
+    .hero__flotante--b {
+      left: 12px;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+
+  const hero = document.querySelector<HTMLElement>("[data-hero]");
+  if (hero) {
+    const q = (n: string) => hero.querySelectorAll<HTMLElement>(`[data-hero="${n}"]`);
+    const todos = hero.querySelectorAll<HTMLElement>(".g-oculto");
+
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(todos, { clearProps: "all" });
+    } else {
+      // GSAP toma el control: estado inicial en línea y fuera la clase anti-FOUC,
+      // para que al limpiar los estilos al final nada vuelva a esconderse.
+      gsap.set(todos, { autoAlpha: 0 });
+      for (const el of todos) el.classList.remove("g-oculto");
+      // Secuencia con solapes cortos: cada pieza arranca antes de que termine la anterior.
+      const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1 } });
+      tl.fromTo(q("eyebrow"), { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.7 })
+        .fromTo(q("titulo"), { autoAlpha: 0, y: 44 }, { autoAlpha: 1, y: 0, duration: 1.1 }, "-=0.45")
+        .fromTo(q("subtitulo"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.9 }, "-=0.75")
+        .fromTo(
+          q("cta"),
+          { autoAlpha: 0, y: 26 },
+          { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.14 },
+          "-=0.6",
+        )
+        .fromTo(q("nota"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, "-=0.5")
+        .fromTo(
+          q("visual"),
+          { autoAlpha: 0, y: 36, scale: 0.96 },
+          { autoAlpha: 1, y: 0, scale: 1, duration: 1.2 },
+          "-=1.1",
+        )
+        .set(todos, { clearProps: "transform,opacity,visibility" });
+    }
+  }
+</script>

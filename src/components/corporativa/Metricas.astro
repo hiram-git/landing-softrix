@@ -1,0 +1,111 @@
+---
+// 5. CONTADORES NUMÉRICOS: cada cifra arranca en 0 y cuenta hasta su valor en 2 s
+// (snap: { textContent: 1 } para enteros) cuando la sección entra en pantalla.
+//
+// ⚠ CIFRAS DE EJEMPLO. El handoff indica que los contadores del sitio actual no
+// tienen cifra real: reemplazar `valor` con los números reales antes de publicar.
+const metricas = [
+  { prefijo: "+", valor: 500, sufijo: "", etiqueta: "Clientes atendidos en Panamá" },
+  { prefijo: "", valor: 100, sufijo: "%", etiqueta: "Equipos homologados por la DGI" },
+  { prefijo: "+", valor: 15, sufijo: "", etiqueta: "Años de experiencia legal y fiscal" },
+  { prefijo: "", valor: 24, sufijo: "h", etiqueta: "Tiempo máximo de respuesta" },
+];
+---
+
+<section class="metricas" aria-labelledby="metricas-titulo" data-metricas>
+  <div class="contenedor">
+    <h2 id="metricas-titulo" class="metricas__titulo">Confianza que se mide</h2>
+    <div class="metricas__rejilla">
+      {
+        metricas.map((m) => (
+          <div class="metrica">
+            <div class="metrica__valor" aria-label={`${m.prefijo}${m.valor}${m.sufijo}`}>
+              <span class="metrica__prefijo" aria-hidden="true">{m.prefijo}</span>
+              <span class="metrica__numero" data-contador data-valor={m.valor} aria-hidden="true">0</span>
+              <span class="metrica__sufijo" aria-hidden="true">{m.sufijo}</span>
+            </div>
+            <div class="metrica__etiqueta">{m.etiqueta}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .metricas {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(3.5rem, 7vw, 5.5rem);
+    background:
+      radial-gradient(50% 80% at 100% 0%, rgba(6, 182, 212, 0.22), transparent 70%),
+      radial-gradient(40% 70% at 0% 100%, rgba(16, 185, 129, 0.2), transparent 70%),
+      var(--c-marino);
+    color: #fff;
+  }
+  .metricas__titulo {
+    color: #fff;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .metricas__rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem 2rem;
+  }
+  .metrica {
+    display: grid;
+    gap: 0.5rem;
+    padding-left: 1.25rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.18);
+  }
+  .metrica__valor {
+    font: 800 clamp(2.6rem, 5vw, 3.75rem) / 1 var(--f-display);
+    letter-spacing: -0.03em;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: baseline;
+  }
+  .metrica__prefijo,
+  .metrica__sufijo {
+    color: var(--c-esmeralda-2);
+    font-size: 0.6em;
+  }
+  .metrica__sufijo {
+    margin-left: 0.1em;
+  }
+  .metrica__etiqueta {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.95rem;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const seccion = document.querySelector<HTMLElement>("[data-metricas]");
+  if (seccion) {
+    const contadores = seccion.querySelectorAll<HTMLElement>("[data-contador]");
+    const contar = () => {
+      for (const el of contadores) {
+        const valor = Number(el.dataset.valor ?? 0);
+        // textContent empieza en «0»; GSAP lo interpola y snap lo deja en enteros.
+        gsap.fromTo(
+          el,
+          { textContent: 0 },
+          { textContent: valor, duration: 2, ease: "power2.out", snap: { textContent: 1 } },
+        );
+      }
+    };
+
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      for (const el of contadores) el.textContent = el.dataset.valor ?? "0";
+    } else {
+      ScrollTrigger.create({ trigger: seccion, start: "top 75%", once: true, onEnter: contar });
+    }
+  }
+</script>

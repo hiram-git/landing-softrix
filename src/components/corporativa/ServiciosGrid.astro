@@ -1,0 +1,176 @@
+---
+// 4. STAGGERED FADE-IN: las tarjetas de servicios suben desde y: 50 una a una
+// (stagger: 0.15) cuando la cuadrícula entra en pantalla.
+const servicios = [
+  {
+    nombre: "Legal",
+    texto: "Constitución y gestión de sociedades, contratos de compraventa y escrituras, registro de marca y propiedad intelectual.",
+    icono: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M8 13h8 M8 17h8",
+  },
+  {
+    nombre: "Tributario",
+    texto: "Declaraciones de impuestos, revisión y optimización de cargas fiscales y defensa ante las autoridades.",
+    icono: "M4 3h16v18H4z M8 7h8 M8 11h.01 M12 11h.01 M16 11h.01 M8 15h.01 M12 15h.01 M16 15h.01 M8 19h.01 M12 19h.01 M16 19h.01",
+  },
+  {
+    nombre: "Contable",
+    texto: "Contabilidad mensual, conciliaciones, estados financieros y planilla conforme a la legislación panameña.",
+    icono: "M3 3v18h18 M7 15l4-4 4 3 5-6",
+  },
+  {
+    nombre: "Licencias fiscales",
+    texto: "Homologación de equipos ante la DGI, certificados de firma digital y licencias de facturación electrónica.",
+    icono: "M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z M9 12l2 2 4-4",
+  },
+];
+---
+
+<section id="servicios" class="seccion servicios" aria-labelledby="servicios-titulo" data-servicios>
+  <div class="contenedor">
+    <div class="servicios__cabecera g-oculto" data-servicios-cabecera>
+      <span class="eyebrow">Servicios de RC Group</span>
+      <h2 id="servicios-titulo" class="titulo">Un solo equipo para lo legal, lo fiscal y lo contable</h2>
+      <p class="texto">
+        La facturación electrónica no es solo un sistema: es cumplir bien. Por eso cada
+        servicio viene con quien sabe de impuestos.
+      </p>
+    </div>
+    <div class="servicios__rejilla" data-servicios-rejilla>
+      {
+        servicios.map((s) => (
+          <article class="tarjeta g-oculto">
+            <div class="tarjeta__icono" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d={s.icono} />
+              </svg>
+            </div>
+            <h3 class="tarjeta__titulo">{s.nombre}</h3>
+            <p class="tarjeta__texto">{s.texto}</p>
+            <a class="tarjeta__enlace" href="#contacto">
+              Hablar con un asesor
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .servicios__cabecera {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    max-width: 680px;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .servicios__rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+  .tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1.75rem;
+    background: #fff;
+    border: 1px solid var(--c-borde);
+    border-radius: var(--radio-grande);
+    transition:
+      transform 200ms var(--ease),
+      box-shadow 200ms var(--ease),
+      border-color 200ms var(--ease);
+  }
+  .tarjeta:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sombra-grande);
+    border-color: #cfe8df;
+  }
+  .tarjeta__icono {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--c-esmeralda-suave), var(--c-cian-suave));
+    color: var(--c-esmeralda);
+  }
+  .tarjeta__icono svg {
+    width: 26px;
+    height: 26px;
+  }
+  .tarjeta__titulo {
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+  .tarjeta__texto {
+    color: var(--c-texto-2);
+    font-size: 0.975rem;
+    flex: 1;
+  }
+  .tarjeta__enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--c-esmeralda);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+  .tarjeta__enlace svg {
+    width: 1.1em;
+    height: 1.1em;
+    transition: transform 180ms var(--ease);
+  }
+  .tarjeta__enlace:hover svg {
+    transform: translateX(4px);
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const seccion = document.querySelector<HTMLElement>("[data-servicios]");
+  if (seccion) {
+    const cabecera = seccion.querySelector<HTMLElement>("[data-servicios-cabecera]");
+    const rejilla = seccion.querySelector<HTMLElement>("[data-servicios-rejilla]");
+    const tarjetas = rejilla ? rejilla.querySelectorAll<HTMLElement>(".tarjeta") : [];
+
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set([cabecera, ...tarjetas], { clearProps: "all" });
+    } else {
+      // Estado inicial en línea y fuera la clase anti-FOUC: así, al limpiar los
+      // estilos al terminar, el hover de la tarjeta vuelve a mandar y nada se esconde.
+      if (cabecera) {
+        gsap.set(cabecera, { autoAlpha: 0, y: 24 });
+        cabecera.classList.remove("g-oculto");
+        gsap.to(cabecera, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: { trigger: cabecera, start: "top 85%", once: true },
+        });
+      }
+      if (rejilla && tarjetas.length) {
+        gsap.set(tarjetas, { autoAlpha: 0, y: 50 });
+        for (const t of tarjetas) t.classList.remove("g-oculto");
+        gsap.to(tarjetas, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.85,
+          ease: "power3.out",
+          stagger: 0.15,
+          clearProps: "transform,opacity,visibility",
+          scrollTrigger: { trigger: rejilla, start: "top 80%", once: true },
+        });
+      }
+    }
+  }
+</script>

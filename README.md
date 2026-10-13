@@ -101,6 +101,30 @@ se pinta quieta.
 Las capturas reales de los tres productos rotan en el hero (5 s, dos vueltas y se detiene;
 se pausa con el puntero o el foco encima). Las pestañas de abajo eligen el producto.
 
+## Landing corporativa `/rc-group` (cinco animaciones GSAP)
+
+Página independiente del design system RCG Softrix, con paleta azul marino +
+esmeralda/cian: `src/pages/rc-group.astro`, layout `src/layouts/Corporativa.astro` y
+secciones en `src/components/corporativa/`. Cada sección trae su markup, su CSS y su
+`<script>` con GSAP (`gsap.registerPlugin(ScrollTrigger)` donde hace falta):
+
+| Sección | Animación |
+|---|---|
+| `HeroCascada` | Timeline con `ease: "power4.out"`: eyebrow, título, subtítulo, los dos botones y el panel |
+| `EquipoPos` | El terminal FYJ-F1 gira en Y y se desliza de izquierda a derecha ligado al scroll (`scrub: true`) |
+| `SelloDigital` | El sello «Certificado por la DGI» cae sobre el PDF simulado con `ease: "bounce.out"`; al impacto, onda, vibración y estado «Aprobado» |
+| `ServiciosGrid` | Tarjetas Legal · Tributario · Contable · Licencias fiscales desde `y: 50` con `stagger: 0.15` |
+| `Metricas` | Contadores de 0 al valor en 2 s con `snap: { textContent: 1 }` |
+
+**Anti-FOUC**: los elementos que GSAP anima llevan la clase `g-oculto`; el `<head>` añade
+`g-anima` al `<html>` (solo con JavaScript y sin «reducir movimiento») y `.g-anima .g-oculto`
+los esconde. Cada script fija el estado inicial en línea, quita la clase y anima; al final
+limpia los estilos. Sin JavaScript o con movimiento reducido todo se ve de inmediato.
+
+⚠ Las cifras de `Metricas` y las características del FYJ-F1 son **de ejemplo**: el handoff
+pide no publicar contadores sin números reales. La ilustración del equipo es un SVG propio;
+una foto real entra por el slot `foto` de `EquipoPos`.
+
 ## Pendientes del handoff (no inventar)
 
 - Los módulos de Softrix RRHH llevan la nota «[CONFIRMAR CON PRODUCTO]».
