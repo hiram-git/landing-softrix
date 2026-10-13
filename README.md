@@ -116,6 +116,14 @@ secciones en `src/components/corporativa/`. Cada sección trae su markup, su CSS
 | `ServiciosGrid` | Tarjetas Legal · Tributario · Contable · Licencias fiscales desde `y: 50` con `stagger: 0.15` |
 | `Metricas` | Contadores de 0 al valor en 2 s con `snap: { textContent: 1 }` |
 
+**Escena Three.js del hero** (`EscenaHero.astro`): una «red de cumplimiento», esfera de 900
+puntos enlazados en malla (azul marino, esmeralda y cian) con dos anillos orbitales y
+satélites; rota sola, se inclina hacia el puntero y entra creciendo desde el centro con
+GSAP. Three.js se carga en un chunk aparte y solo cuando el navegador está libre
+(`requestIdleCallback`), así la cascada del hero no espera por él. Sin WebGL quedan los chips
+y dos órbitas en CSS; con «reducir movimiento» se pinta un solo cuadro quieto; se pausa fuera
+de pantalla y con la pestaña oculta.
+
 **Anti-FOUC**: los elementos que GSAP anima llevan la clase `g-oculto`; el `<head>` añade
 `g-anima` al `<html>` (solo con JavaScript y sin «reducir movimiento») y `.g-anima .g-oculto`
 los esconde. Cada script fija el estado inicial en línea, quita la clase y anima; al final

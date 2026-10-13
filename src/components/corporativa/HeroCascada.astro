@@ -1,7 +1,8 @@
 ---
-// 1. HERO CASCADE: eyebrow, título, subtítulo, los dos botones y el panel
-// visual entran en secuencia con un timeline de GSAP (ease: power4.out).
+// 1. HERO CASCADE: eyebrow, título, subtítulo, los dos botones y la escena
+// Three.js (EscenaHero) entran en secuencia con un timeline de GSAP (ease: power4.out).
 import { contacto } from "@/data/contacto";
+import EscenaHero from "./EscenaHero.astro";
 ---
 
 <section class="hero" data-hero aria-labelledby="hero-titulo">
@@ -29,30 +30,9 @@ import { contacto } from "@/data/contacto";
       </p>
     </div>
 
-    <!-- Panel visual: tarjeta de estado de cumplimiento (ilustrativa) -->
-    <div class="hero__visual g-oculto" data-hero="visual" aria-hidden="true">
-      <div class="panel">
-        <div class="panel__barra">
-          <span class="panel__punto"></span><span class="panel__punto"></span><span class="panel__punto"></span>
-          <span class="panel__titulo">Estado de cumplimiento</span>
-        </div>
-        <ul class="panel__lista">
-          <li><span class="panel__ok">✓</span> Facturación electrónica activa</li>
-          <li><span class="panel__ok">✓</span> Certificado de firma digital vigente</li>
-          <li><span class="panel__ok">✓</span> Equipo fiscal homologado por la DGI</li>
-          <li><span class="panel__ok">✓</span> Declaraciones al día</li>
-        </ul>
-        <div class="panel__pie">
-          <span class="panel__chip">DGI · Panamá</span>
-          <span class="panel__chip panel__chip--cian">Tiempo real</span>
-        </div>
-      </div>
-      <div class="hero__flotante hero__flotante--a">
-        <strong>CUFE</strong><span>FE01…A3F9</span>
-      </div>
-      <div class="hero__flotante hero__flotante--b">
-        <strong>ITBMS 7 %</strong><span>calculado</span>
-      </div>
+    <!-- Columna visual: escena Three.js (red de cumplimiento) -->
+    <div class="hero__visual g-oculto" data-hero="visual">
+      <EscenaHero />
     </div>
   </div>
 </section>
@@ -124,99 +104,8 @@ import { contacto } from "@/data/contacto";
   .hero__visual {
     position: relative;
     justify-self: center;
-    width: min(100%, 420px);
-  }
-  .panel {
-    background: #fff;
-    border: 1px solid var(--c-borde);
-    border-radius: var(--radio-grande);
-    box-shadow: var(--sombra-grande);
-    overflow: hidden;
-  }
-  .panel__barra {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 16px;
-    background: var(--c-fondo-2);
-    border-bottom: 1px solid var(--c-borde);
-  }
-  .panel__punto {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--c-borde);
-  }
-  .panel__titulo {
-    margin-left: 10px;
-    font: 600 0.85rem/1 var(--f-texto);
-    color: var(--c-texto-2);
-  }
-  .panel__lista {
-    list-style: none;
-    margin: 0;
-    padding: 18px 20px 8px;
-    display: grid;
-    gap: 12px;
-    font-weight: 500;
-    color: var(--c-marino);
-  }
-  .panel__lista li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .panel__ok {
-    display: inline-grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--c-esmeralda-suave);
-    color: var(--c-esmeralda);
-    font-weight: 700;
-    font-size: 0.8rem;
-  }
-  .panel__pie {
-    display: flex;
-    gap: 8px;
-    padding: 12px 20px 18px;
-  }
-  .panel__chip {
-    font: 600 0.75rem/1 var(--f-texto);
-    letter-spacing: 0.04em;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: var(--c-esmeralda-suave);
-    color: var(--c-esmeralda);
-  }
-  .panel__chip--cian {
-    background: var(--c-cian-suave);
-    color: #0e7490;
-  }
-  .hero__flotante {
-    position: absolute;
-    display: grid;
-    gap: 2px;
-    padding: 10px 14px;
-    background: #fff;
-    border: 1px solid var(--c-borde);
-    border-radius: 12px;
-    box-shadow: var(--sombra);
-    font-size: 0.8rem;
-    color: var(--c-texto-2);
-  }
-  .hero__flotante strong {
-    color: var(--c-marino);
-    font-family: var(--f-display);
-  }
-  .hero__flotante--a {
-    top: -18px;
-    right: -22px;
-  }
-  .hero__flotante--b {
-    bottom: -60px; /* debajo del panel, sin pisar sus chips */
-    left: 28px;
+    width: 100%;
+    max-width: 520px;
   }
 
   @media (max-width: 900px) {
@@ -225,12 +114,6 @@ import { contacto } from "@/data/contacto";
     }
     .hero__visual {
       margin-top: 1.5rem;
-    }
-    .hero__flotante--a {
-      right: 0;
-    }
-    .hero__flotante--b {
-      left: 12px;
     }
   }
 </style>
