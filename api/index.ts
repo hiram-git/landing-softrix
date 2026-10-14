@@ -9,6 +9,8 @@ import { Elysia, t } from "elysia";
 import { intereses } from "../src/data/contacto";
 
 const PUERTO = Number(process.env.PORT ?? process.env.API_PORT ?? 3001);
+// Por defecto 0.0.0.0 (IPv4). HOST=:: escucha también en IPv6, donde lo haya.
+const HOST = process.env.HOST ?? "0.0.0.0";
 // Carpeta del sitio estático; sin ella (o sin build) solo se sirve la API.
 const SITIO = resolve(process.env.SITE_DIR ?? join(import.meta.dir, "..", "dist"));
 const HAY_SITIO = existsSync(join(SITIO, "index.html"));
@@ -76,7 +78,7 @@ export const app = new Elysia()
   });
 
 if (import.meta.main) {
-  app.listen(PUERTO);
+  app.listen({ port: PUERTO, hostname: HOST });
   const modo = HAY_SITIO ? `sitio: ${SITIO} + /api` : "solo /api";
   console.info(`RCG Softrix en http://localhost:${PUERTO} (${modo})`);
 }
