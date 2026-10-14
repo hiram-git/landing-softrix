@@ -205,6 +205,7 @@ import Input from "./Input.astro";
         form.hidden = true;
         exito.hidden = false;
         exito.focus();
+        document.dispatchEvent(new CustomEvent("demo:enviada", { detail: exito }));
       } catch {
         aviso.hidden = false;
       } finally {

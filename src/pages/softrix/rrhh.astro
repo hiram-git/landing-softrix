@@ -50,7 +50,7 @@ const modulos = {
 
   <section id="modulos" class="seccion seccion--alterna" aria-labelledby="modulos-titulo">
     <div class="contenedor pila">
-      <div class="encabezado">
+      <div class="encabezado" data-revelar>
         <div class="eyebrow">Módulos</div>
         <h2 id="modulos-titulo" class="titulo-seccion">De la ficha del colaborador al recibo de pago</h2>
         <!-- Pendiente del handoff: validar el alcance de cada módulo antes de publicar. -->
@@ -58,7 +58,7 @@ const modulos = {
           [CONFIRMAR CON PRODUCTO: alcance exacto de cada módulo antes de publicar.]
         </p>
       </div>
-      <div class="rejilla rejilla--2">
+      <div class="rejilla rejilla--2" data-revelar-grupo>
         <FeatureCard title="Colaboradores" items={modulos.colaboradores} />
         <FeatureCard title="Cálculo de planilla" items={modulos.calculo} />
         <FeatureCard title="Portal del colaborador" items={modulos.portal} />
@@ -68,7 +68,7 @@ const modulos = {
   </section>
 
   <section class="seccion" aria-labelledby="ficha-titulo">
-    <div class="contenedor fila">
+    <div class="contenedor fila" data-revelar-grupo>
       <div class="ficha__texto">
         <div class="eyebrow">Ficha del colaborador</div>
         <h2 id="ficha-titulo" class="titulo-seccion">Todo el expediente en una sola pantalla</h2>

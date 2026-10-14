@@ -2,6 +2,7 @@
 import "@/styles/tokens.css";
 import "@/styles/components.css";
 import "@/styles/global.css";
+import FondoInteractivo from "@/components/FondoInteractivo.astro";
 import Footer from "@/components/Footer.astro";
 import MobileMenu from "@/components/MobileMenu.astro";
 import Navbar from "@/components/Navbar.astro";
@@ -42,19 +43,36 @@ const logo = "/logos/rcg-softrix-horizontal.png";
       href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap"
       rel="stylesheet"
     />
+    <script is:inline>
+      // Antes del primer pintado: oculta lo que GSAP va a revelar, para que no
+      // parpadee. Si el script de animaciones no llega a correr, se muestra igual.
+      if (matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+        const raiz = document.documentElement;
+        raiz.classList.add("anima");
+        setTimeout(() => {
+          if (!("animListo" in raiz.dataset)) raiz.classList.remove("anima");
+        }, 2500);
+      }
+    </script>
   </head>
   <body class="sx-root">
+    <FondoInteractivo modo="pagina" tono="claro" />
     {topBar && <TopBar />}
     <Navbar
       logoSrc={logo}
       links={navLinks(seccion)}
       primary={navPrimary}
       secondary={navSecondary}
+      sticky
     />
     <MobileMenu logoSrc={logo} actual={Astro.url.pathname} />
     <main>
       <slot />
     </main>
     <Footer variante={footer} />
+    <script>
+      import "@/scripts/fondo";
+      import "@/scripts/animaciones";
+    </script>
   </body>
 </html>

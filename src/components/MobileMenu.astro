@@ -80,8 +80,15 @@ const grupos = [
   .movil {
     display: none;
     flex-direction: column;
+    position: sticky;
+    top: 0;
+    z-index: 30;
     border-bottom: 1px solid var(--border);
     background: var(--surface-000);
+    transition: box-shadow 150ms ease-out;
+  }
+  .movil[data-desplazada] {
+    box-shadow: var(--shadow-md);
   }
   .movil__barra {
     display: flex;
@@ -133,6 +140,9 @@ const grupos = [
     gap: var(--space-1);
     padding: var(--space-2) var(--space-4) var(--space-4);
     border-top: 1px solid var(--border);
+    max-height: calc(100svh - 64px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .movil__panel[hidden] {
     display: none;
@@ -176,18 +186,53 @@ const grupos = [
 </style>
 
 <script>
+  import { gsap } from "gsap";
+
   const menu = document.querySelector<HTMLElement>("[data-menu-movil]");
   const boton = menu?.querySelector<HTMLButtonElement>("button[aria-controls]");
   const panel = document.getElementById("menu-movil");
   if (menu && boton && panel) {
-    const poner = (abierto: boolean) => {
+    const animar = () => window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+    const poner = (abierto: boolean, instantaneo = false) => {
+      if (abierto === !panel.hidden) return;
       boton.setAttribute("aria-expanded", String(abierto));
-      panel.hidden = !abierto;
+      gsap.killTweensOf([panel, ...panel.children]);
+      if (instantaneo || !animar()) {
+        gsap.set([panel, ...panel.children], { clearProps: "height,opacity,visibility,transform" });
+        panel.hidden = !abierto;
+        return;
+      }
+      // Se despliega hacia abajo y los enlaces entran en cascada; al cerrar se recoge.
+      if (abierto) {
+        panel.hidden = false;
+        gsap.fromTo(
+          panel,
+          { height: 0, opacity: 0 },
+          { height: "auto", opacity: 1, duration: 0.32, ease: "power2.out", clearProps: "height" },
+        );
+        gsap.fromTo(
+          panel.children,
+          { autoAlpha: 0, y: -6 },
+          { autoAlpha: 1, y: 0, duration: 0.24, ease: "power2.out", stagger: 0.025, delay: 0.06 },
+        );
+      } else {
+        gsap.to(panel, {
+          height: 0,
+          opacity: 0,
+          duration: 0.22,
+          ease: "power2.in",
+          onComplete: () => {
+            panel.hidden = true;
+            gsap.set(panel, { clearProps: "height,opacity" });
+          },
+        });
+      }
     };
     boton.addEventListener("click", () => poner(boton.getAttribute("aria-expanded") !== "true"));
-    // Un enlace del panel (también los anclas de la misma página) cierra el menú.
+    // Un enlace del panel cierra el menú al instante: si es un ancla de esta misma
+    // página, el desplazamiento se calcula con el panel ya recogido.
     panel.addEventListener("click", (e) => {
-      if ((e.target as HTMLElement).closest("a")) poner(false);
+      if ((e.target as HTMLElement).closest("a")) poner(false, true);
     });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !panel.hidden) {

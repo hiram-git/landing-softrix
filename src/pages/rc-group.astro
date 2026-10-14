@@ -1,0 +1,23 @@
+---
+// Landing corporativa de RC Group con las cinco animaciones GSAP:
+// 1 hero en cascada · 2 revelado 3D del equipo POS (scrub) · 3 sello digital
+// con rebote · 4 tarjetas de servicios escalonadas · 5 contadores numéricos.
+// Cada sección trae su markup, su CSS y su <script> con GSAP.
+import EquipoPos from "@/components/corporativa/EquipoPos.astro";
+import HeroCascada from "@/components/corporativa/HeroCascada.astro";
+import Metricas from "@/components/corporativa/Metricas.astro";
+import SelloDigital from "@/components/corporativa/SelloDigital.astro";
+import ServiciosGrid from "@/components/corporativa/ServiciosGrid.astro";
+import Corporativa from "@/layouts/Corporativa.astro";
+---
+
+<Corporativa
+  title="RC Group Panamá · Equipos fiscales, facturación electrónica y asesoría legal"
+  description="Terminales homologadas por la DGI, firma digital y asesoría legal, tributaria y contable para empresas de Panamá."
+>
+  <HeroCascada />
+  <EquipoPos />
+  <SelloDigital />
+  <ServiciosGrid />
+  <Metricas />
+</Corporativa>

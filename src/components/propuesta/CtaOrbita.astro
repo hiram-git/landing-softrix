@@ -1,0 +1,187 @@
+---
+// Llamado a la acción en tarjeta suave: anillos concéntricos con la marca al
+// centro y, orbitando, tarjetas de los tres productos con paralaje y chips.
+---
+
+<section class="seccion cta">
+  <div class="contenedor">
+    <div class="tarjeta tarjeta--suave cta__tarjeta" data-paralaje-zona>
+      <div class="cta__texto">
+        <span class="etiqueta" data-reveal>Empieza hoy</span>
+        <h2 class="titulo" data-reveal data-reveal-delay="0.2">
+          ¿Listo para facturar <span class="resalte">ante la DGI</span>?
+        </h2>
+        <a class="boton" href="#contacto" data-reveal data-reveal-delay="0.3">Solicitar demo</a>
+      </div>
+      <div class="orbita" aria-hidden="true">
+        <span class="orbita__anillo orbita__anillo--1"></span>
+        <span class="orbita__anillo orbita__anillo--2"></span>
+        <span class="orbita__anillo orbita__anillo--3"></span>
+        <div class="orbita__centro"><img src="/logos/rcg-mark.png" alt="" width="56" height="56" /></div>
+
+        <div class="flotante orbita__tarjeta orbita__tarjeta--a" data-paralaje="0.1">
+          <div class="flotante__titulo">
+            <span class="icono-redondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8l9 5 9-5z M3 8v8l9 5 9-5V8 M12 13v8" /></svg></span>
+            Caja del día
+          </div>
+          <div class="flotante__fila"><span>Apertura · Cierre</span><strong>Cuadrada</strong></div>
+        </div>
+        <div class="flotante orbita__tarjeta orbita__tarjeta--b" data-paralaje="-0.07">
+          <div class="flotante__titulo">
+            <span class="icono-redondo icono-redondo--verde"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M2 21a7 7 0 0 1 14 0" /></svg></span>
+            Portal del colaborador
+          </div>
+          <div class="flotante__fila"><span>Comprobante de pago</span><span class="positivo">Disponible</span></div>
+        </div>
+        <div class="flotante orbita__tarjeta orbita__tarjeta--c" data-paralaje="0.06">
+          <div class="flotante__titulo">
+            <span class="icono-redondo icono-redondo--azul"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16 M2 21h20 M9 21v-6h6v6" /></svg></span>
+            Puesto de control
+          </div>
+          <div class="flotante__fila"><span>Visitante con QR</span><strong>Autorizado</strong></div>
+        </div>
+        <span class="cursor-chip orbita__chip orbita__chip--a">Facturación</span>
+        <span class="cursor-chip cursor-chip--verde cursor-chip--izquierda orbita__chip orbita__chip--b">RRHH</span>
+        <span class="cursor-chip cursor-chip--azul orbita__chip orbita__chip--c">SmartGate</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta__tarjeta {
+    position: relative;
+    overflow: clip;
+    align-items: center;
+    padding: 4rem 1.5rem 0;
+    gap: 0;
+  }
+  .cta__tarjeta:hover {
+    transform: none;
+  }
+  .cta__texto {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    max-width: 680px;
+  }
+  .orbita {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    margin-top: -1rem;
+  }
+  .orbita__anillo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+    border: 1px solid rgba(229, 35, 26, 0.12);
+    background: radial-gradient(circle, rgba(229, 35, 26, 0.03), rgba(229, 35, 26, 0.0) 70%);
+    transform: translate(-50%, -40%);
+  }
+  .orbita__anillo--1 {
+    width: 240px;
+    height: 240px;
+    background: rgba(229, 35, 26, 0.06);
+  }
+  .orbita__anillo--2 {
+    width: 440px;
+    height: 440px;
+  }
+  .orbita__anillo--3 {
+    width: 680px;
+    height: 680px;
+  }
+  .orbita__centro {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 5.5rem;
+    height: 5.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1.5rem;
+    background: var(--p-degradado);
+    box-shadow: 0 30px 60px -24px rgba(229, 35, 26, 0.7);
+    transform: translate(-50%, calc(-50% - 40px));
+  }
+  .orbita__centro img {
+    width: 3.25rem;
+    height: 3.25rem;
+    filter: brightness(0) invert(1);
+  }
+  .orbita__tarjeta {
+    position: absolute;
+    width: 260px;
+  }
+  .orbita__tarjeta--a {
+    left: 8%;
+    top: 6%;
+  }
+  .orbita__tarjeta--b {
+    right: 6%;
+    top: 28%;
+  }
+  .orbita__tarjeta--c {
+    left: 12%;
+    bottom: 14%;
+  }
+  .orbita__chip {
+    position: absolute;
+  }
+  .orbita__chip--a {
+    left: 31%;
+    top: 42%;
+  }
+  .orbita__chip--b {
+    right: 30%;
+    bottom: 26%;
+  }
+  .orbita__chip--c {
+    right: 10%;
+    bottom: 8%;
+  }
+  /* En el celular las tarjetas dejan la órbita y se apilan bajo la marca. */
+  @media (max-width: 900px) {
+    .cta__tarjeta {
+      padding: 2.5rem 1rem 2rem;
+    }
+    .orbita {
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.9rem;
+      padding-top: 7rem;
+      margin-top: 0;
+    }
+    .orbita__anillo {
+      transform: translate(-50%, -50%);
+      top: 3.5rem;
+    }
+    .orbita__anillo--2 {
+      width: 300px;
+      height: 300px;
+    }
+    .orbita__anillo--3 {
+      width: 480px;
+      height: 480px;
+    }
+    .orbita__centro {
+      top: 3.5rem;
+      transform: translate(-50%, -50%);
+    }
+    .orbita__tarjeta {
+      position: static;
+      width: min(100%, 300px);
+    }
+    .orbita__chip {
+      display: none;
+    }
+  }
+</style>

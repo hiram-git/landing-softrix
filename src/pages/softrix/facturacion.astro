@@ -57,7 +57,7 @@ const modulos = {
 
   <!-- Facturación electrónica -->
   <section class="seccion" aria-labelledby="fe-titulo">
-    <div class="contenedor fila">
+    <div class="contenedor fila" data-revelar-grupo>
       <img
         class="captura fe__captura"
         src="/screenshots/facturacion-factura.png"
@@ -87,11 +87,11 @@ const modulos = {
   <!-- Módulos -->
   <section id="modulos" class="seccion seccion--alterna" aria-labelledby="modulos-titulo">
     <div class="contenedor pila">
-      <div class="encabezado">
+      <div class="encabezado" data-revelar>
         <div class="eyebrow">Módulos</div>
         <h2 id="modulos-titulo" class="titulo-seccion">Todo el ciclo comercial en un solo sistema</h2>
       </div>
-      <div class="rejilla rejilla--2">
+      <div class="rejilla rejilla--2" data-revelar-grupo>
         <FeatureCard title="Ventas y caja" items={modulos.ventas} />
         <FeatureCard title="Inventario y compras" items={modulos.inventario} />
         <FeatureCard title="Servicios y taller" items={modulos.servicios} />
@@ -103,11 +103,11 @@ const modulos = {
   <!-- Verticales -->
   <section class="seccion" aria-labelledby="verticales-titulo">
     <div class="contenedor pila">
-      <div class="encabezado">
+      <div class="encabezado" data-revelar>
         <div class="eyebrow">Hecho para tu negocio</div>
         <h2 id="verticales-titulo" class="titulo-seccion">Modos de trabajo por vertical</h2>
       </div>
-      <div class="rejilla">
+      <div class="rejilla" data-revelar-grupo>
         <FeatureCard badge="Joyerías" title="Precio por peso de oro">
           Órdenes de servicio con varias piezas y prioridad, y certificados de regalo al portador.
         </FeatureCard>

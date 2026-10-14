@@ -1,0 +1,381 @@
+---
+// Layout de la landing corporativa de RC Group (/rc-group). Es independiente del
+// design system RCG Softrix: trae su propia paleta (azul marino + esmeralda/cian),
+// sus fuentes y su navegación. Las secciones viven en src/components/corporativa.
+import { contacto } from "@/data/contacto";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+
+const enlaces = [
+  { label: "Equipos fiscales", href: "#equipos" },
+  { label: "Facturación electrónica", href: "#facturacion" },
+  { label: "Servicios", href: "#servicios" },
+  { label: "Contacto", href: "#contacto" },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonica} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_PA" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonica} />
+    <link rel="icon" type="image/png" href="/logos/rcg-mark.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      // Anti-FOUC: con JavaScript y sin «reducir movimiento», los elementos que GSAP
+      // va a animar nacen ocultos (.g-oculto) hasta que el timeline toma el control.
+      // Sin JavaScript, o con movimiento reducido, la clase no actúa y todo se ve.
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.documentElement.classList.add("g-anima");
+      }
+    </script>
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="nav" data-nav>
+      <div class="contenedor nav__fila">
+        <a class="nav__marca" href="/rc-group" aria-label="RC Group Panamá, inicio">
+          <span class="nav__marca-punto" aria-hidden="true"></span>
+          RC Group
+        </a>
+        <nav class="nav__enlaces" aria-label="Secciones">
+          {enlaces.map((e) => <a href={e.href}>{e.label}</a>)}
+        </nav>
+        <a class="btn btn--primario btn--chico" href={contacto.whatsapp} target="_blank" rel="noopener">
+          Hablar con un asesor
+        </a>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="pie" id="contacto">
+      <div class="contenedor pie__fila">
+        <div>
+          <div class="pie__marca">RC Group Panamá</div>
+          <p class="pie__texto">
+            {contacto.direccion} · {contacto.oficina} · WhatsApp {contacto.whatsappVisible} ·{" "}
+            {contacto.correo}
+          </p>
+          <p class="pie__texto">{contacto.horario}</p>
+        </div>
+        <div class="pie__acciones">
+          <a class="btn btn--primario" href={contacto.whatsapp} target="_blank" rel="noopener">
+            Escribir por WhatsApp
+          </a>
+          <a class="btn btn--secundario btn--claro" href={`mailto:${contacto.correo}`}>Enviar correo</a>
+        </div>
+      </div>
+      <div class="contenedor pie__legal">© {new Date().getFullYear()} RC Group · Panamá</div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  /* ── Paleta corporativa ─────────────────────────────────────────────── */
+  :root {
+    --c-fondo: #ffffff;
+    --c-fondo-2: #f5f8fb;
+    --c-borde: #e2e8f0;
+    --c-marino: #0b1f3a; /* azul marino profundo: texto y titulares */
+    --c-marino-2: #16305a;
+    --c-texto: #1f2f46;
+    --c-texto-2: #52627a;
+    --c-esmeralda: #059669;
+    --c-esmeralda-2: #10b981;
+    --c-esmeralda-suave: #ecfdf5;
+    --c-cian: #06b6d4;
+    --c-cian-suave: #ecfeff;
+    --c-blanco: #ffffff;
+    --f-display: "Manrope", "Segoe UI", system-ui, sans-serif;
+    --f-texto: "Inter", "Segoe UI", system-ui, sans-serif;
+    --radio: 14px;
+    --radio-grande: 22px;
+    --sombra: 0 10px 30px -12px rgba(11, 31, 58, 0.18);
+    --sombra-grande: 0 30px 60px -24px rgba(11, 31, 58, 0.28);
+    --contenedor: 1160px;
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--c-fondo);
+    color: var(--c-texto);
+    font-family: var(--f-texto);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    font-family: var(--f-display);
+    color: var(--c-marino);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+  a {
+    color: inherit;
+  }
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+  :focus-visible {
+    outline: 3px solid var(--c-cian);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  [id] {
+    scroll-margin-top: 88px;
+  }
+
+  /* Anti-FOUC: GSAP revela estos elementos (ver <head>). */
+  .g-anima .g-oculto {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .saltar {
+    position: absolute;
+    top: -4rem;
+    left: 1rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--c-marino);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+  .saltar:focus {
+    top: 1rem;
+  }
+
+  .contenedor {
+    width: 100%;
+    max-width: calc(var(--contenedor) + 2 * 24px);
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+  .seccion {
+    padding-block: clamp(4rem, 8vw, 7rem);
+  }
+  .seccion--suave {
+    background: var(--c-fondo-2);
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-esmeralda);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--c-esmeralda), var(--c-cian));
+  }
+  .titulo {
+    font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+    font-weight: 800;
+  }
+  .texto {
+    color: var(--c-texto-2);
+    max-width: 62ch;
+  }
+
+  /* ── Botones ───────────────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    border: 1.5px solid transparent;
+    font: 600 1rem/1.1 var(--f-texto);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 180ms var(--ease),
+      box-shadow 180ms var(--ease),
+      background-color 180ms var(--ease),
+      border-color 180ms var(--ease),
+      color 180ms var(--ease);
+  }
+  .btn svg {
+    width: 1.15em;
+    height: 1.15em;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+  .btn--primario {
+    background: linear-gradient(135deg, var(--c-esmeralda-2), var(--c-esmeralda));
+    color: #fff;
+    box-shadow: 0 10px 24px -10px rgba(5, 150, 105, 0.6);
+  }
+  .btn--primario:hover {
+    box-shadow: 0 16px 30px -10px rgba(5, 150, 105, 0.7);
+  }
+  .btn--secundario {
+    background: transparent;
+    color: var(--c-marino);
+    border-color: var(--c-marino);
+  }
+  .btn--secundario:hover {
+    background: var(--c-marino);
+    color: #fff;
+  }
+  .btn--claro {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  .btn--claro:hover {
+    background: #fff;
+    color: var(--c-marino);
+    border-color: #fff;
+  }
+  .btn--chico {
+    min-height: 2.75rem;
+    padding: 0.6rem 1.15rem;
+    font-size: 0.9375rem;
+  }
+
+  /* ── Navegación ────────────────────────────────────────────────────── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(160%) blur(12px);
+    -webkit-backdrop-filter: saturate(160%) blur(12px);
+    border-bottom: 1px solid var(--c-borde);
+  }
+  .nav__fila {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 72px;
+  }
+  .nav__marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font: 800 1.2rem/1 var(--f-display);
+    color: var(--c-marino);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav__marca-punto {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, var(--c-esmeralda-2), var(--c-cian));
+    box-shadow: 0 0 0 4px var(--c-esmeralda-suave);
+  }
+  .nav__enlaces {
+    display: flex;
+    gap: 1.6rem;
+    margin-left: auto;
+  }
+  .nav__enlaces a {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--c-texto-2);
+    text-decoration: none;
+    transition: color 150ms;
+  }
+  .nav__enlaces a:hover {
+    color: var(--c-marino);
+  }
+  @media (max-width: 860px) {
+    .nav__enlaces {
+      display: none;
+    }
+    .nav__fila > .btn {
+      margin-left: auto;
+    }
+  }
+
+  /* ── Pie ───────────────────────────────────────────────────────────── */
+  .pie {
+    background: var(--c-marino);
+    color: #fff;
+    padding-block: 3.5rem 2rem;
+  }
+  .pie__fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem 3rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .pie__marca {
+    font: 800 1.35rem/1 var(--f-display);
+    margin-bottom: 0.9rem;
+  }
+  .pie__texto {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.95rem;
+    max-width: 60ch;
+  }
+  .pie__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .pie__legal {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.85rem;
+  }
+</style>

@@ -1,0 +1,699 @@
+---
+// Layout de la propuesta «Suite» (/propuesta): la portada de RCG Softrix con la
+// dirección visual de una landing SaaS clara —hero en tarjeta redondeada con
+// retícula y halos, barra flotante en píldora, tarjetas con borde fino, etiquetas
+// en píldora y titulares grandes con una palabra resaltada— y sus transiciones:
+// revelado al entrar en pantalla, marquesina, paralaje de tarjetas flotantes,
+// pestañas con fundido y menú móvil con hamburguesa animada. Todo en CSS y
+// scripts cortos: sin GSAP ni Three.js.
+import { contacto } from "@/data/contacto";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+
+const enlaces = [
+  { label: "Productos", href: "#productos" },
+  { label: "Servicios legales", href: "#legal" },
+  { label: "Gobierno", href: "#gobierno" },
+  { label: "Equipos", href: "#equipos" },
+  { label: "Contacto", href: "#contacto" },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonica} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_PA" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonica} />
+    <link rel="icon" type="image/png" href="/logos/rcg-mark.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      // Anti-FOUC del revelado: con JavaScript, lo marcado con data-reveal nace
+      // oculto hasta que entra en pantalla. Si el script no corre en 3 s, se muestra.
+      (function () {
+        var raiz = document.documentElement;
+        raiz.classList.add("js-reveal-ready");
+        setTimeout(function () {
+          if (!raiz.hasAttribute("data-reveal-running")) raiz.classList.remove("js-reveal-ready");
+        }, 3000);
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="pie">
+      <div class="contenedor">
+        <div class="pie__fila">
+          <div class="pie__marca">
+            <img src="/logos/rcg-softrix-horizontal.png" alt="RCG Softrix" width="150" height="40" />
+            <p class="pie__texto">
+              Software hecho en Panamá para pymes e instituciones, con el respaldo legal y fiscal de
+              RC Group.
+            </p>
+          </div>
+          <nav class="pie__columna" aria-label="Secciones">
+            <h2 class="pie__titulo">Secciones</h2>
+            {enlaces.map((e) => <a href={e.href}>{e.label}</a>)}
+          </nav>
+          <div class="pie__columna">
+            <h2 class="pie__titulo">Productos</h2>
+            <a href="/softrix/facturacion">Softrix Facturación</a>
+            <a href="/softrix/rrhh">Softrix RRHH</a>
+            <a href="/softrix/smartgate">SmartGate Control</a>
+          </div>
+          <div class="pie__columna">
+            <h2 class="pie__titulo">Contacto</h2>
+            <address>
+              <span>{contacto.direccion}</span>
+              <span>{contacto.oficina} · WhatsApp {contacto.whatsappVisible}</span>
+              <a href={`mailto:${contacto.correo}`}>{contacto.correo}</a>
+              <span>{contacto.horario}</span>
+            </address>
+          </div>
+        </div>
+        <div class="pie__legal">
+          <span>© {new Date().getFullYear()} RC Group · Panamá</span>
+          <a href={contacto.instagram.url} target="_blank" rel="noopener">Instagram {contacto.instagram.usuario}</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ── Revelado al entrar en pantalla ───────────────────────────────────
+      // [data-reveal] sube y aparece una vez (CSS); data-reveal-delay escalona y
+      // data-reveal-offset (% del alto de la ventana) decide cuánto hay que ver.
+      const LISTO = "js-reveal-ready";
+      const REVELADO = "is-revealed";
+      const raiz = document.documentElement;
+      const elementos = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+      raiz.setAttribute("data-reveal-running", "");
+      if (elementos.length === 0) {
+        raiz.classList.remove(LISTO);
+      } else {
+        raiz.classList.add(LISTO);
+        const revelar = (el: HTMLElement) => {
+          if (el.classList.contains(REVELADO)) return;
+          el.style.setProperty("--reveal-delay", `${el.dataset.revealDelay ?? "0.1"}s`);
+          el.classList.add(REVELADO);
+        };
+        if (!("IntersectionObserver" in window)) {
+          elementos.forEach(revelar);
+        } else {
+          const porMargen = new Map<number, HTMLElement[]>();
+          for (const el of elementos) {
+            const margen = Number(el.dataset.revealOffset ?? 10);
+            porMargen.set(margen, [...(porMargen.get(margen) ?? []), el]);
+          }
+          for (const [margen, lista] of porMargen) {
+            const io = new IntersectionObserver(
+              (entradas) => {
+                for (const e of entradas) {
+                  if (e.isIntersecting) {
+                    revelar(e.target as HTMLElement);
+                    io.unobserve(e.target);
+                  }
+                }
+              },
+              { rootMargin: `0px 0px -${margen}% 0px`, threshold: 0 },
+            );
+            lista.forEach((el) => io.observe(el));
+          }
+          // Lo que ya está en pantalla al cargar no espera al primer scroll.
+          const repasar = () => {
+            for (const el of elementos) {
+              if (el.classList.contains(REVELADO)) continue;
+              const r = el.getBoundingClientRect();
+              const limite = innerHeight * (1 - Number(el.dataset.revealOffset ?? 10) / 100);
+              if (r.top < limite && r.bottom > 0) revelar(el);
+            }
+          };
+          addEventListener("load", repasar);
+          repasar();
+        }
+      }
+
+      // ── Paralaje: las tarjetas flotantes se desplazan con el scroll ──────
+      // [data-paralaje="0.08"]: fracción de lo que su contenedor dista del centro.
+      const flotantes = Array.from(document.querySelectorAll<HTMLElement>("[data-paralaje]"));
+      if (flotantes.length && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        let pendiente = false;
+        const mover = () => {
+          pendiente = false;
+          const medio = innerHeight / 2;
+          for (const el of flotantes) {
+            const zona = el.closest<HTMLElement>("[data-paralaje-zona]") ?? el.parentElement;
+            if (!zona) continue;
+            const r = zona.getBoundingClientRect();
+            const distancia = r.top + r.height / 2 - medio;
+            const factor = Number(el.dataset.paralaje ?? 0.08);
+            // Con tope: lejos del centro la tarjeta no se va de su sitio.
+            const y = Math.max(-70, Math.min(70, -distancia * factor));
+            el.style.setProperty("--paralaje", `${y.toFixed(1)}px`);
+          }
+        };
+        addEventListener(
+          "scroll",
+          () => {
+            if (pendiente) return;
+            pendiente = true;
+            requestAnimationFrame(mover);
+          },
+          { passive: true },
+        );
+        addEventListener("resize", mover, { passive: true });
+        mover();
+      }
+
+      // ── Pestañas con fundido ─────────────────────────────────────────────
+      for (const tabs of document.querySelectorAll<HTMLElement>("[data-tabs]")) {
+        const botones = Array.from(tabs.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+        const elegir = (boton: HTMLButtonElement, enfocar: boolean) => {
+          for (const b of botones) {
+            const activo = b === boton;
+            b.setAttribute("aria-selected", String(activo));
+            b.tabIndex = activo ? 0 : -1;
+          }
+          tabs.dataset.actual = boton.dataset.tab ?? "";
+          tabs.dispatchEvent(new CustomEvent("tabs:cambio", { detail: boton.dataset.tab ?? "" }));
+          if (enfocar) boton.focus();
+        };
+        botones.forEach((b, i) => {
+          b.addEventListener("click", () => elegir(b, false));
+          b.addEventListener("keydown", (e) => {
+            const destino = { ArrowLeft: i - 1, ArrowRight: i + 1, Home: 0, End: botones.length - 1 }[e.key];
+            if (destino === undefined) return;
+            e.preventDefault();
+            elegir(botones[(destino + botones.length) % botones.length], true);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --p-tinta: #0f1116;
+    --p-texto: #2a2e36;
+    --p-gris: #7c8290;
+    --p-gris-claro: #f5f6f9;
+    --p-neutro: #e2e4ea;
+    --p-blanco: #fff;
+    --p-marca: #e5231a;
+    --p-marca-2: #f2503f;
+    --p-marca-suave: #fdeceb;
+    --p-verde: #10b981;
+    --p-verde-suave: #e7f8f1;
+    --p-azul: #2a6fc0;
+    --p-azul-suave: #e8f0fb;
+    --p-degradado: linear-gradient(0deg, #d41a11, #f2503f);
+    --p-fuente: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+    --p-radio: 1rem;
+    --p-radio-grande: 1.5rem;
+    --p-ease: cubic-bezier(0.165, 0.84, 0.44, 1);
+    --p-sombra-etiqueta: 0 0 1px 1px rgba(0, 0, 0, 0.08), inset 4px 4px 4px rgba(255, 255, 255, 0.25);
+    --p-contenedor: 1200px;
+  }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--p-blanco);
+    color: var(--p-texto);
+    font-family: var(--p-fuente);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    color: var(--p-tinta);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+  img {
+    height: auto;
+  }
+  a {
+    color: inherit;
+  }
+  :focus-visible {
+    outline: 3px solid var(--p-marca);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  [id] {
+    scroll-margin-top: 1.5rem;
+  }
+  [hidden] {
+    display: none !important;
+  }
+  .saltar {
+    position: absolute;
+    top: -4rem;
+    left: 1rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--p-tinta);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+  .saltar:focus {
+    top: 1rem;
+  }
+
+  /* ── Revelado ─────────────────────────────────────────────────────── */
+  /* En una capa: así el hover de una tarjeta (sin capa) gana al transform del
+     revelado aunque tenga menos especificidad. */
+  @layer revelado {
+    .js-reveal-ready [data-reveal] {
+      opacity: 0;
+      transform: translate3d(0, 15%, 0);
+    }
+    .js-reveal-ready [data-reveal].is-revealed {
+      opacity: 1;
+      transform: translateZ(0);
+      transition:
+        opacity 0.7s var(--p-ease),
+        transform 0.7s var(--p-ease);
+      transition-delay: var(--reveal-delay, 0.1s);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .js-reveal-ready [data-reveal] {
+        opacity: 1;
+        transform: none;
+      }
+      .js-reveal-ready [data-reveal].is-revealed {
+        transition: none;
+      }
+    }
+  }
+
+  /* ── Piezas compartidas ───────────────────────────────────────────── */
+  .contenedor {
+    width: 100%;
+    max-width: calc(var(--p-contenedor) + 3rem);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+  .seccion {
+    padding-block: clamp(4rem, 8vw, 7rem);
+  }
+  .cabecera {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    max-width: 760px;
+    margin-inline: auto;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .cabecera--izquierda {
+    align-items: flex-start;
+    text-align: left;
+    margin-inline: 0;
+  }
+  .titulo {
+    font-size: clamp(2.1rem, 4.4vw, 3.4rem);
+  }
+  .resalte {
+    color: var(--p-marca);
+  }
+  .texto {
+    color: var(--p-gris);
+    font-size: 1.0625rem;
+    max-width: 60ch;
+  }
+  .etiqueta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    padding: 0.25rem 1rem 0.25rem 0.75rem;
+    border-radius: 2.5rem;
+    background: var(--p-gris-claro);
+    box-shadow: var(--p-sombra-etiqueta);
+    color: var(--p-marca);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .etiqueta svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3.25rem;
+    padding: 1rem 2rem;
+    border-radius: 3.75rem;
+    border: 1px solid transparent;
+    background: var(--p-degradado);
+    color: #fff;
+    font: 500 1rem/1.1 var(--p-fuente);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transition:
+      transform 0.3s var(--p-ease),
+      background-color 0.2s var(--p-ease),
+      color 0.2s var(--p-ease),
+      border-color 0.2s var(--p-ease);
+  }
+  .boton:hover {
+    transform: scale(0.95);
+  }
+  .boton--secundario {
+    background: var(--p-blanco);
+    color: var(--p-tinta);
+    border-color: var(--p-neutro);
+    box-shadow: none;
+  }
+  .boton--secundario:hover {
+    background: var(--p-gris-claro);
+  }
+  .boton--chico {
+    min-height: 2.75rem;
+    padding: 0.65rem 1.4rem;
+    font-size: 0.95rem;
+  }
+  .tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: var(--p-blanco);
+    border: 1px solid var(--p-neutro);
+    border-radius: var(--p-radio);
+    transition:
+      transform 0.3s var(--p-ease),
+      border-color 0.2s var(--p-ease),
+      box-shadow 0.3s var(--p-ease);
+  }
+  .tarjeta:hover {
+    transform: scale(1.015);
+    border-color: #cfd3dc;
+    box-shadow: 0 20px 40px -24px rgba(15, 17, 22, 0.2);
+  }
+  .tarjeta--suave {
+    background: var(--p-gris-claro);
+    border-color: transparent;
+    border-radius: var(--p-radio-grande);
+  }
+  .icono-redondo {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--p-degradado);
+    color: #fff;
+  }
+  .icono-redondo svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .icono-redondo--verde {
+    background: linear-gradient(0deg, #0e9f6e, #34d399);
+  }
+  .icono-redondo--azul {
+    background: linear-gradient(0deg, #2360aa, #4a8ee0);
+  }
+  .lista-check {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+  }
+  .lista-check li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+  .lista-check li::before {
+    content: "";
+    flex: none;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 0.15rem;
+    border-radius: 50%;
+    background: var(--p-marca) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l4 4L19 7'/%3E%3C/svg%3E") center / 60% no-repeat;
+  }
+  /* Píldora con flecha de cursor, como un puntero que señala la palabra. */
+  .cursor-chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 1rem;
+    border-radius: 0.75rem;
+    background: var(--p-degradado);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    box-shadow: 0 10px 24px -12px rgba(229, 35, 26, 0.6);
+  }
+  .cursor-chip--verde {
+    background: linear-gradient(0deg, #0e9f6e, #34d399);
+    box-shadow: 0 10px 24px -12px rgba(16, 185, 129, 0.6);
+  }
+  .cursor-chip--azul {
+    background: linear-gradient(0deg, #2360aa, #4a8ee0);
+    box-shadow: 0 10px 24px -12px rgba(42, 111, 192, 0.6);
+  }
+  .cursor-chip::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: inherit;
+    clip-path: polygon(0 0, 100% 40%, 55% 55%, 40% 100%);
+    top: -14px;
+    right: -14px;
+    box-shadow: none;
+  }
+  .cursor-chip--izquierda::after {
+    right: auto;
+    left: -14px;
+    transform: scaleX(-1);
+  }
+  /* Tarjeta flotante de interfaz (hero, CTA). */
+  .flotante {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    background: var(--p-blanco);
+    border: 1px solid var(--p-neutro);
+    border-radius: 1rem;
+    box-shadow: 0 24px 48px -28px rgba(15, 17, 22, 0.28);
+    font-size: 0.85rem;
+    transform: translate3d(0, var(--paralaje, 0px), 0);
+    will-change: transform;
+  }
+  .flotante__titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 500;
+    color: var(--p-tinta);
+  }
+  .flotante__titulo .icono-redondo {
+    width: 2rem;
+    height: 2rem;
+  }
+  .flotante__titulo .icono-redondo svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  .flotante__fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    color: var(--p-gris);
+  }
+  .flotante__fila strong {
+    color: var(--p-tinta);
+    font-weight: 500;
+  }
+  .flotante__fila .positivo {
+    color: var(--p-verde);
+  }
+  .progreso {
+    height: 1.5rem;
+    border-radius: 0.5rem;
+    background: var(--p-gris-claro);
+    overflow: hidden;
+  }
+  .progreso > span {
+    display: block;
+    height: 100%;
+    width: var(--ancho, 60%);
+    border-radius: inherit;
+    background: var(--p-degradado);
+    color: #fff;
+    font-size: 0.65rem;
+    line-height: 1.5rem;
+    padding-left: 0.5rem;
+  }
+
+  /* ── Pestañas ─────────────────────────────────────────────────────── */
+  .pestanas {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.35rem;
+    border: 1px solid var(--p-neutro);
+    border-radius: 3rem;
+    background: var(--p-blanco);
+  }
+  .pestanas [role="tab"] {
+    min-height: 2.6rem;
+    padding: 0.5rem 1rem;
+    border: 0;
+    border-radius: 3rem;
+    background: transparent;
+    color: var(--p-gris);
+    font: 500 0.95rem/1 var(--p-fuente);
+    cursor: pointer;
+    transition:
+      background-color 0.25s var(--p-ease),
+      color 0.25s var(--p-ease);
+  }
+  .pestanas [role="tab"][aria-selected="true"] {
+    background: var(--p-degradado);
+    color: #fff;
+  }
+
+  /* ── Pie ──────────────────────────────────────────────────────────── */
+  .pie {
+    margin: 1.5rem;
+    padding: 3rem 0 1.5rem;
+    background: var(--p-gris-claro);
+    border: 1px solid var(--p-neutro);
+    border-radius: var(--p-radio-grande);
+  }
+  .pie__fila {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  .pie__marca {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .pie__texto {
+    color: var(--p-gris);
+    font-size: 0.95rem;
+    max-width: 36ch;
+  }
+  .pie__columna {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+  }
+  .pie__columna a {
+    color: var(--p-texto);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .pie__columna a:hover {
+    color: var(--p-marca);
+  }
+  .pie__columna address {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-style: normal;
+    color: var(--p-gris);
+  }
+  .pie__titulo {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    margin-bottom: 0.25rem;
+  }
+  .pie__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--p-neutro);
+    color: var(--p-gris);
+    font-size: 0.875rem;
+  }
+  .pie__legal a {
+    color: var(--p-gris);
+    text-decoration: none;
+  }
+  @media (max-width: 900px) {
+    .pie {
+      margin: 1rem;
+    }
+    .pie__fila {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .pie__fila {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

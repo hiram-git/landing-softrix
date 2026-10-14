@@ -1,0 +1,13 @@
+---
+// Canvas del fondo interactivo (src/scripts/fondo.ts lo pinta).
+// «pagina»: fijo detrás de todo el documento. «local»: absoluto dentro de su
+// contenedor (p. ej. el hero oscuro de las páginas de producto).
+interface Props {
+  modo?: "pagina" | "local";
+  tono?: "claro" | "oscuro";
+}
+const { modo = "pagina", tono = "claro" } = Astro.props;
+---
+
+<canvas class:list={["fondo", `fondo--${modo}`]} data-fondo data-tono={tono} aria-hidden="true"
+></canvas>

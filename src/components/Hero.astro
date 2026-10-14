@@ -1,10 +1,14 @@
 ---
 import Badge from "./Badge.astro";
 import Button from "./Button.astro";
+import FondoInteractivo from "./FondoInteractivo.astro";
 import type { Accion, BadgeTone, ButtonVariant } from "./types";
 
 // HeroProps. La captura (children) llega por el slot por defecto y ocupa la
-// columna derecha; la entrada escalonada sx-enter es solo de esta primera pantalla.
+// columna derecha; la ranura «fondo» admite un fondo propio detrás del contenido
+// (la portada mete ahí el fondo 3D); la entrada escalonada sx-enter es solo de esta primera pantalla.
+// El titular se parte en palabras (.sx-hero__palabra) para que animaciones.ts
+// las haga entrar una a una; sin JavaScript se ve como un texto normal.
 interface Props {
   eyebrow?: string;
   title: string;
@@ -30,9 +34,12 @@ const {
   class: clase,
 } = Astro.props;
 const varianteSecundaria = dark ? "secondary-inverse" : (secondaryVariant ?? "ghost");
+const palabras = title.split(" ");
 ---
 
 <section class:list={["sx-hero", dark && "sx-hero--dark", clase]}>
+  {dark && <FondoInteractivo modo="local" tono="oscuro" />}
+  <slot name="fondo" />
   <div class="sx-hero__inner">
     <div class="sx-hero__text">
       {
@@ -45,7 +52,14 @@ const varianteSecundaria = dark ? "secondary-inverse" : (secondaryVariant ?? "gh
         )
       }
       {eyebrow && <div class="sx-hero__eyebrow sx-enter">{eyebrow}</div>}
-      <h1 class="sx-hero__title sx-enter sx-enter--2">{title}</h1>
+      <h1 class="sx-hero__title sx-enter sx-enter--2">
+        {palabras.map((p, i) => (
+          <>
+            <span class="sx-hero__palabra">{p}</span>
+            {i < palabras.length - 1 && " "}
+          </>
+        ))}
+      </h1>
       {lead && <p class="sx-hero__lead sx-enter sx-enter--3">{lead}</p>}
       <div class="sx-hero__actions sx-enter sx-enter--4">
         {

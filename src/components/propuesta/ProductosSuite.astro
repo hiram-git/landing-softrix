@@ -1,0 +1,122 @@
+---
+// Los tres productos en tarjetas con borde fino (la del producto insignia con el
+// botón relleno) y, arriba, pestañas por segmento que atenúan con fundido las
+// tarjetas que no corresponden.
+import { productos, segmentos } from "@/data/productos";
+
+const colorDe = { fact: "", rrhh: "icono-redondo--verde", gate: "icono-redondo--azul" } as const;
+const iconos = {
+  box: "M21 8 12 3 3 8l9 5 9-5z M3 8v8l9 5 9-5V8 M12 13v8",
+  users: "M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M2 21a7 7 0 0 1 14 0 M17 4a4 4 0 0 1 0 8 M22 21a7 7 0 0 0-5-6.7",
+  gate: "M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16 M2 21h20 M9 21v-6h6v6 M15 11h.01",
+} as const;
+---
+
+<section id="productos" class="seccion productos" aria-labelledby="productos-titulo">
+  <div class="contenedor">
+    <div class="cabecera">
+      <span class="etiqueta" data-reveal>RCG Softrix</span>
+      <h2 id="productos-titulo" class="titulo" data-reveal data-reveal-delay="0.2">
+        Tres productos, una sola <span class="resalte">plataforma</span>
+      </h2>
+      <p class="texto" data-reveal data-reveal-delay="0.3">
+        Se instalan por separado y comparten usuarios, empresas y sucursales. Elige lo que eres y te
+        señalamos el tuyo.
+      </p>
+      <div class="pestanas" role="tablist" aria-label="Elige lo que eres" data-tabs data-reveal data-reveal-delay="0.4" data-segmentos>
+        <button type="button" role="tab" aria-selected="true" data-tab="todos">Todos</button>
+        {
+          segmentos.map((s) => (
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" data-tab={s.id} data-objetivos={s.targets.join(" ")}>
+              {s.label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+    <div class="productos__rejilla">
+      {
+        productos.map((p, i) => (
+          <article class:list={["tarjeta", "producto", p.featured && "producto--insignia"]} data-producto={p.id} data-reveal data-reveal-delay={`${0.1 + i * 0.12}`}>
+            <div class="producto__cabecera">
+              <span class:list={["icono-redondo", colorDe[p.id]]} aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d={iconos[p.icon as keyof typeof iconos]} /></svg>
+              </span>
+              <span class="producto__eyebrow">{p.eyebrow}</span>
+            </div>
+            <h3>{p.title}</h3>
+            <p class="producto__pitch">{p.pitch}</p>
+            <a class:list={["boton", !p.featured && "boton--secundario"]} href={p.href}>{p.cta}</a>
+            <ul class="lista-check">{p.features.map((f) => <li>{f}</li>)}</ul>
+            {p.badge && <span class="producto__badge">{p.badge}</span>}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .productos__rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .producto {
+    position: relative;
+    padding: 1.75rem;
+    transition:
+      transform 0.3s var(--p-ease),
+      border-color 0.2s var(--p-ease),
+      box-shadow 0.3s var(--p-ease),
+      opacity 0.4s var(--p-ease);
+  }
+  .producto[data-atenuado] {
+    opacity: 0.35;
+  }
+  .producto__cabecera {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .producto__eyebrow {
+    color: var(--p-gris);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .producto h3 {
+    font-size: 1.75rem;
+  }
+  .producto__pitch {
+    color: var(--p-gris);
+    flex: 1;
+  }
+  .producto .boton {
+    width: 100%;
+  }
+  .producto__badge {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: var(--p-azul-suave);
+    color: var(--p-azul);
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  // Pestañas por segmento: las tarjetas que no corresponden se atenúan con fundido.
+  const grupo = document.querySelector<HTMLElement>("[data-segmentos]");
+  const tarjetas = document.querySelectorAll<HTMLElement>("[data-producto]");
+  grupo?.addEventListener("tabs:cambio", (e) => {
+    const id = (e as CustomEvent<string>).detail;
+    const boton = grupo.querySelector<HTMLElement>(`[data-tab="${id}"]`);
+    const objetivos = id === "todos" ? null : (boton?.dataset.objetivos ?? "").split(" ");
+    for (const t of tarjetas) {
+      t.toggleAttribute("data-atenuado", Boolean(objetivos && !objetivos.includes(t.dataset.producto ?? "")));
+    }
+  });
+</script>
