@@ -116,14 +116,18 @@ secciones en `src/components/corporativa/`. Cada sección trae su markup, su CSS
 | `ServiciosGrid` | Tarjetas Legal · Tributario · Contable · Licencias fiscales desde `y: 50` con `stagger: 0.15` |
 | `Metricas` | Contadores de 0 al valor en 2 s con `snap: { textContent: 1 }` |
 
-**Escena Three.js del hero** (`EscenaHero.astro`): una «red de cumplimiento», esfera de 900
-puntos enlazados en malla con dos anillos orbitales y satélites. La prop `paleta` elige los
-colores: `rojos` (el rojo de RC Group y sus tonos), `verdes` (esmeralda y menta) o
-`rojos-verdes` (las dos familias, la que usa el hero); `/rc-group?paleta=verdes` previsualiza
-otra sin tocar código. Rota sola, se inclina hacia el puntero y entra creciendo desde el centro con
-GSAP. Three.js se carga en un chunk aparte y solo cuando el navegador está libre
-(`requestIdleCallback`), así la cascada del hero no espera por él. Sin WebGL quedan los chips
-y dos órbitas en CSS; con «reducir movimiento» se pinta un solo cuadro quieto; se pausa fuera
+**Fondo 3D del hero** (`FondoHero.astro`, Three.js): cubre toda la sección. Un campo de
+partículas con profundidad que ondula en 3D y, flotando sobre él, tres redes de puntos
+enlazados, una por producto y cada una en su familia de color: Softrix Facturación en
+rojos, Softrix RRHH en verdes y SmartGate Control en azules, unidas entre sí (la suite). El
+puntero interactúa con el fondo: aparta y enciende las partículas que toca, empuja las
+redes cercanas y desplaza la cámara (paralaje); sin puntero, o en táctil, un punto virtual
+recorre el campo. Las etiquetas de producto son HTML y siguen a su red proyectándola a
+pantalla cada cuadro; un velo blanco mantiene legible el texto del hero. La prop `paleta`
+es `productos` (cada red con su color) o una sola familia para todo (`rojos` | `verdes` |
+`azules`); `/rc-group?paleta=azules` previsualiza. Three.js se carga en un chunk aparte y
+solo cuando el navegador está libre (`requestIdleCallback`). Sin WebGL quedan las etiquetas
+en posiciones fijas; con «reducir movimiento» se pinta un solo cuadro quieto; se pausa fuera
 de pantalla y con la pestaña oculta.
 
 **Anti-FOUC**: los elementos que GSAP anima llevan la clase `g-oculto`; el `<head>` añade

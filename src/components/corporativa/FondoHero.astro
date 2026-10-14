@@ -1,0 +1,507 @@
+---
+// Fondo 3D del hero (Three.js): un campo de partículas con profundidad que
+// ondula en 3D y, flotando sobre él, tres redes de puntos enlazados, una por
+// producto y cada una en su familia de color:
+//   Softrix Facturación → rojos · Softrix RRHH → verdes · SmartGate Control → azules
+//
+// El puntero interactúa con el fondo: aparta y enciende las partículas que
+// toca, empuja las redes cercanas, y la cámara se desplaza con él (paralaje).
+// Sin puntero (o en táctil) un punto virtual recorre el campo. Las etiquetas
+// de producto son HTML y siguen a su red proyectándola a pantalla cada cuadro.
+//
+// `paleta`: «productos» (cada red con su color) o una sola familia para todo
+// («rojos» | «verdes» | «azules»). Para comparar: /rc-group?paleta=azules.
+//
+// Three.js se carga aparte, cuando el navegador está libre. Sin WebGL quedan
+// las etiquetas en posiciones fijas; con «reducir movimiento», un cuadro quieto.
+export type Paleta = "productos" | "rojos" | "verdes" | "azules";
+
+interface Props {
+  paleta?: Paleta;
+}
+const { paleta = "productos" } = Astro.props;
+
+const productos = [
+  { id: "facturacion", nombre: "Softrix Facturación", familia: "rojos", pos: "a" },
+  { id: "rrhh", nombre: "Softrix RRHH", familia: "verdes", pos: "b" },
+  { id: "smartgate", nombre: "SmartGate Control", familia: "azules", pos: "c" },
+];
+---
+
+<div class="fondo3d" data-fondo3d data-paleta={paleta}>
+  <canvas class="fondo3d__canvas" data-fondo3d-canvas aria-hidden="true"></canvas>
+  <div class="fondo3d__velo" aria-hidden="true"></div>
+  {
+    productos.map((p) => (
+      <div
+        class:list={["fondo3d__chip", `fondo3d__chip--${p.pos}`]}
+        data-chip={p.id}
+        data-familia={p.familia}
+      >
+        <span class="fondo3d__punto" aria-hidden="true" />
+        {p.nombre}
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .fondo3d {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .fondo3d__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1000ms var(--ease);
+  }
+  .fondo3d[data-lista] .fondo3d__canvas {
+    opacity: 1;
+  }
+  /* Velo: el texto del hero se lee sobre el campo; a la derecha el 3D queda libre. */
+  .fondo3d__velo {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.72) 38%,
+      rgba(255, 255, 255, 0) 60%
+    );
+  }
+  .fondo3d__chip {
+    --familia: var(--c-marino);
+    position: absolute;
+    left: var(--x, 50%);
+    top: var(--y, 50%);
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 13px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--c-borde);
+    border-radius: 999px;
+    box-shadow: var(--sombra);
+    font: 600 0.82rem/1 var(--f-texto);
+    color: var(--c-marino);
+    white-space: nowrap;
+    pointer-events: none;
+    backdrop-filter: blur(6px);
+    transition: opacity 600ms var(--ease);
+  }
+  .fondo3d__chip[data-familia="rojos"] {
+    --familia: #e5231a;
+  }
+  .fondo3d__chip[data-familia="verdes"] {
+    --familia: #10b981;
+  }
+  .fondo3d__chip[data-familia="azules"] {
+    --familia: #2a6fc0;
+  }
+  .fondo3d__punto {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--familia);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--familia) 18%, transparent);
+  }
+  /* Posiciones de respaldo (sin WebGL o antes de que la escena las proyecte). */
+  .fondo3d__chip--a {
+    --x: 63%;
+    --y: 24%;
+  }
+  .fondo3d__chip--b {
+    --x: 86%;
+    --y: 50%;
+  }
+  .fondo3d__chip--c {
+    --x: 62%;
+    --y: 78%;
+  }
+  @media (max-width: 900px) {
+    .fondo3d__velo {
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.94) 0%,
+        rgba(255, 255, 255, 0.84) 52%,
+        rgba(255, 255, 255, 0) 74%
+      );
+    }
+    .fondo3d__chip {
+      font-size: 0.76rem;
+    }
+    .fondo3d__chip--a {
+      --x: 26%;
+      --y: 82%;
+    }
+    .fondo3d__chip--b {
+      --x: 74%;
+      --y: 84%;
+    }
+    .fondo3d__chip--c {
+      --x: 50%;
+      --y: 94%;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+
+  // Tres tonos por familia: puntos en reposo (oscuro), activos (medio) y encendidos (claro).
+  const PALETAS = {
+    rojos: { oscuro: "#7a1a14", medio: "#e5231a", claro: "#ff8a7a" },
+    verdes: { oscuro: "#0f5132", medio: "#10b981", claro: "#6ee7b7" },
+    azules: { oscuro: "#163d73", medio: "#2a6fc0", claro: "#7cc4ff" },
+  } as const;
+  type Familia = keyof typeof PALETAS;
+
+  // Una red por producto. `escritorio` y `movil` son su centro en el mundo 3D.
+  const PRODUCTOS: { id: string; familia: Familia; escritorio: [number, number, number]; movil: [number, number, number] }[] = [
+    { id: "facturacion", familia: "rojos", escritorio: [1.5, 0.95, 0.1], movil: [-0.55, -1.6, 0] },
+    { id: "rrhh", familia: "verdes", escritorio: [3.3, -0.3, -0.7], movil: [0.58, -1.85, -0.5] },
+    { id: "smartgate", familia: "azules", escritorio: [1.4, -1.6, 0.5], movil: [0, -2.42, 0.3] },
+  ];
+
+  const contenedor = document.querySelector<HTMLElement>("[data-fondo3d]");
+  const canvas = contenedor?.querySelector<HTMLCanvasElement>("[data-fondo3d-canvas]");
+
+  const hayWebGL = () => {
+    try {
+      const c = document.createElement("canvas");
+      return Boolean(c.getContext("webgl2") ?? c.getContext("webgl"));
+    } catch {
+      return false;
+    }
+  };
+  const cuandoLibre = () =>
+    new Promise<void>((listo) => {
+      if ("requestIdleCallback" in window) {
+        (window as Window).requestIdleCallback(() => listo(), { timeout: 1500 });
+      } else {
+        setTimeout(listo, 400);
+      }
+    });
+
+  async function iniciar(cont: HTMLElement, lienzo: HTMLCanvasElement) {
+    if (!hayWebGL()) return; // las etiquetas se quedan en sus posiciones de respaldo
+
+    const pedida = new URLSearchParams(location.search).get("paleta");
+    const modo = pedida && (pedida === "productos" || pedida in PALETAS) ? pedida : (cont.dataset.paleta ?? "productos");
+    cont.dataset.paleta = modo;
+    const familiaDe = (f: Familia): Familia => (modo === "productos" ? f : (modo as Familia));
+
+    const reducir = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fino = matchMedia("(pointer: fine)").matches;
+
+    await cuandoLibre();
+    const {
+      Scene,
+      PerspectiveCamera,
+      WebGLRenderer,
+      Group,
+      BufferGeometry,
+      BufferAttribute,
+      Float32BufferAttribute,
+      Points,
+      PointsMaterial,
+      LineSegments,
+      LineBasicMaterial,
+      Color,
+      Vector2,
+      Vector3,
+      Raycaster,
+      Plane,
+    } = await import("three");
+
+    const escena = new Scene();
+    const camara = new PerspectiveCamera(35, 1, 0.1, 60);
+    camara.position.set(0, 0, 9);
+    const renderer = new WebGLRenderer({ canvas: lienzo, alpha: true, antialias: true, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, fino ? 2 : 1.5));
+    renderer.setClearColor(0x000000, 0);
+
+    const color = (hex: string) => new Color(hex);
+    const tonos = (f: Familia) => {
+      const p = PALETAS[familiaDe(f)];
+      return { oscuro: color(p.oscuro), medio: color(p.medio), claro: color(p.claro) };
+    };
+
+    // ── Campo de partículas con profundidad ──────────────────────────────
+    const NP = fino ? 1400 : 700;
+    const base = new Float32Array(NP * 3); // posición de reposo
+    const fase = new Float32Array(NP);
+    const colorBase = new Float32Array(NP * 3);
+    const colorClaro = new Float32Array(NP * 3);
+    const ox = new Float32Array(NP); // desplazamiento por el puntero
+    const oy = new Float32Array(NP);
+    const vx = new Float32Array(NP);
+    const vy = new Float32Array(NP);
+    const inf = new Float32Array(NP); // influencia del puntero en el último cuadro
+    const familias: Familia[] = ["rojos", "verdes", "azules"];
+    let semilla = 7;
+    const azar = () => {
+      semilla = (semilla * 16807) % 2147483647;
+      return semilla / 2147483647;
+    };
+    for (let i = 0; i < NP; i++) {
+      base[i * 3] = (azar() - 0.5) * 20;
+      base[i * 3 + 1] = (azar() - 0.5) * 10;
+      base[i * 3 + 2] = -7 + azar() * 8.5;
+      fase[i] = azar() * Math.PI * 2;
+      const t = tonos(familias[i % 3]);
+      const u = azar();
+      const c = u < 0.62 ? t.oscuro : u < 0.9 ? t.medio : t.claro;
+      colorBase.set([c.r, c.g, c.b], i * 3);
+      colorClaro.set([t.claro.r, t.claro.g, t.claro.b], i * 3);
+    }
+    const posiciones = new Float32Array(base);
+    const colores = new Float32Array(colorBase);
+    const geoCampo = new BufferGeometry();
+    geoCampo.setAttribute("position", new BufferAttribute(posiciones, 3));
+    geoCampo.setAttribute("color", new BufferAttribute(colores, 3));
+    const campo = new Points(
+      geoCampo,
+      new PointsMaterial({ size: 0.075, vertexColors: true, transparent: true, opacity: 0, sizeAttenuation: true, depthWrite: false }),
+    );
+    escena.add(campo);
+
+    // ── Tres redes, una por producto ─────────────────────────────────────
+    const NR = 240;
+    const RADIO = 0.85;
+    const dorado = Math.PI * (3 - Math.sqrt(5));
+    const redes = PRODUCTOS.map((p, indice) => {
+      const t = tonos(p.familia);
+      const pos = new Float32Array(NR * 3);
+      const col = new Float32Array(NR * 3);
+      for (let i = 0; i < NR; i++) {
+        const y = 1 - (i / (NR - 1)) * 2;
+        const r = Math.sqrt(1 - y * y);
+        const th = dorado * i;
+        pos.set([Math.cos(th) * r * RADIO, y * RADIO, Math.sin(th) * r * RADIO], i * 3);
+        const u = (i * 7919) % 100;
+        const c = u < 68 ? t.oscuro : u < 90 ? t.medio : t.claro;
+        col.set([c.r, c.g, c.b], i * 3);
+      }
+      const geo = new BufferGeometry();
+      geo.setAttribute("position", new Float32BufferAttribute(pos, 3));
+      geo.setAttribute("color", new Float32BufferAttribute(col, 3));
+      const puntos = new Points(geo, new PointsMaterial({ size: 0.065, vertexColors: true, transparent: true, opacity: 0.95, sizeAttenuation: true, depthWrite: false }));
+      const segs: number[] = [];
+      const U2 = 0.34 * 0.34;
+      for (let i = 0; i < NR; i++) {
+        for (let j = i + 1; j < NR; j++) {
+          const dx = pos[i * 3] - pos[j * 3];
+          const dy = pos[i * 3 + 1] - pos[j * 3 + 1];
+          const dz = pos[i * 3 + 2] - pos[j * 3 + 2];
+          if (dx * dx + dy * dy + dz * dz < U2) segs.push(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2], pos[j * 3], pos[j * 3 + 1], pos[j * 3 + 2]);
+        }
+      }
+      const geoL = new BufferGeometry();
+      geoL.setAttribute("position", new Float32BufferAttribute(segs, 3));
+      const lineas = new LineSegments(geoL, new LineBasicMaterial({ color: t.medio, transparent: true, opacity: 0.22, depthWrite: false }));
+      const grupo = new Group();
+      grupo.add(puntos, lineas);
+      escena.add(grupo);
+      const chip = cont.querySelector<HTMLElement>(`[data-chip="${p.id}"]`);
+      return { ...p, grupo, chip, centro: new Vector3(), empuje: new Vector2(), indice, medio: t.medio, entrada: 1 };
+    });
+
+    // Enlaces entre las tres redes: la suite.
+    const geoSuite = new BufferGeometry();
+    const posSuite = new Float32Array(6 * 3);
+    const colSuite = new Float32Array(6 * 3);
+    [[0, 1], [1, 2], [2, 0]].forEach(([a, b], k) => {
+      colSuite.set([redes[a].medio.r, redes[a].medio.g, redes[a].medio.b], k * 6);
+      colSuite.set([redes[b].medio.r, redes[b].medio.g, redes[b].medio.b], k * 6 + 3);
+    });
+    geoSuite.setAttribute("position", new BufferAttribute(posSuite, 3));
+    geoSuite.setAttribute("color", new BufferAttribute(colSuite, 3));
+    const suite = new LineSegments(geoSuite, new LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.35, depthWrite: false }));
+    escena.add(suite);
+
+    // ── Tamaño y disposición (escritorio: redes a la derecha; móvil: abajo) ─
+    let ancho = 1;
+    let alto = 1;
+    let movil = false;
+    const medir = () => {
+      ancho = Math.max(1, cont.clientWidth);
+      alto = Math.max(1, cont.clientHeight);
+      movil = ancho < 900;
+      renderer.setSize(ancho, alto, false);
+      camara.aspect = ancho / alto;
+      camara.updateProjectionMatrix();
+    };
+    const escalaBase = () => (movil ? 0.5 : 1);
+    medir();
+
+    // ── Puntero: rayo sobre el plano z = 0 del mundo ─────────────────────
+    const ndc = new Vector2(0, 0);
+    const objetivoNdc = new Vector2(0, 0);
+    let punteroActivo = false;
+    const rayo = new Raycaster();
+    const plano = new Plane(new Vector3(0, 0, 1), 0);
+    const puntoMundo = new Vector3(99, 99, 0);
+    if (fino && !reducir) {
+      window.addEventListener(
+        "pointermove",
+        (e) => {
+          const r = lienzo.getBoundingClientRect();
+          objetivoNdc.set(((e.clientX - r.left) / r.width) * 2 - 1, -(((e.clientY - r.top) / r.height) * 2 - 1));
+          punteroActivo = e.clientY >= r.top - 80 && e.clientY <= r.bottom + 80;
+        },
+        { passive: true },
+      );
+      document.documentElement.addEventListener("mouseleave", () => {
+        punteroActivo = false;
+      });
+    }
+
+    // ── Bucle ────────────────────────────────────────────────────────────
+    const ALCANCE = 2.3; // radio de influencia del puntero sobre las partículas
+    let tiempo = 0;
+    let anterior = performance.now();
+    let visible = true;
+    let cuadro = 0;
+    const tmp = new Vector3();
+
+    const paso = (dt: number) => {
+      tiempo += dt;
+      // Sin puntero, un recorrido ambiental alrededor de las redes.
+      if (!punteroActivo) {
+        objetivoNdc.set((movil ? 0 : 0.45) + 0.45 * Math.sin(tiempo * 0.21), (movil ? -0.5 : 0) + 0.4 * Math.sin(tiempo * 0.17 + 1.3));
+      }
+      ndc.lerp(objetivoNdc, punteroActivo ? 0.12 : 0.03);
+
+      // Cámara: paralaje suave hacia el puntero.
+      camara.position.x += (ndc.x * 0.55 - camara.position.x) * 0.05;
+      camara.position.y += (ndc.y * 0.35 - camara.position.y) * 0.05;
+      camara.lookAt(0, 0, 0);
+      rayo.setFromCamera(ndc, camara);
+      rayo.ray.intersectPlane(plano, puntoMundo);
+
+      // Partículas: ondulación 3D + apartarse y encenderse cerca del puntero.
+      for (let i = 0; i < NP; i++) {
+        const bx = base[i * 3];
+        const by = base[i * 3 + 1];
+        const bz = base[i * 3 + 2];
+        const dx = bx - puntoMundo.x;
+        const dy = by - puntoMundo.y;
+        const d = Math.hypot(dx, dy);
+        let k = 0;
+        let tx = 0;
+        let ty = 0;
+        if (d < ALCANCE) {
+          const q = 1 - d / ALCANCE;
+          k = q * q;
+          const emp = (1.1 * k) / (d || 1);
+          tx = dx * emp;
+          ty = dy * emp;
+        }
+        inf[i] += (k - inf[i]) * 0.15;
+        vx[i] = (vx[i] + (tx - ox[i]) * 0.12) * 0.8;
+        vy[i] = (vy[i] + (ty - oy[i]) * 0.12) * 0.8;
+        ox[i] += vx[i];
+        oy[i] += vy[i];
+        posiciones[i * 3] = bx + ox[i];
+        posiciones[i * 3 + 1] = by + oy[i] + 0.28 * Math.sin(tiempo * 0.5 + fase[i] + bx * 0.35);
+        posiciones[i * 3 + 2] = bz + 0.35 * Math.sin(tiempo * 0.3 + fase[i] * 1.7 + by * 0.6);
+        const m = inf[i];
+        colores[i * 3] = colorBase[i * 3] + (colorClaro[i * 3] - colorBase[i * 3]) * m;
+        colores[i * 3 + 1] = colorBase[i * 3 + 1] + (colorClaro[i * 3 + 1] - colorBase[i * 3 + 1]) * m;
+        colores[i * 3 + 2] = colorBase[i * 3 + 2] + (colorClaro[i * 3 + 2] - colorBase[i * 3 + 2]) * m;
+      }
+      geoCampo.attributes.position.needsUpdate = true;
+      geoCampo.attributes.color.needsUpdate = true;
+
+      // Redes: flotan en 3D, giran y se apartan del puntero.
+      for (const r of redes) {
+        const b = movil ? r.movil : r.escritorio;
+        const dx = b[0] - puntoMundo.x;
+        const dy = b[1] - puntoMundo.y;
+        const d = Math.hypot(dx, dy);
+        const q = d < 2 ? (1 - d / 2) : 0;
+        r.empuje.x += ((dx / (d || 1)) * q * 0.45 - r.empuje.x) * 0.06;
+        r.empuje.y += ((dy / (d || 1)) * q * 0.45 - r.empuje.y) * 0.06;
+        r.centro.set(
+          b[0] + r.empuje.x,
+          b[1] + r.empuje.y + 0.18 * Math.sin(tiempo * 0.6 + r.indice * 2.1),
+          b[2] + 0.35 * Math.sin(tiempo * 0.4 + r.indice * 1.4),
+        );
+        r.grupo.position.copy(r.centro);
+        r.grupo.rotation.y = tiempo * (0.18 + r.indice * 0.04);
+        r.grupo.rotation.x = Math.sin(tiempo * 0.3 + r.indice) * 0.25;
+        // Escala: base según el ancho × entrada (GSAP) × un leve crecimiento bajo el puntero.
+        r.grupo.scale.setScalar(escalaBase() * r.entrada * (1 + q * 0.12));
+      }
+      [[0, 1], [1, 2], [2, 0]].forEach(([a, b], k) => {
+        posSuite.set([redes[a].centro.x, redes[a].centro.y, redes[a].centro.z], k * 6);
+        posSuite.set([redes[b].centro.x, redes[b].centro.y, redes[b].centro.z], k * 6 + 3);
+      });
+      geoSuite.attributes.position.needsUpdate = true;
+
+      renderer.render(escena, camara);
+
+      // Etiquetas: siguen a su red (proyección a pantalla).
+      for (const r of redes) {
+        if (!r.chip) continue;
+        tmp.copy(r.centro);
+        tmp.y += RADIO * r.grupo.scale.y + (movil ? 0.2 : 0.32);
+        tmp.project(camara);
+        // Acotada al contenedor: la etiqueta nunca sale del hero.
+        const mx = ((r.chip.offsetWidth / 2 + 8) / ancho) * 100;
+        const my = ((r.chip.offsetHeight / 2 + 8) / alto) * 100;
+        const x = Math.min(100 - mx, Math.max(mx, ((tmp.x + 1) / 2) * 100));
+        const y = Math.min(100 - my, Math.max(my, ((1 - tmp.y) / 2) * 100));
+        r.chip.style.setProperty("--x", `${x.toFixed(2)}%`);
+        r.chip.style.setProperty("--y", `${y.toFixed(2)}%`);
+      }
+    };
+
+    const pintar = (ahora: number) => {
+      cuadro = 0;
+      const dt = Math.min((ahora - anterior) / 1000, 0.05);
+      anterior = ahora;
+      paso(dt);
+      if (visible && !document.hidden) cuadro = requestAnimationFrame(pintar);
+    };
+    const arrancar = () => {
+      if (cuadro || reducir || !visible || document.hidden) return;
+      anterior = performance.now();
+      cuadro = requestAnimationFrame(pintar);
+    };
+    new ResizeObserver(() => {
+      medir();
+      if (reducir) paso(0);
+    }).observe(cont);
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      arrancar();
+    }).observe(cont);
+    document.addEventListener("visibilitychange", arrancar);
+
+    // ── Entrada ──────────────────────────────────────────────────────────
+    cont.setAttribute("data-lista", "");
+    if (reducir) {
+      campo.material.opacity = 0.6;
+      paso(0);
+      return;
+    }
+    gsap.to(campo.material, { opacity: 0.6, duration: 1.6, ease: "power2.out" });
+    for (const r of redes) {
+      gsap.fromTo(r, { entrada: 0.45 }, { entrada: 1, duration: 1.5, ease: "power3.out", delay: 0.1 + r.indice * 0.15 });
+    }
+    arrancar();
+  }
+
+  if (contenedor && canvas) {
+    iniciar(contenedor, canvas).catch(() => {});
+  }
+</script>

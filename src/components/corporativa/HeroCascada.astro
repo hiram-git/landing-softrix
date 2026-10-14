@@ -1,12 +1,14 @@
 ---
-// 1. HERO CASCADE: eyebrow, título, subtítulo, los dos botones y la escena
-// Three.js (EscenaHero) entran en secuencia con un timeline de GSAP (ease: power4.out).
+// 1. HERO CASCADE: eyebrow, título, subtítulo y los dos botones entran en
+// secuencia con un timeline de GSAP (ease: power4.out), sobre el fondo 3D
+// (FondoHero) que cubre toda la sección.
 import { contacto } from "@/data/contacto";
-import EscenaHero from "./EscenaHero.astro";
+import FondoHero from "./FondoHero.astro";
 ---
 
 <section class="hero" data-hero aria-labelledby="hero-titulo">
   <div class="hero__fondo" aria-hidden="true"></div>
+  <FondoHero paleta="productos" />
   <div class="contenedor hero__rejilla">
     <div class="hero__texto">
       <span class="eyebrow g-oculto" data-hero="eyebrow">RC Group Panamá</span>
@@ -30,10 +32,8 @@ import EscenaHero from "./EscenaHero.astro";
       </p>
     </div>
 
-    <!-- Columna visual: escena Three.js (red de cumplimiento) -->
-    <div class="hero__visual g-oculto" data-hero="visual">
-      <EscenaHero paleta="rojos-verdes" />
-    </div>
+    <!-- Columna derecha: espacio donde flotan las tres redes del fondo 3D -->
+    <div class="hero__espacio" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -54,6 +54,8 @@ import EscenaHero from "./EscenaHero.astro";
       linear-gradient(180deg, #fff, var(--c-fondo-2));
   }
   .hero__rejilla {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
     gap: clamp(2rem, 5vw, 5rem);
@@ -101,19 +103,16 @@ import EscenaHero from "./EscenaHero.astro";
     color: var(--c-texto-2);
   }
 
-  .hero__visual {
-    position: relative;
-    justify-self: center;
-    width: 100%;
-    max-width: 520px;
+  .hero__espacio {
+    min-height: 440px;
   }
 
   @media (max-width: 900px) {
     .hero__rejilla {
       grid-template-columns: 1fr;
     }
-    .hero__visual {
-      margin-top: 1.5rem;
+    .hero__espacio {
+      min-height: 380px;
     }
   }
 </style>
@@ -145,12 +144,6 @@ import EscenaHero from "./EscenaHero.astro";
           "-=0.6",
         )
         .fromTo(q("nota"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, "-=0.5")
-        .fromTo(
-          q("visual"),
-          { autoAlpha: 0, y: 36, scale: 0.96 },
-          { autoAlpha: 1, y: 0, scale: 1, duration: 1.2 },
-          "-=1.1",
-        )
         .set(todos, { clearProps: "transform,opacity,visibility" });
     }
   }
