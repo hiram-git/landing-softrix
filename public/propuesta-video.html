@@ -120,6 +120,7 @@ body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
+  animation: drop-in .8s var(--ease) .42s backwards;
 }
 .burger i {
   display: block;
@@ -144,6 +145,7 @@ body {
   transition: opacity .4s var(--ease);
 }
 .navtoggle:checked ~ .scrim { opacity: 1; pointer-events: auto; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 .navpanel {
   position: fixed;
@@ -467,7 +469,7 @@ body {
 
 .art { animation: art-in 2.1s var(--ease) backwards; }
 .brand { animation: drop-in .8s var(--ease) .3s backwards; }
-.burger, .menu, .login, .pill { animation: drop-in .8s var(--ease) .42s backwards; }
+.menu, .navpanel > .login, .navpanel > .pill { animation: drop-in .8s var(--ease) .42s backwards; }
 #h1a { animation: line-in .95s var(--ease) .5s backwards; }
 #h1b { animation: line-in .95s var(--ease) .64s backwards; }
 #sub1 { animation: rise-in .8s var(--ease) .86s backwards; }
@@ -500,7 +502,7 @@ body {
 <header class="bar">
   <a class="brand" href="/"><img src="rcg-softrix-horizontal-inverse.png" alt="RCG Softrix" width="1282" height="180"></a>
   <input class="navtoggle" type="checkbox" id="nav-open" aria-label="Abrir menú">
-  <label class="scrim" for="nav-open" aria-hidden="true"></label>
+  <label class="scrim" for="nav-open"><span class="sr">Cerrar menú</span></label>
   <label class="burger" for="nav-open" aria-label="Menú"><i class="b1"></i><i class="b2"></i><i class="b3"></i></label>
   <div class="navpanel">
     <nav class="menu" aria-label="Principal">
@@ -533,32 +535,35 @@ body {
 
 <script>
 // 11a. Con movimiento reducido, el video queda en pausa en su primer fotograma.
-(function () {
-  var video = document.querySelector(".art");
-  var consulta = window.matchMedia("(prefers-reduced-motion: reduce)");
+(() => {
+  const video = document.querySelector(".art");
+  const consulta = window.matchMedia("(prefers-reduced-motion: reduce)");
   if (!video) return;
-  function aplicar() {
+  const aplicar = () => {
     if (consulta.matches) {
       video.removeAttribute("autoplay");
       video.pause();
-      try { video.currentTime = 0; } catch (e) {}
+      try {
+        video.currentTime = 0;
+      } catch {
+        // Sin metadatos todavía: el póster ya muestra el primer fotograma.
+      }
     } else {
-      var p = video.play();
-      if (p && p.catch) p.catch(function () {});
+      video.play()?.catch(() => {});
     }
-  }
+  };
   aplicar();
-  if (consulta.addEventListener) consulta.addEventListener("change", aplicar);
+  consulta.addEventListener?.("change", aplicar);
 })();
 
 // 11b. Terminada la entrada (o sin ella), se retiran sus animaciones.
-(function () {
-  var raiz = document.documentElement;
+(() => {
+  const raiz = document.documentElement;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     raiz.classList.add("is-entered");
     return;
   }
-  window.setTimeout(function () { raiz.classList.add("is-entered"); }, 2400);
+  window.setTimeout(() => raiz.classList.add("is-entered"), 2400);
 })();
 </script>
 </body>
