@@ -176,6 +176,18 @@ function botones() {
       gsap.to(tarjeta, { y: 0, duration: 0.2, ease: SALIDA }),
     );
   }
+
+  // El icono de la tarjeta hace zoom al pasar el cursor por ella.
+  for (const tarjeta of document.querySelectorAll<HTMLElement>(".sx-card, .sx-feature")) {
+    const icono = tarjeta.querySelector<HTMLElement>(".sx-card__icon, .sx-feature__icon");
+    if (!icono) continue;
+    tarjeta.addEventListener("pointerenter", () =>
+      gsap.to(icono, { scale: 1.15, duration: 0.35, ease: "back.out(2.5)" }),
+    );
+    tarjeta.addEventListener("pointerleave", () =>
+      gsap.to(icono, { scale: 1, duration: 0.25, ease: SALIDA }),
+    );
+  }
 }
 
 // ── Titular del hero: las palabras entran una a una y la línea roja crece ─

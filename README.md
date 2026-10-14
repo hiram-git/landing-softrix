@@ -71,12 +71,12 @@ botones con GSAP. Se conserva el lenguaje del brand: entradas de 16 px con la cu
   - La flecha avanza al pasar el cursor.
   - El botón se hunde al pulsar.
   - El icono de WhatsApp se balancea.
-  - La tarjeta de producto se eleva 2 px.
+  - La tarjeta de producto se eleva 2 px y el icono de la tarjeta hace zoom.
 - **Formulario**: el estado de éxito entra animado.
 - **Titular del hero**: entra palabra por palabra y la línea roja crece desde la izquierda.
-- **Puntero** (solo con `pointer: fine`): la captura del hero se inclina hacia el cursor,
-  los botones grandes se acercan unos píxeles cuando está cerca, y las tarjetas muestran
-  un foco de luz que lo sigue (`--mx`/`--my`).
+- **Puntero** (solo con `pointer: fine`): los botones grandes se acercan unos píxeles
+  cuando está cerca, las tarjetas muestran un foco de luz que lo sigue (`--mx`/`--my`) y
+  la captura del hero de las páginas de producto se inclina hacia el cursor.
 - **Movimiento reducido**: con `prefers-reduced-motion: reduce` no se anima nada. El hero
   sigue usando las clases CSS `sx-enter` del design system.
 
@@ -96,10 +96,15 @@ se pinta quieta.
 - Los colores se leen de los tokens en tiempo de ejecución; no hay hex en el script.
 - Se detiene cuando la pestaña está oculta o el canvas sale de pantalla.
 
-## Vitrina del hero (portada)
+## Hero de la portada: el fondo 3D de `/rc-group`
 
-Las capturas reales de los tres productos rotan en el hero (5 s, dos vueltas y se detiene;
-se pausa con el puntero o el foco encima). Las pestañas de abajo eligen el producto.
+La portada conserva su contenido (servicios legales, los tres productos, gobierno, equipos
+y contacto) y toma de `/rc-group` el fondo interactivo con las tres esferas: `Hero.astro`
+ofrece la ranura `fondo` y `index.astro` mete ahí `FondoHero` (abajo), con la columna
+derecha vacía marcada como `data-fondo3d-ancla` para que las redes floten en ella. El hero
+es opaco (`.hero-3d`) para que la retícula de la página no se mezcle con el campo de
+partículas. La vitrina de capturas que rotaba ahí se retiró; las capturas siguen en las
+páginas de producto.
 
 ## Landing corporativa `/rc-group` (cinco animaciones GSAP)
 
@@ -116,19 +121,23 @@ secciones en `src/components/corporativa/`. Cada sección trae su markup, su CSS
 | `ServiciosGrid` | Tarjetas Legal · Tributario · Contable · Licencias fiscales desde `y: 50` con `stagger: 0.15` |
 | `Metricas` | Contadores de 0 al valor en 2 s con `snap: { textContent: 1 }` |
 
-**Fondo 3D del hero** (`FondoHero.astro`, Three.js): cubre toda la sección. Un campo de
-partículas con profundidad que ondula en 3D y, flotando sobre él, tres redes de puntos
-enlazados, una por producto y cada una en su familia de color: Softrix Facturación en
-rojos, Softrix RRHH en verdes y SmartGate Control en azules, unidas entre sí (la suite). El
-puntero interactúa con el fondo: aparta y enciende las partículas que toca, empuja las
-redes cercanas y desplaza la cámara (paralaje); sin puntero, o en táctil, un punto virtual
-recorre el campo. Las etiquetas de producto son HTML y siguen a su red proyectándola a
-pantalla cada cuadro; un velo blanco mantiene legible el texto del hero. La prop `paleta`
-es `productos` (cada red con su color) o una sola familia para todo (`rojos` | `verdes` |
-`azules`); `/rc-group?paleta=azules` previsualiza. Three.js se carga en un chunk aparte y
-solo cuando el navegador está libre (`requestIdleCallback`). Sin WebGL quedan las etiquetas
-en posiciones fijas; con «reducir movimiento» se pinta un solo cuadro quieto; se pausa fuera
-de pantalla y con la pestaña oculta.
+**Fondo 3D del hero** (`FondoHero.astro`, Three.js; lo usan la portada y `/rc-group`):
+cubre toda la sección. Un campo de partículas con profundidad que ondula en 3D y, flotando
+sobre él, tres redes de puntos enlazados, una por producto y cada una en su familia de
+color: Softrix Facturación en rojos, Softrix RRHH en verdes y SmartGate Control en azules,
+unidas entre sí (la suite). Las redes flotan dentro del elemento hermano marcado con
+`data-fondo3d-ancla` (la columna vacía del hero), así siguen al layout de cada página: a la
+derecha del texto en escritorio y debajo de él cuando la rejilla se apila; el velo blanco
+que mantiene legible el texto cambia de horizontal a vertical con ellas. El puntero
+interactúa con el fondo: aparta y enciende las partículas que toca, empuja las redes
+cercanas y desplaza la cámara (paralaje); sin puntero, o en táctil, un punto virtual recorre
+la zona de las redes. Las etiquetas de producto son enlaces a su página y siguen a su red
+proyectándola a pantalla cada cuadro. La prop `paleta` es `productos` (cada red con su
+color) o una sola familia para todo (`rojos` | `verdes` | `azules`); `/?paleta=azules`
+previsualiza. Three.js se carga en un chunk aparte y solo cuando el navegador está libre
+(`requestIdleCallback`). Sin WebGL quedan las etiquetas en posiciones fijas; con «reducir
+movimiento» se pinta un solo cuadro quieto; se pausa fuera de pantalla y con la pestaña
+oculta.
 
 **Anti-FOUC**: los elementos que GSAP anima llevan la clase `g-oculto`; el `<head>` añade
 `g-anima` al `<html>` (solo con JavaScript y sin «reducir movimiento») y `.g-anima .g-oculto`

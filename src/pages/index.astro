@@ -2,37 +2,13 @@
 import Button from "@/components/Button.astro";
 import DemoForm from "@/components/DemoForm.astro";
 import FeatureCard from "@/components/FeatureCard.astro";
+import FondoHero from "@/components/corporativa/FondoHero.astro";
 import Hero from "@/components/Hero.astro";
 import Icon from "@/components/Icon.astro";
 import ProductCard from "@/components/ProductCard.astro";
 import { contacto } from "@/data/contacto";
 import { productos, segmentos } from "@/data/productos";
 import Base from "@/layouts/Base.astro";
-
-// Vitrina del hero: las capturas reales de los tres productos, en rotación.
-const vitrina = [
-  {
-    nombre: "Softrix Facturación",
-    src: "/screenshots/facturacion-panel.png",
-    alt: "Panel de Softrix Facturación: ventas del día, cuentas por cobrar e inventario",
-    ancho: 2160,
-    alto: 3065,
-  },
-  {
-    nombre: "Softrix RRHH",
-    src: "/screenshots/rrhh-panel.png",
-    alt: "Panel de Softrix RRHH: planilla en curso, empleados activos y asistencia",
-    ancho: 1280,
-    alto: 800,
-  },
-  {
-    nombre: "SmartGate Control",
-    src: "/screenshots/smartgate-tablero.png",
-    alt: "Tablero de SmartGate Control: personas esperadas, autorizadas y cola de trabajo",
-    ancho: 1366,
-    alto: 824,
-  },
-];
 ---
 
 <Base
@@ -41,6 +17,7 @@ const vitrina = [
   seccion="inicio"
 >
   <Hero
+    class="hero-3d"
     eyebrow="RC Group Panamá · RCG Softrix"
     title="Factura ante la DGI, paga tu planilla y controla tus accesos"
     lead="Software hecho en Panamá para pymes e instituciones, con el respaldo legal y fiscal de RC Group. En la nube o instalado en tu local."
@@ -48,38 +25,10 @@ const vitrina = [
     secondary={{ label: "Escribir por WhatsApp", href: contacto.whatsapp }}
     note="Sin tarjeta. Demo guiada de 30 minutos con un asesor."
   >
-    <div class="muestra sx-enter sx-enter--5" data-muestra>
-      <div class="muestra__marco" data-tilt>
-        {
-          vitrina.map((v, i) => (
-            <img
-              class="captura muestra__captura"
-              src={v.src}
-              alt={v.alt}
-              width={v.ancho}
-              height={v.alto}
-              loading={i === 0 ? undefined : "lazy"}
-              aria-hidden={i === 0 ? undefined : "true"}
-              data-muestra-item
-            />
-          ))
-        }
-      </div>
-      <div class="muestra__pestanas" role="group" aria-label="Producto en pantalla">
-        {
-          vitrina.map((v, i) => (
-            <button
-              type="button"
-              class="pastilla"
-              aria-pressed={i === 0 ? "true" : "false"}
-              data-muestra-tab={i}
-            >
-              {v.nombre}
-            </button>
-          ))
-        }
-      </div>
-    </div>
+    <!-- El fondo 3D de /rc-group: campo de partículas y las tres redes, una por producto -->
+    <FondoHero slot="fondo" paleta="productos" />
+    <!-- Columna derecha: espacio donde flotan las tres redes -->
+    <div class="espacio3d" data-fondo3d-ancla aria-hidden="true"></div>
   </Hero>
 
   <!-- Productos RCG Softrix -->
@@ -267,37 +216,21 @@ const vitrina = [
 </Base>
 
 <style>
-  /* Vitrina del hero: tres capturas apiladas que se alternan, y sus pestañas. */
-  .muestra {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    perspective: 1200px;
+  /* Hero con el fondo 3D: opaco, para que la retícula de la página no se mezcle
+     con el campo de partículas (el resto de la portada la sigue mostrando). */
+  :global(.sx-hero.hero-3d:not(.sx-hero--dark)) {
+    background:
+      radial-gradient(60% 55% at 86% 12%, color-mix(in srgb, var(--brand) 6%, transparent), transparent 70%),
+      var(--surface-000);
   }
-  .muestra__marco {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--surface-100);
-    transform-style: preserve-3d;
+  /* Columna derecha vacía: la zona donde FondoHero pone las tres redes. */
+  .espacio3d {
+    min-height: 440px;
   }
-  .muestra__captura {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-    border-radius: 0;
-  }
-  .muestra__captura[aria-hidden="true"] {
-    opacity: 0;
-  }
-  .muestra__pestanas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
+  @media (max-width: 959.98px) {
+    .espacio3d {
+      min-height: 380px;
+    }
   }
 
   /* Selector de segmento: atenúa los productos que no corresponden. */
@@ -307,7 +240,7 @@ const vitrina = [
     gap: var(--space-2);
   }
 
-  /* Pastilla conmutable (segmentos y pestañas de la vitrina). */
+  /* Pastilla conmutable del selector de segmento. */
   .pastilla {
     height: var(--control-md);
     padding: 0 var(--space-4);
@@ -452,67 +385,6 @@ const vitrina = [
   import { gsap } from "gsap";
 
   const animar = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
-
-  // ── Vitrina del hero ───────────────────────────────────────────────────
-  const muestra = document.querySelector<HTMLElement>("[data-muestra]");
-  if (muestra) {
-    const items = [...muestra.querySelectorAll<HTMLElement>("[data-muestra-item]")];
-    const tabs = [...muestra.querySelectorAll<HTMLButtonElement>("[data-muestra-tab]")];
-    const PAUSA = 5000;
-    const VUELTAS = 2; // rota sola dos vueltas y se detiene; las pestañas siguen activas
-    let actual = 0;
-    let pasos = 0;
-    let reloj = 0;
-
-    const mostrar = (i: number) => {
-      if (i === actual) return;
-      const sale = items[actual];
-      const entra = items[i];
-      actual = i;
-      tabs.forEach((t, k) => t.setAttribute("aria-pressed", String(k === i)));
-      for (const [k, it] of items.entries()) {
-        if (k === i) it.removeAttribute("aria-hidden");
-        else it.setAttribute("aria-hidden", "true");
-      }
-      gsap.killTweensOf([sale, entra]);
-      if (!animar) {
-        gsap.set(sale, { opacity: 0 });
-        gsap.set(entra, { opacity: 1, scale: 1 });
-        return;
-      }
-      gsap.to(sale, { opacity: 0, duration: 0.45, ease: "power2.inOut" });
-      gsap.fromTo(
-        entra,
-        { opacity: 0, scale: 1.04 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" },
-      );
-    };
-
-    const detener = () => window.clearInterval(reloj);
-    const programar = () => {
-      detener();
-      if (!animar || pasos >= items.length * VUELTAS) return;
-      reloj = window.setInterval(() => {
-        pasos += 1;
-        mostrar((actual + 1) % items.length);
-        if (pasos >= items.length * VUELTAS) detener();
-      }, PAUSA);
-    };
-
-    tabs.forEach((t, i) =>
-      t.addEventListener("click", () => {
-        mostrar(i);
-        pasos = 0;
-        programar();
-      }),
-    );
-    muestra.addEventListener("pointerenter", detener);
-    muestra.addEventListener("pointerleave", programar);
-    muestra.addEventListener("focusin", detener);
-    muestra.addEventListener("focusout", programar);
-    document.addEventListener("visibilitychange", () => (document.hidden ? detener() : programar()));
-    programar();
-  }
 
   // ── Selector de segmento ───────────────────────────────────────────────
   const grupo = document.querySelector<HTMLElement>("[data-segmentos]");

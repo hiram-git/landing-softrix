@@ -86,6 +86,11 @@ body.sx-root {
 .sx-hero:not(.sx-hero--dark) {
   background: transparent;
 }
+/* El contenido queda por encima de un fondo propio (ranura «fondo» del Hero). */
+.sx-hero__inner {
+  position: relative;
+  z-index: 1;
+}
 
 /* Titular del hero por palabras: animaciones.ts las hace entrar una a una y
    dibuja la línea roja (--regla) creciendo desde la izquierda. */

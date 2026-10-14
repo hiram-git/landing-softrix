@@ -7,10 +7,16 @@
 // El puntero interactúa con el fondo: aparta y enciende las partículas que
 // toca, empuja las redes cercanas, y la cámara se desplaza con él (paralaje).
 // Sin puntero (o en táctil) un punto virtual recorre el campo. Las etiquetas
-// de producto son HTML y siguen a su red proyectándola a pantalla cada cuadro.
+// de producto son enlaces a su página y siguen a su red proyectándola a
+// pantalla cada cuadro.
+//
+// Las redes flotan dentro del elemento hermano marcado con `data-fondo3d-ancla`
+// (la columna vacía del hero), así siguen al layout de cada página: a la
+// derecha del texto en escritorio y debajo de él cuando la rejilla se apila.
+// Sin ancla ocupan la mitad derecha (o el tercio inferior bajo 900 px).
 //
 // `paleta`: «productos» (cada red con su color) o una sola familia para todo
-// («rojos» | «verdes» | «azules»). Para comparar: /rc-group?paleta=azules.
+// («rojos» | «verdes» | «azules»). Para comparar: /?paleta=azules.
 //
 // Three.js se carga aparte, cuando el navegador está libre. Sin WebGL quedan
 // las etiquetas en posiciones fijas; con «reducir movimiento», un cuadro quieto.
@@ -22,9 +28,9 @@ interface Props {
 const { paleta = "productos" } = Astro.props;
 
 const productos = [
-  { id: "facturacion", nombre: "Softrix Facturación", familia: "rojos", pos: "a" },
-  { id: "rrhh", nombre: "Softrix RRHH", familia: "verdes", pos: "b" },
-  { id: "smartgate", nombre: "SmartGate Control", familia: "azules", pos: "c" },
+  { id: "facturacion", nombre: "Softrix Facturación", familia: "rojos", pos: "a", href: "/softrix/facturacion" },
+  { id: "rrhh", nombre: "Softrix RRHH", familia: "verdes", pos: "b", href: "/softrix/rrhh" },
+  { id: "smartgate", nombre: "SmartGate Control", familia: "azules", pos: "c", href: "/softrix/smartgate" },
 ];
 ---
 
@@ -33,20 +39,28 @@ const productos = [
   <div class="fondo3d__velo" aria-hidden="true"></div>
   {
     productos.map((p) => (
-      <div
+      <a
         class:list={["fondo3d__chip", `fondo3d__chip--${p.pos}`]}
+        href={p.href}
         data-chip={p.id}
         data-familia={p.familia}
       >
         <span class="fondo3d__punto" aria-hidden="true" />
         {p.nombre}
-      </div>
+      </a>
     ))
   }
 </div>
 
 <style>
+  /* Vive en dos layouts: toma los tokens de la landing corporativa (--c-*) y,
+     si no están, los del design system RCG Softrix. */
   .fondo3d {
+    --fondo3d-tinta: var(--c-marino, var(--ink, #0b1f3a));
+    --fondo3d-borde: var(--c-borde, var(--border, #e2e8f0));
+    --fondo3d-sombra: var(--sombra, var(--shadow-md, 0 10px 30px -12px rgba(11, 31, 58, 0.18)));
+    --fondo3d-fuente: var(--f-texto, var(--font-sans, system-ui, sans-serif));
+    --fondo3d-ease: var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1));
     position: absolute;
     inset: 0;
     z-index: 0;
@@ -58,12 +72,14 @@ const productos = [
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 1000ms var(--ease);
+    transition: opacity 1000ms var(--fondo3d-ease);
   }
   .fondo3d[data-lista] .fondo3d__canvas {
     opacity: 1;
   }
-  /* Velo: el texto del hero se lee sobre el campo; a la derecha el 3D queda libre. */
+  /* Velo: el texto del hero se lee sobre el campo; donde flotan las redes el 3D
+     queda libre. Horizontal con las redes a la derecha, vertical con ellas debajo
+     (el script lo decide por la zona real; la media query es el respaldo). */
   .fondo3d__velo {
     position: absolute;
     inset: 0;
@@ -76,7 +92,7 @@ const productos = [
     );
   }
   .fondo3d__chip {
-    --familia: var(--c-marino);
+    --familia: var(--fondo3d-tinta);
     position: absolute;
     left: var(--x, 50%);
     top: var(--y, 50%);
@@ -86,15 +102,25 @@ const productos = [
     gap: 8px;
     padding: 8px 13px;
     background: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--c-borde);
+    border: 1px solid var(--fondo3d-borde);
     border-radius: 999px;
-    box-shadow: var(--sombra);
-    font: 600 0.82rem/1 var(--f-texto);
-    color: var(--c-marino);
+    box-shadow: var(--fondo3d-sombra);
+    font: 600 0.82rem/1 var(--fondo3d-fuente);
+    color: var(--fondo3d-tinta);
+    text-decoration: none;
     white-space: nowrap;
-    pointer-events: none;
     backdrop-filter: blur(6px);
-    transition: opacity 600ms var(--ease);
+    transition:
+      border-color 200ms var(--fondo3d-ease),
+      box-shadow 200ms var(--fondo3d-ease);
+  }
+  .fondo3d__chip:hover,
+  .fondo3d__chip:focus-visible {
+    color: var(--fondo3d-tinta);
+    border-color: var(--familia);
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--familia) 18%, transparent),
+      var(--fondo3d-sombra);
   }
   .fondo3d__chip[data-familia="rojos"] {
     --familia: #e5231a;
@@ -125,8 +151,24 @@ const productos = [
     --x: 62%;
     --y: 78%;
   }
+  .fondo3d[data-apilado="1"] .fondo3d__velo {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.94) 0%,
+      rgba(255, 255, 255, 0.84) 52%,
+      rgba(255, 255, 255, 0) 74%
+    );
+  }
+  .fondo3d[data-apilado="0"] .fondo3d__velo {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.72) 38%,
+      rgba(255, 255, 255, 0) 60%
+    );
+  }
   @media (max-width: 900px) {
-    .fondo3d__velo {
+    .fondo3d:not([data-apilado]) .fondo3d__velo {
       background: linear-gradient(
         180deg,
         rgba(255, 255, 255, 0.94) 0%,
@@ -163,12 +205,14 @@ const productos = [
   } as const;
   type Familia = keyof typeof PALETAS;
 
-  // Una red por producto. `escritorio` y `movil` son su centro en el mundo 3D.
-  const PRODUCTOS: { id: string; familia: Familia; escritorio: [number, number, number]; movil: [number, number, number] }[] = [
-    { id: "facturacion", familia: "rojos", escritorio: [1.5, 0.95, 0.1], movil: [-0.55, -1.6, 0] },
-    { id: "rrhh", familia: "verdes", escritorio: [3.3, -0.3, -0.7], movil: [0.58, -1.85, -0.5] },
-    { id: "smartgate", familia: "azules", escritorio: [1.4, -1.6, 0.5], movil: [0, -2.42, 0.3] },
+  // Una red por producto. `sitio`: su centro dentro de la zona de las redes
+  // (fracciones del ancho y del alto, desde arriba a la izquierda) y su profundidad.
+  const PRODUCTOS: { id: string; familia: Familia; sitio: [number, number, number] }[] = [
+    { id: "facturacion", familia: "rojos", sitio: [0.3, 0.3, 0.1] },
+    { id: "rrhh", familia: "verdes", sitio: [0.74, 0.52, -0.5] },
+    { id: "smartgate", familia: "azules", sitio: [0.33, 0.8, 0.4] },
   ];
+  const DISTANCIA = 9; // la cámara, en reposo, mira al origen desde z = 9
 
   const contenedor = document.querySelector<HTMLElement>("[data-fondo3d]");
   const canvas = contenedor?.querySelector<HTMLCanvasElement>("[data-fondo3d-canvas]");
@@ -200,6 +244,7 @@ const productos = [
 
     const reducir = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fino = matchMedia("(pointer: fine)").matches;
+    const ancla = cont.parentElement?.querySelector<HTMLElement>("[data-fondo3d-ancla]") ?? null;
 
     await cuandoLibre();
     const {
@@ -223,7 +268,7 @@ const productos = [
 
     const escena = new Scene();
     const camara = new PerspectiveCamera(35, 1, 0.1, 60);
-    camara.position.set(0, 0, 9);
+    camara.position.set(0, 0, DISTANCIA);
     const renderer = new WebGLRenderer({ canvas: lienzo, alpha: true, antialias: true, powerPreference: "high-performance" });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, fino ? 2 : 1.5));
     renderer.setClearColor(0x000000, 0);
@@ -311,7 +356,7 @@ const productos = [
       grupo.add(puntos, lineas);
       escena.add(grupo);
       const chip = cont.querySelector<HTMLElement>(`[data-chip="${p.id}"]`);
-      return { ...p, grupo, chip, centro: new Vector3(), empuje: new Vector2(), indice, medio: t.medio, entrada: 1 };
+      return { ...p, grupo, chip, base: new Vector3(), centro: new Vector3(), empuje: new Vector2(), indice, medio: t.medio, entrada: 1 };
     });
 
     // Enlaces entre las tres redes: la suite.
@@ -327,19 +372,59 @@ const productos = [
     const suite = new LineSegments(geoSuite, new LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.35, depthWrite: false }));
     escena.add(suite);
 
-    // ── Tamaño y disposición (escritorio: redes a la derecha; móvil: abajo) ─
+    // ── Tamaño y zona de las redes ───────────────────────────────────────
     let ancho = 1;
     let alto = 1;
-    let movil = false;
+    let escala = 1; // tamaño de las redes según el sitio que tienen
+    let paralaje = 0.55; // cuánto se desplaza la cámara con el puntero
+    const centroZona = new Vector2(0.45, 0); // centro de la zona, en NDC
+    const extensionZona = new Vector2(0.45, 1); // ancho y alto de la zona, en fracción de pantalla
     const medir = () => {
       ancho = Math.max(1, cont.clientWidth);
       alto = Math.max(1, cont.clientHeight);
-      movil = ancho < 900;
       renderer.setSize(ancho, alto, false);
       camara.aspect = ancho / alto;
       camara.updateProjectionMatrix();
+
+      // La zona: el ancla (la columna vacía del hero) o, sin ella, la mitad
+      // derecha en escritorio y el tercio inferior cuando la sección es angosta.
+      const rc = cont.getBoundingClientRect();
+      const ra = ancla?.getBoundingClientRect();
+      let zx = ancho * 0.55;
+      let zy = 0;
+      let zw = ancho * 0.45;
+      let zh = alto;
+      if (ra && ra.width > 40 && ra.height > 40) {
+        zx = ra.left - rc.left;
+        zy = ra.top - rc.top;
+        zw = ra.width;
+        zh = ra.height;
+      } else if (ancho < 900) {
+        zx = 0;
+        zy = alto * 0.6;
+        zw = ancho;
+        zh = alto * 0.38;
+      }
+      const apilado = zw > ancho * 0.8 && zy > alto * 0.3;
+      cont.dataset.apilado = apilado ? "1" : "0";
+      // Con las redes apiladas a lo ancho, menos paralaje: que no toquen los bordes.
+      paralaje = apilado ? 0.3 : 0.55;
+
+      // Mundo visible sobre z = 0 con la cámara en reposo: de píxeles a unidades 3D.
+      const mitadAlto = Math.tan((camara.fov / 2) * (Math.PI / 180)) * DISTANCIA;
+      const mitadAncho = mitadAlto * camara.aspect;
+      const porPx = (2 * mitadAlto) / alto;
+      escala = Math.min(1, Math.max(0.42, (Math.min(zw, zh) * porPx) / 4));
+      for (const r of redes) {
+        r.base.set(
+          (((zx + zw * r.sitio[0]) / ancho) * 2 - 1) * mitadAncho,
+          (1 - ((zy + zh * r.sitio[1]) / alto) * 2) * mitadAlto,
+          r.sitio[2],
+        );
+      }
+      centroZona.set(((zx + zw / 2) / ancho) * 2 - 1, 1 - ((zy + zh / 2) / alto) * 2);
+      extensionZona.set(zw / ancho, zh / alto);
     };
-    const escalaBase = () => (movil ? 0.5 : 1);
     medir();
 
     // ── Puntero: rayo sobre el plano z = 0 del mundo ─────────────────────
@@ -374,14 +459,17 @@ const productos = [
 
     const paso = (dt: number) => {
       tiempo += dt;
-      // Sin puntero, un recorrido ambiental alrededor de las redes.
+      // Sin puntero, un recorrido ambiental por la zona de las redes.
       if (!punteroActivo) {
-        objetivoNdc.set((movil ? 0 : 0.45) + 0.45 * Math.sin(tiempo * 0.21), (movil ? -0.5 : 0) + 0.4 * Math.sin(tiempo * 0.17 + 1.3));
+        objetivoNdc.set(
+          centroZona.x + extensionZona.x * 0.5 * Math.sin(tiempo * 0.21),
+          centroZona.y + extensionZona.y * 0.45 * Math.sin(tiempo * 0.17 + 1.3),
+        );
       }
       ndc.lerp(objetivoNdc, punteroActivo ? 0.12 : 0.03);
 
       // Cámara: paralaje suave hacia el puntero.
-      camara.position.x += (ndc.x * 0.55 - camara.position.x) * 0.05;
+      camara.position.x += (ndc.x * paralaje - camara.position.x) * 0.05;
       camara.position.y += (ndc.y * 0.35 - camara.position.y) * 0.05;
       camara.lookAt(0, 0, 0);
       rayo.setFromCamera(ndc, camara);
@@ -423,23 +511,26 @@ const productos = [
 
       // Redes: flotan en 3D, giran y se apartan del puntero.
       for (const r of redes) {
-        const b = movil ? r.movil : r.escritorio;
-        const dx = b[0] - puntoMundo.x;
-        const dy = b[1] - puntoMundo.y;
+        const b = r.base;
+        const dx = b.x - puntoMundo.x;
+        const dy = b.y - puntoMundo.y;
         const d = Math.hypot(dx, dy);
-        const q = d < 2 ? (1 - d / 2) : 0;
-        r.empuje.x += ((dx / (d || 1)) * q * 0.45 - r.empuje.x) * 0.06;
-        r.empuje.y += ((dy / (d || 1)) * q * 0.45 - r.empuje.y) * 0.06;
+        // El alcance y el empuje van con el tamaño de las redes; el recorrido
+        // ambiental (sin puntero) solo las roza: en una zona chica siempre está cerca.
+        const alcanceRed = 2 * escala;
+        const q = d < alcanceRed ? (1 - d / alcanceRed) * (punteroActivo ? 1 : 0.35) : 0;
+        r.empuje.x += ((dx / (d || 1)) * q * 0.45 * escala - r.empuje.x) * 0.06;
+        r.empuje.y += ((dy / (d || 1)) * q * 0.45 * escala - r.empuje.y) * 0.06;
         r.centro.set(
-          b[0] + r.empuje.x,
-          b[1] + r.empuje.y + 0.18 * Math.sin(tiempo * 0.6 + r.indice * 2.1),
-          b[2] + 0.35 * Math.sin(tiempo * 0.4 + r.indice * 1.4),
+          b.x + r.empuje.x,
+          b.y + r.empuje.y + 0.18 * escala * Math.sin(tiempo * 0.6 + r.indice * 2.1),
+          b.z + 0.35 * Math.sin(tiempo * 0.4 + r.indice * 1.4),
         );
         r.grupo.position.copy(r.centro);
         r.grupo.rotation.y = tiempo * (0.18 + r.indice * 0.04);
         r.grupo.rotation.x = Math.sin(tiempo * 0.3 + r.indice) * 0.25;
-        // Escala: base según el ancho × entrada (GSAP) × un leve crecimiento bajo el puntero.
-        r.grupo.scale.setScalar(escalaBase() * r.entrada * (1 + q * 0.12));
+        // Escala: la de la zona × entrada (GSAP) × un leve crecimiento bajo el puntero.
+        r.grupo.scale.setScalar(escala * r.entrada * (1 + q * 0.12));
       }
       [[0, 1], [1, 2], [2, 0]].forEach(([a, b], k) => {
         posSuite.set([redes[a].centro.x, redes[a].centro.y, redes[a].centro.z], k * 6);
@@ -449,11 +540,11 @@ const productos = [
 
       renderer.render(escena, camara);
 
-      // Etiquetas: siguen a su red (proyección a pantalla).
+      // Etiquetas: siguen a su red (proyección a pantalla), justo encima de ella.
       for (const r of redes) {
         if (!r.chip) continue;
         tmp.copy(r.centro);
-        tmp.y += RADIO * r.grupo.scale.y + (movil ? 0.2 : 0.32);
+        tmp.y += RADIO * r.grupo.scale.y + 0.1 + 0.14 * escala;
         tmp.project(camara);
         // Acotada al contenedor: la etiqueta nunca sale del hero.
         const mx = ((r.chip.offsetWidth / 2 + 8) / ancho) * 100;
@@ -477,10 +568,12 @@ const productos = [
       anterior = performance.now();
       cuadro = requestAnimationFrame(pintar);
     };
-    new ResizeObserver(() => {
+    const observador = new ResizeObserver(() => {
       medir();
       if (reducir) paso(0);
-    }).observe(cont);
+    });
+    observador.observe(cont);
+    if (ancla) observador.observe(ancla);
     new IntersectionObserver(([e]) => {
       visible = e.isIntersecting;
       arrancar();

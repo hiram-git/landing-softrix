@@ -5,7 +5,8 @@ import FondoInteractivo from "./FondoInteractivo.astro";
 import type { Accion, BadgeTone, ButtonVariant } from "./types";
 
 // HeroProps. La captura (children) llega por el slot por defecto y ocupa la
-// columna derecha; la entrada escalonada sx-enter es solo de esta primera pantalla.
+// columna derecha; la ranura «fondo» admite un fondo propio detrás del contenido
+// (la portada mete ahí el fondo 3D); la entrada escalonada sx-enter es solo de esta primera pantalla.
 // El titular se parte en palabras (.sx-hero__palabra) para que animaciones.ts
 // las haga entrar una a una; sin JavaScript se ve como un texto normal.
 interface Props {
@@ -38,6 +39,7 @@ const palabras = title.split(" ");
 
 <section class:list={["sx-hero", dark && "sx-hero--dark", clase]}>
   {dark && <FondoInteractivo modo="local" tono="oscuro" />}
+  <slot name="fondo" />
   <div class="sx-hero__inner">
     <div class="sx-hero__text">
       {
