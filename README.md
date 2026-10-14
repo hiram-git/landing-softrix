@@ -47,8 +47,38 @@ Los componentes traducen `components.reference.js` uno a uno, con las props de
 
 `api/index.ts` es un **stub**: valida el cuerpo (422 si no cumple) y lo registra en
 consola. Falta decidir a dónde va la solicitud (correo, CRM). En desarrollo y en preview,
-Vite reenvía `/api` al puerto 3001. En producción, el servidor que sirva el sitio tiene que
-hacer lo mismo.
+Vite reenvía `/api` al puerto 3001.
+
+## Producción (un solo proceso)
+
+El sitio es **estático**: `bun run build` deja los HTML en `dist/` (no hay
+`dist/server/entry.mjs`, eso es de un sitio SSR). En producción el mismo proceso de la
+API sirve `dist/` y atiende `/api`:
+
+```bash
+bun install --frozen-lockfile && bun run build
+PORT=4330 bun run start        # o: bun api/index.ts
+```
+
+- `PORT` (o `API_PORT`): puerto de escucha. `SITE_DIR`: otra carpeta del sitio (por
+  defecto `dist/` junto al repo). Sin build, responde solo `/api` y 404 en el resto.
+- Las rutas se resuelven como las deja Astro (`build.format: "file"`): `/softrix/rrhh` →
+  `dist/softrix/rrhh.html`; lo de `/_astro/` sale con caché larga y el HTML sin caché.
+
+Unidad de systemd de ejemplo (`/etc/systemd/system/landing.service`), con el reverse
+proxy (nginx, Caddy) apuntando al puerto:
+
+```ini
+[Service]
+User=softrix
+WorkingDirectory=/opt/landing
+Environment=PORT=4330
+ExecStart=/home/softrix/.bun/bin/bun /opt/landing/api/index.ts
+Restart=always
+```
+
+Para actualizar: `git pull`, `bun install --frozen-lockfile`, `bun run build`,
+`sudo systemctl restart landing`.
 
 ## Animaciones (GSAP)
 
