@@ -201,6 +201,26 @@ Plus Jakarta Sans, el rojo de la marca en degradado y los colores de los tres pr
   de capacidades, no hay precios ni testimonios, y los valores de las tarjetas flotantes son
   ilustraciones de interfaz.
 
+## Propuesta B «Video» `/propuesta-video`
+
+Un solo archivo HTML autocontenido, sin build: `public/propuesta-video.html`, con el logo
+al lado (`public/rcg-softrix-horizontal-inverse.png`). Astro lo copia tal cual a `dist/`,
+y tanto nginx (`try_files $uri.html`) como `api/index.ts` lo sirven en `/propuesta-video`.
+Una sola pantalla, sin scroll, con video de fondo en bucle y mudo (y su póster) desde
+CloudFront, y la fuente Sora variable de Google Fonts.
+
+- **Escritorio (≥ 1200 px)**: composición de 1536×1024 que solo escala con `--u`. Barra
+  en `flex` con `padding: 0 221u`, menú con `gap: 34u` e «Iniciar sesión» empujado a la
+  derecha; el hero centra en columna, sin coordenadas por letra.
+- **Flujo (< 1200 px)**: teléfono, apaisado bajo y tableta, cada uno con su lienzo.
+  El menú se recoge tras la hamburguesa solo con checkbox y CSS.
+- **Legibilidad**: el velo baja el núcleo brillante del video y se re-apunta a la altura
+  del titular en cada layout (`--vx`, `--vy`, `--cw`, `--ch`).
+- **Entrada** de unos 2,1 s, solo con `translate`, `scale`, `opacity` y `clip-path`, con
+  `fill-mode: backwards`; al terminar, `is-entered` la retira. Con «reducir movimiento» no
+  hay entrada ni transición del panel, y el video queda en pausa en su primer fotograma.
+- El rojo RCG aparece solo en el logotipo y en el resplandor del CTA al pasar el cursor.
+
 ## Pendientes del handoff (no inventar)
 
 - Los módulos de Softrix RRHH llevan la nota «[CONFIRMAR CON PRODUCTO]».
