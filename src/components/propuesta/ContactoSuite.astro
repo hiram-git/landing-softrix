@@ -1,0 +1,198 @@
+---
+// Contacto: los datos reales de RC Group y el formulario de demo (POST /api/demo),
+// con el estado de éxito que entra con fundido.
+import { contacto, intereses } from "@/data/contacto";
+---
+
+<section id="contacto" class="seccion contacto" aria-labelledby="contacto-titulo">
+  <div class="contenedor contacto__rejilla">
+    <div class="contacto__texto">
+      <div class="cabecera cabecera--izquierda">
+        <span class="etiqueta" data-reveal>Contáctenos</span>
+        <h2 id="contacto-titulo" class="titulo" data-reveal data-reveal-delay="0.2">
+          Tres datos y <span class="resalte">te llamamos</span>
+        </h2>
+        <p class="texto" data-reveal data-reveal-delay="0.3">
+          Un asesor te muestra el producto con datos parecidos a los tuyos o te orienta en lo legal y
+          fiscal. Lo demás lo hablamos en la llamada.
+        </p>
+      </div>
+      <address class="contacto__datos" data-reveal data-reveal-delay="0.4">
+        <span>{contacto.direccion}</span>
+        <span>{contacto.oficina} · WhatsApp {contacto.whatsappVisible}</span>
+        <a href={`mailto:${contacto.correo}`}>{contacto.correo}</a>
+        <span>{contacto.horario}</span>
+      </address>
+      <a class="boton boton--secundario" href={contacto.whatsapp} target="_blank" rel="noopener" data-reveal data-reveal-delay="0.5">
+        O escríbenos por WhatsApp
+      </a>
+    </div>
+
+    <div class="tarjeta formulario" data-reveal data-reveal-delay="0.3" data-formulario>
+      <form method="post" action="/api/demo" novalidate>
+        <label>
+          <span>Nombre</span>
+          <input type="text" name="nombre" required maxlength="120" autocomplete="name" placeholder="Tu nombre o el de tu empresa" />
+        </label>
+        <label>
+          <span>Correo o WhatsApp</span>
+          <input type="text" name="contacto" required maxlength="160" autocomplete="email" placeholder="correo@empresa.com o +507 6000-0000" />
+        </label>
+        <label>
+          <span>Me interesa</span>
+          <select name="interes" id="interes" required>
+            {intereses.map((i) => <option value={i}>{i}</option>)}
+          </select>
+        </label>
+        <p class="formulario__error" data-error hidden>Completa tu nombre y un correo o WhatsApp.</p>
+        <button class="boton" type="submit">Solicitar demo</button>
+        <p class="formulario__nota">Sin tarjeta. Demo guiada de 30 minutos con un asesor.</p>
+      </form>
+      <div class="formulario__exito" data-exito hidden>
+        <span class="icono-redondo icono-redondo--verde" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7" /></svg>
+        </span>
+        <h3>Recibido. Te llamamos pronto.</h3>
+        <p>Un asesor se comunica contigo en horario de oficina para agendar la demo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contacto__rejilla {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .contacto__texto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .contacto__texto .cabecera {
+    margin-bottom: 0;
+  }
+  .contacto__datos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-style: normal;
+    color: var(--p-gris);
+    font-size: 0.95rem;
+  }
+  .contacto__datos a {
+    color: var(--p-tinta);
+  }
+  .formulario {
+    padding: 2rem;
+  }
+  .formulario form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .formulario label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--p-tinta);
+  }
+  .formulario input,
+  .formulario select {
+    min-height: 3rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--p-neutro);
+    border-radius: 0.75rem;
+    background: var(--p-blanco);
+    color: var(--p-tinta);
+    font: 400 1rem/1.3 var(--p-fuente);
+    transition: border-color 0.2s var(--p-ease);
+  }
+  .formulario input:focus,
+  .formulario select:focus {
+    outline: none;
+    border-color: var(--p-marca);
+    box-shadow: 0 0 0 3px var(--p-marca-suave);
+  }
+  .formulario [aria-invalid="true"] {
+    border-color: var(--p-marca);
+  }
+  .formulario__error {
+    color: var(--p-marca);
+    font-size: 0.9rem;
+  }
+  .formulario__nota {
+    color: var(--p-gris);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  .formulario__exito {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+    padding: 1rem 0;
+    animation: aparecer 0.5s var(--p-ease);
+  }
+  .formulario__exito h3 {
+    font-size: 1.5rem;
+  }
+  .formulario__exito p {
+    color: var(--p-gris);
+  }
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+  @media (max-width: 900px) {
+    .contacto__rejilla {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const caja = document.querySelector<HTMLElement>("[data-formulario]");
+  const form = caja?.querySelector("form");
+  const exito = caja?.querySelector<HTMLElement>("[data-exito]");
+  const error = caja?.querySelector<HTMLElement>("[data-error]");
+  if (form && exito && error) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const datos = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      let valido = true;
+      for (const nombre of ["nombre", "contacto"]) {
+        const campo = form.elements.namedItem(nombre) as HTMLInputElement;
+        const vacio = !datos[nombre]?.trim();
+        campo.setAttribute("aria-invalid", String(vacio));
+        if (vacio) valido = false;
+      }
+      error.hidden = valido;
+      if (!valido) return;
+      const boton = form.querySelector<HTMLButtonElement>("button[type=submit]");
+      if (boton) boton.disabled = true;
+      try {
+        const r = await fetch(form.action, {
+          method: "POST",
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify(datos),
+        });
+        if (!r.ok) throw new Error(String(r.status));
+        form.hidden = true;
+        exito.hidden = false;
+      } catch {
+        error.textContent = "No se pudo enviar. Escríbenos por WhatsApp o inténtalo de nuevo.";
+        error.hidden = false;
+        if (boton) boton.disabled = false;
+      }
+    });
+  }
+</script>

@@ -1,0 +1,488 @@
+---
+// Hero en tarjeta: retícula de puntos con halos cálidos abajo, barra flotante en
+// píldora, titular con la palabra resaltada y chips-cursor con los productos, y
+// el visual (ventana del panel + teléfono + tarjetas flotantes con paralaje).
+import { contacto } from "@/data/contacto";
+
+const enlaces = [
+  { label: "Productos", href: "#productos" },
+  { label: "Servicios legales", href: "#legal" },
+  { label: "Gobierno", href: "#gobierno" },
+  { label: "Equipos", href: "#equipos" },
+  { label: "Contacto", href: "#contacto" },
+];
+---
+
+<section class="hero" id="inicio" aria-labelledby="hero-titulo">
+  <div class="hero__tarjeta" data-paralaje-zona>
+    <header class="barra" data-barra>
+      <div class="barra__velo" aria-hidden="true"></div>
+      <div class="barra__fila">
+        <a class="barra__logo" href="/propuesta" aria-label="RCG Softrix, inicio">
+          <img src="/logos/rcg-softrix-horizontal.png" alt="RCG Softrix" width="150" height="40" />
+        </a>
+        <nav class="barra__nav" id="menu-principal" aria-label="Principal">
+          {enlaces.map((e) => <a href={e.href}>{e.label}</a>)}
+          <a class="boton boton--chico barra__cta-movil" href="#contacto">Solicitar demo</a>
+        </nav>
+        <div class="barra__acciones">
+          <a class="boton boton--chico barra__cta" href="#contacto">Solicitar demo</a>
+          <button
+            type="button"
+            class="hamburguesa"
+            aria-label="Abrir menú"
+            aria-expanded="false"
+            aria-controls="menu-principal"
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="hero__contenido">
+      <span class="etiqueta" data-reveal>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" /></svg>
+        Software hecho en Panamá
+      </span>
+      <h1 id="hero-titulo" class="hero__titulo" data-reveal data-reveal-delay="0.2">
+        Factura ante la DGI, paga tu planilla y controla accesos
+        <span class="hero__linea">
+          <span class="cursor-chip cursor-chip--izquierda hero__chip hero__chip--a" aria-hidden="true">Facturación</span>
+          <span>con</span>
+          <span class="hero__marca">Softrix</span>
+          <span class="cursor-chip cursor-chip--azul hero__chip hero__chip--b" aria-hidden="true">SmartGate</span>
+        </span>
+      </h1>
+      <p class="hero__texto" data-reveal data-reveal-delay="0.3">
+        Facturación electrónica, planilla conforme a la ley y control de accesos para pymes e
+        instituciones, con el respaldo legal y fiscal de RC Group. En la nube o instalado en tu local.
+      </p>
+      <div class="hero__acciones" data-reveal data-reveal-delay="0.4">
+        <a class="boton" href="#contacto">Solicitar demo</a>
+        <a class="boton boton--secundario" href={contacto.whatsapp} target="_blank" rel="noopener">
+          Escribir por WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__visual" data-reveal data-reveal-delay="0.5" data-reveal-offset="0">
+      <div class="ventana">
+        <div class="ventana__barra" aria-hidden="true">
+          <i></i><i></i><i></i>
+          <span>app.rcgpty.com/panel</span>
+        </div>
+        <img
+          src="/screenshots/facturacion-panel.png"
+          alt="Panel de Softrix Facturación: ventas del día, cuentas por cobrar e inventario"
+          width="2160"
+          height="3065"
+        />
+      </div>
+      <div class="telefono">
+        <img
+          src="/screenshots/smartgate-visitante.png"
+          alt="SmartGate Control en el celular: invitación de un visitante con su código QR"
+          width="828"
+          height="2288"
+          loading="lazy"
+        />
+      </div>
+      <div class="flotante hero__flotante hero__flotante--izq" data-paralaje="0.07">
+        <div class="flotante__titulo">
+          <span class="icono-redondo icono-redondo--verde" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M2 21a7 7 0 0 1 14 0 M17 4a4 4 0 0 1 0 8 M22 21a7 7 0 0 0-5-6.7" /></svg>
+          </span>
+          Planilla de la quincena
+        </div>
+        <div class="flotante__fila"><span>Deducciones de ley</span><strong>Aplicadas</strong></div>
+        <div class="progreso"><span style="--ancho: 78%; background: linear-gradient(0deg, #0e9f6e, #34d399)">Calculada</span></div>
+      </div>
+      <div class="flotante hero__flotante hero__flotante--der" data-paralaje="-0.05">
+        <div class="flotante__titulo">
+          <span class="icono-redondo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7" /></svg>
+          </span>
+          Factura autorizada
+        </div>
+        <div class="flotante__fila"><span>CAFE · F001-00001234</span><strong>B/. 134.18</strong></div>
+        <div class="flotante__fila"><span>CUFE validado por la DGI</span><span class="positivo">✓</span></div>
+      </div>
+      <span class="cursor-chip cursor-chip--verde hero__chip-visual" aria-hidden="true">RRHH</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: 1.5rem;
+  }
+  .hero__tarjeta {
+    position: relative;
+    overflow: clip;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 1.5rem 1.5rem 0;
+    border: 1px solid var(--p-neutro);
+    border-radius: var(--p-radio-grande);
+    background:
+      radial-gradient(rgba(15, 17, 22, 0.09) 1px, transparent 1.3px) 0 0 / 18px 18px,
+      radial-gradient(55% 45% at 12% 100%, rgba(255, 168, 160, 0.8), transparent 70%),
+      radial-gradient(50% 45% at 88% 100%, rgba(242, 80, 63, 0.5), transparent 70%),
+      radial-gradient(70% 42% at 50% 104%, rgba(255, 214, 210, 0.95), transparent 70%),
+      radial-gradient(40% 35% at 95% 10%, rgba(232, 240, 251, 0.9), transparent 70%),
+      #f7f7fa;
+  }
+
+  /* ── Barra flotante ──────────────────────────────────────────────── */
+  .barra {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1080px;
+  }
+  .barra__fila {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.6rem 0.6rem 0.6rem 1.5rem;
+    border: 1px solid var(--p-neutro);
+    border-radius: 4.5rem;
+    background: var(--p-blanco);
+  }
+  .barra__logo img {
+    height: 34px;
+    width: auto;
+  }
+  .barra__nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-inline: auto;
+  }
+  .barra__nav a {
+    color: var(--p-gris);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s var(--p-ease);
+  }
+  .barra__nav a:hover {
+    color: var(--p-tinta);
+  }
+  .barra__cta-movil {
+    display: none;
+  }
+  .barra__acciones {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .hamburguesa {
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--p-degradado);
+    cursor: pointer;
+  }
+  .hamburguesa span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: #fff;
+    transition: transform 0.35s var(--p-ease);
+    transform-origin: center;
+  }
+  .hamburguesa[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .hamburguesa[aria-expanded="true"] span:nth-child(2) {
+    transform: scaleX(0);
+  }
+  .hamburguesa[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  .barra__velo {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: rgba(15, 17, 22, 0.24);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.3s var(--p-ease),
+      visibility 0s linear 0.3s;
+  }
+  .barra[data-abierto] .barra__velo {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.4s var(--p-ease);
+  }
+
+  /* ── Contenido ───────────────────────────────────────────────────── */
+  .hero__contenido {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    max-width: 900px;
+    padding-top: 0.5rem;
+  }
+  .hero__titulo {
+    font-size: clamp(2.4rem, 5.2vw, 4rem);
+    line-height: 1.05;
+  }
+  .hero__linea {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em 0.4em;
+    margin-top: 0.15em;
+  }
+  .hero__marca {
+    display: inline-block;
+    padding: 0.05em 0.35em;
+    border-radius: 0.22em;
+    background: var(--p-degradado);
+    color: #fff;
+    box-shadow: 0 18px 40px -16px rgba(229, 35, 26, 0.55);
+  }
+  .hero__chip {
+    margin-inline: 0.4em;
+    transform: translateY(-0.1em);
+  }
+  .hero__texto {
+    color: var(--p-gris);
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    max-width: 62ch;
+  }
+  .hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  /* ── Visual ──────────────────────────────────────────────────────── */
+  .hero__visual {
+    position: relative;
+    width: min(100%, 980px);
+    margin-top: 0.25rem;
+    margin-bottom: -2px;
+  }
+  .ventana {
+    width: min(100%, 720px);
+    margin-inline: auto;
+    border: 1px solid var(--p-neutro);
+    border-bottom: 0;
+    border-radius: 1.25rem 1.25rem 0 0;
+    background: var(--p-blanco);
+    box-shadow: 0 40px 80px -40px rgba(15, 17, 22, 0.35);
+    overflow: hidden;
+  }
+  .ventana__barra {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--p-neutro);
+    background: var(--p-gris-claro);
+    font-size: 0.75rem;
+    color: var(--p-gris);
+  }
+  .ventana__barra i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--p-neutro);
+  }
+  .ventana__barra span {
+    margin-left: 0.5rem;
+    padding: 0.2rem 0.8rem;
+    border-radius: 2rem;
+    background: var(--p-blanco);
+    border: 1px solid var(--p-neutro);
+  }
+  .ventana img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: top;
+  }
+  .telefono {
+    position: absolute;
+    right: 6%;
+    bottom: -6%;
+    width: 170px;
+    padding: 8px;
+    border-radius: 28px;
+    background: #15171c;
+    box-shadow: 0 30px 60px -30px rgba(15, 17, 22, 0.6);
+  }
+  .telefono img {
+    width: 100%;
+    aspect-ratio: 9 / 19.5;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 20px;
+  }
+  .hero__flotante {
+    position: absolute;
+    width: 270px;
+  }
+  .hero__flotante--izq {
+    left: 2%;
+    top: 22%;
+  }
+  .hero__flotante--der {
+    right: 0;
+    top: 2%;
+    width: 300px;
+  }
+  .hero__chip-visual {
+    position: absolute;
+    left: 24%;
+    bottom: 24%;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding: 1rem;
+    }
+    .hero__tarjeta {
+      padding: 1rem 1rem 0;
+      gap: 2rem;
+    }
+    .barra__fila {
+      padding: 0.5rem 0.5rem 0.5rem 1rem;
+      gap: 1rem;
+    }
+    .barra__cta {
+      display: none;
+    }
+    .hamburguesa {
+      display: flex;
+    }
+    .barra__nav {
+      position: absolute;
+      top: calc(100% + 0.6rem);
+      left: 0;
+      right: 0;
+      z-index: 6;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.25rem;
+      padding: 0.75rem;
+      border: 1px solid var(--p-neutro);
+      border-radius: 1.25rem;
+      background: var(--p-blanco);
+      box-shadow: 0 24px 48px -24px rgba(15, 17, 22, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition:
+        opacity 0.3s var(--p-ease),
+        transform 0.3s var(--p-ease),
+        visibility 0s linear 0.3s;
+    }
+    .barra[data-abierto] .barra__nav {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition:
+        opacity 0.35s var(--p-ease),
+        transform 0.35s var(--p-ease);
+    }
+    .barra__nav a {
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      font-size: 1.05rem;
+      color: var(--p-tinta);
+    }
+    .barra__nav a:hover {
+      background: var(--p-gris-claro);
+    }
+    .barra__cta-movil {
+      display: inline-flex;
+      margin-top: 0.5rem;
+      color: #fff;
+    }
+    .hero__contenido {
+      padding-top: 1rem;
+    }
+    .hero__chip {
+      display: none;
+    }
+    .telefono {
+      width: 110px;
+      right: 2%;
+      bottom: -4%;
+      padding: 5px;
+      border-radius: 18px;
+    }
+    .telefono img {
+      border-radius: 13px;
+    }
+    .hero__flotante {
+      width: 230px;
+      font-size: 0.75rem;
+      padding: 0.7rem 0.8rem;
+      white-space: nowrap;
+    }
+    .hero__flotante--izq {
+      left: 0;
+      top: 8%;
+    }
+    .hero__flotante--der {
+      display: none;
+    }
+    .hero__chip-visual {
+      left: auto;
+      right: 36%;
+      bottom: 10%;
+    }
+  }
+</style>
+
+<script>
+  // Menú móvil: hamburguesa animada, panel que baja con fundido y velo que
+  // oscurece la página; se cierra con Escape, con un enlace o tocando fuera.
+  const barra = document.querySelector<HTMLElement>("[data-barra]");
+  const boton = barra?.querySelector<HTMLButtonElement>(".hamburguesa");
+  const menu = barra?.querySelector<HTMLElement>(".barra__nav");
+  const velo = barra?.querySelector<HTMLElement>(".barra__velo");
+  if (barra && boton && menu) {
+    const abrir = (estado: boolean) => {
+      boton.setAttribute("aria-expanded", String(estado));
+      boton.setAttribute("aria-label", estado ? "Cerrar menú" : "Abrir menú");
+      barra.toggleAttribute("data-abierto", estado);
+      document.documentElement.style.overflow = estado ? "hidden" : "";
+      if (estado) menu.querySelector("a")?.focus();
+    };
+    boton.addEventListener("click", () => abrir(boton.getAttribute("aria-expanded") !== "true"));
+    velo?.addEventListener("click", () => abrir(false));
+    menu.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("a")) abrir(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && boton.getAttribute("aria-expanded") === "true") {
+        abrir(false);
+        boton.focus();
+      }
+    });
+    matchMedia("(min-width: 901px)").addEventListener("change", (e) => e.matches && abrir(false));
+  }
+</script>

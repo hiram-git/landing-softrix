@@ -1,0 +1,109 @@
+---
+// Marquesina de capacidades: lo que trae la suite, pasando de continuo (CSS).
+// Reemplaza a la franja de logos de clientes: todavía no hay logos que publicar.
+const capacidades = [
+  "Facturación electrónica DGI",
+  "CAFE y CUFE",
+  "Caja con apertura y cierre",
+  "Inventario por almacén",
+  "Órdenes de servicio y taller",
+  "Planilla y deducciones de ley",
+  "Portal del colaborador",
+  "Invitaciones y acceso por QR",
+  "Puesto de control en tableta",
+  "Verificación de antecedentes",
+  "En la nube o en tu local",
+  "Soporte en Panamá",
+];
+---
+
+<section class="franja" aria-labelledby="franja-titulo">
+  <div class="contenedor">
+    <h2 id="franja-titulo" class="franja__titulo" data-reveal>
+      Una suite, tres productos, un solo proveedor
+    </h2>
+  </div>
+  <div class="marquesina" data-reveal data-reveal-delay="0.2">
+    <ul class="marquesina__pista">
+      {capacidades.map((c) => <li>{c}</li>)}
+    </ul>
+    <ul class="marquesina__pista" aria-hidden="true">
+      {capacidades.map((c) => <li>{c}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .franja {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .franja__titulo {
+    text-align: center;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+  }
+  .marquesina {
+    display: flex;
+    overflow: clip;
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .marquesina__pista {
+    flex: none;
+    display: flex;
+    gap: 1rem;
+    padding: 0 0.5rem 0 0;
+    margin: 0;
+    list-style: none;
+    animation: desplazar 48s linear infinite;
+  }
+  .marquesina:hover .marquesina__pista {
+    animation-play-state: paused;
+  }
+  .marquesina__pista li {
+    flex: none;
+    padding: 0.7rem 1.25rem;
+    border: 1px solid var(--p-neutro);
+    border-radius: 3rem;
+    background: var(--p-blanco);
+    color: var(--p-tinta);
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+  .marquesina__pista li::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 0.6rem;
+    border-radius: 50%;
+    background: var(--p-marca);
+    vertical-align: middle;
+  }
+  .marquesina__pista li:nth-child(3n + 2)::before {
+    background: var(--p-verde);
+  }
+  .marquesina__pista li:nth-child(3n)::before {
+    background: var(--p-azul);
+  }
+  @keyframes desplazar {
+    to {
+      transform: translateX(calc(-100% - 1rem));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquesina {
+      overflow-x: auto;
+      mask-image: none;
+    }
+    .marquesina__pista {
+      animation: none;
+    }
+    .marquesina__pista[aria-hidden] {
+      display: none;
+    }
+  }
+</style>

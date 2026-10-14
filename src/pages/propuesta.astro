@@ -1,0 +1,28 @@
+---
+// Propuesta «Suite»: la portada de RCG Softrix con la dirección visual de una
+// landing SaaS clara (ver src/layouts/Propuesta.astro). Mismo contenido que /:
+// productos, servicios legales, gobierno, equipos y contacto.
+import ComoEmpezar from "@/components/propuesta/ComoEmpezar.astro";
+import ContactoSuite from "@/components/propuesta/ContactoSuite.astro";
+import CtaOrbita from "@/components/propuesta/CtaOrbita.astro";
+import FacturacionDetalle from "@/components/propuesta/FacturacionDetalle.astro";
+import FranjaCapacidades from "@/components/propuesta/FranjaCapacidades.astro";
+import HeroSuite from "@/components/propuesta/HeroSuite.astro";
+import LegalSuite from "@/components/propuesta/LegalSuite.astro";
+import ProductosSuite from "@/components/propuesta/ProductosSuite.astro";
+import Propuesta from "@/layouts/Propuesta.astro";
+---
+
+<Propuesta
+  title="RCG Softrix · Factura ante la DGI, paga tu planilla y controla accesos"
+  description="Software hecho en Panamá para pymes e instituciones: facturación electrónica DGI, planilla y control de accesos, con el respaldo legal y fiscal de RC Group."
+>
+  <HeroSuite />
+  <FranjaCapacidades />
+  <ComoEmpezar />
+  <ProductosSuite />
+  <FacturacionDetalle />
+  <CtaOrbita />
+  <LegalSuite />
+  <ContactoSuite />
+</Propuesta>

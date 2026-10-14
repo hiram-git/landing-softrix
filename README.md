@@ -148,6 +148,29 @@ limpia los estilos. Sin JavaScript o con movimiento reducido todo se ve de inmed
 pide no publicar contadores sin números reales. La ilustración del equipo es un SVG propio;
 una foto real entra por el slot `foto` de `EquipoPos`.
 
+## Propuesta «Suite» `/propuesta`
+
+Otra dirección visual para la portada, pedida a partir de una landing SaaS clara:
+`src/pages/propuesta.astro`, layout `src/layouts/Propuesta.astro` y secciones en
+`src/components/propuesta/`. Mismo contenido que `/` (productos, servicios legales,
+gobierno, equipos, contacto y el formulario de demo contra `/api/demo`), con la letra
+Plus Jakarta Sans, el rojo de la marca en degradado y los colores de los tres productos.
+
+- **Hero en tarjeta** redondeada con retícula de puntos y halos cálidos abajo, barra de
+  navegación flotante en píldora (menú móvil con hamburguesa animada, panel que baja con
+  fundido y velo), titular grande con «Softrix» resaltado y chips-cursor con los productos;
+  debajo, la ventana del panel real, el teléfono con SmartGate y tarjetas flotantes.
+- **Transiciones**: todo lo marcado con `data-reveal` sube y aparece al entrar en pantalla
+  (CSS, 0,7 s, escalonado con `data-reveal-delay`; el `<head>` lo esconde antes del primer
+  pintado y lo muestra si el script no corre en 3 s); marquesina de capacidades; tarjetas
+  flotantes con paralaje al desplazarse (`data-paralaje`, con tope); tarjetas que crecen
+  al pasar el cursor y botones que se hunden; pestañas por segmento que atenúan con
+  fundido los productos que no corresponden. Sin GSAP ni Three.js; con «reducir
+  movimiento» nada se mueve.
+- **Sin cifras inventadas**: la franja de logos de clientes se reemplazó por una marquesina
+  de capacidades, no hay precios ni testimonios, y los valores de las tarjetas flotantes son
+  ilustraciones de interfaz.
+
 ## Pendientes del handoff (no inventar)
 
 - Los módulos de Softrix RRHH llevan la nota «[CONFIRMAR CON PRODUCTO]».

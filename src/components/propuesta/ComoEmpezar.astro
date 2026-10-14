@@ -1,0 +1,259 @@
+---
+// Cuatro pasos en tarjetas suaves 2×2, cada una con una ilustración de interfaz
+// hecha en HTML (formulario, hub, documento aprobado, soporte).
+---
+
+<section class="pasos seccion" aria-labelledby="pasos-titulo">
+  <div class="contenedor">
+    <div class="cabecera">
+      <span class="etiqueta" data-reveal>Cómo empiezas</span>
+      <h2 id="pasos-titulo" class="titulo" data-reveal data-reveal-delay="0.2">
+        De la demo a tu primera factura, <span class="resalte">sin vueltas</span>
+      </h2>
+    </div>
+    <div class="pasos__rejilla">
+      <article class="tarjeta tarjeta--suave paso" data-reveal data-reveal-delay="0.1">
+        <span class="icono-redondo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg>
+        </span>
+        <h3>Solicita una demo</h3>
+        <p>Tres datos y te llamamos: un asesor te muestra el producto con datos parecidos a los tuyos.</p>
+        <div class="muestra" aria-hidden="true">
+          <div class="muestra__campo"><span>Nombre</span></div>
+          <div class="muestra__campo"><span>Correo o WhatsApp</span></div>
+          <div class="muestra__campo muestra__campo--lleno"><span>Softrix Facturación</span></div>
+          <div class="muestra__boton">Solicitar demo</div>
+        </div>
+      </article>
+
+      <article class="tarjeta tarjeta--suave paso" data-reveal data-reveal-delay="0.2">
+        <span class="icono-redondo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3H4z M4 14a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3H4z M8 7h.01 M8 14h.01" /></svg>
+        </span>
+        <h3>Elige nube o local</h3>
+        <p>La misma suite en la nube o instalada en tu equipo. Los tres productos comparten usuarios, empresas y sucursales.</p>
+        <div class="muestra hub" aria-hidden="true">
+          <div class="hub__columna">
+            <span class="hub__nodo hub__nodo--rojo">F</span>
+            <span class="hub__nodo hub__nodo--verde">R</span>
+            <span class="hub__nodo hub__nodo--azul">S</span>
+          </div>
+          <div class="hub__centro"><img src="/logos/rcg-mark.png" alt="" width="36" height="36" /></div>
+          <div class="hub__columna">
+            <span class="hub__nodo">Nube</span>
+            <span class="hub__nodo">Local</span>
+            <span class="hub__nodo">Sucursales</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="tarjeta tarjeta--suave paso" data-reveal data-reveal-delay="0.3">
+        <span class="icono-redondo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z M9 12l2 2 4-4" /></svg>
+        </span>
+        <h3>Homologamos ante la DGI</h3>
+        <p>Certificado de firma digital, alta del contribuyente y pruebas con el PAC: tu primera factura sale autorizada.</p>
+        <div class="muestra documento" aria-hidden="true">
+          <div class="documento__cabecera"><strong>Factura electrónica</strong><span class="documento__estado">Aprobada por la DGI</span></div>
+          <div class="documento__linea" style="width: 86%"></div>
+          <div class="documento__linea" style="width: 62%"></div>
+          <div class="progreso"><span style="--ancho: 100%">CUFE validado</span></div>
+        </div>
+      </article>
+
+      <article class="tarjeta tarjeta--suave paso" data-reveal data-reveal-delay="0.4">
+        <span class="icono-redondo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6 M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" /></svg>
+        </span>
+        <h3>Opera con respaldo</h3>
+        <p>Soporte continuo y asesoría tributaria y legal del mismo equipo, en Panamá y en tu idioma.</p>
+        <div class="muestra soporte" aria-hidden="true">
+          <div class="soporte__fila"><span class="soporte__avatar">RC</span><span>Renovación del certificado</span><em>Resuelto</em></div>
+          <div class="soporte__fila"><span class="soporte__avatar soporte__avatar--2">ZR</span><span>Consulta tributaria</span><em>En curso</em></div>
+          <div class="soporte__fila"><span class="soporte__avatar soporte__avatar--3">RC</span><span>Alta de sucursal</span><em>Resuelto</em></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pasos__rejilla {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  @media (max-width: 760px) {
+    .pasos__rejilla {
+      grid-template-columns: 1fr;
+    }
+  }
+  .paso {
+    padding: 2rem;
+    gap: 1rem;
+  }
+  .paso h3 {
+    font-size: 1.6rem;
+  }
+  .paso p {
+    color: var(--p-gris);
+    max-width: 48ch;
+  }
+  .muestra {
+    margin: 1.5rem auto 0;
+    width: min(100%, 320px);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1rem;
+    background: var(--p-blanco);
+    border: 1px solid var(--p-neutro);
+    border-radius: 1rem;
+    box-shadow: 0 24px 48px -32px rgba(15, 17, 22, 0.25);
+    font-size: 0.8rem;
+  }
+  .muestra__campo {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--p-neutro);
+    border-radius: 0.6rem;
+    color: var(--p-gris);
+  }
+  .muestra__campo--lleno {
+    color: var(--p-tinta);
+    border-color: var(--p-marca);
+  }
+  .muestra__boton {
+    margin-top: 0.2rem;
+    padding: 0.7rem;
+    border-radius: 2rem;
+    background: var(--p-degradado);
+    color: #fff;
+    text-align: center;
+    font-weight: 500;
+  }
+  .hub {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .hub__columna {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .hub__nodo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0 0.7rem;
+    border-radius: 2rem;
+    background: var(--p-gris-claro);
+    border: 1px solid var(--p-neutro);
+    color: var(--p-texto);
+    font-weight: 500;
+  }
+  .hub__nodo--rojo {
+    background: var(--p-marca-suave);
+    color: var(--p-marca);
+  }
+  .hub__nodo--verde {
+    background: var(--p-verde-suave);
+    color: #0e9f6e;
+  }
+  .hub__nodo--azul {
+    background: var(--p-azul-suave);
+    color: var(--p-azul);
+  }
+  .hub__centro {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 4.25rem;
+    height: 4.25rem;
+    border-radius: 50%;
+    background: var(--p-degradado);
+    box-shadow: 0 16px 32px -16px rgba(229, 35, 26, 0.6);
+  }
+  .hub__centro::before,
+  .hub__centro::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 2rem;
+    height: 1px;
+    background: var(--p-neutro);
+  }
+  .hub__centro::before {
+    right: 100%;
+  }
+  .hub__centro::after {
+    left: 100%;
+  }
+  .hub__centro img {
+    width: 2rem;
+    height: 2rem;
+    filter: brightness(0) invert(1);
+  }
+  .documento__cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .documento__cabecera strong {
+    color: var(--p-tinta);
+    font-weight: 500;
+  }
+  .documento__estado {
+    padding: 0.25rem 0.6rem;
+    border-radius: 2rem;
+    background: var(--p-verde-suave);
+    color: #0e9f6e;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+  .documento__linea {
+    height: 7px;
+    border-radius: 4px;
+    background: var(--p-gris-claro);
+  }
+  .soporte__fila {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--p-tinta);
+  }
+  .soporte__fila em {
+    margin-left: auto;
+    font-style: normal;
+    font-size: 0.72rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2rem;
+    background: var(--p-verde-suave);
+    color: #0e9f6e;
+  }
+  .soporte__fila:nth-child(2) em {
+    background: var(--p-marca-suave);
+    color: var(--p-marca);
+  }
+  .soporte__avatar {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--p-degradado);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .soporte__avatar--2 {
+    background: linear-gradient(0deg, #0e9f6e, #34d399);
+  }
+  .soporte__avatar--3 {
+    background: linear-gradient(0deg, #2360aa, #4a8ee0);
+  }
+</style>

@@ -1,0 +1,139 @@
+---
+// Beneficios de la facturación electrónica en 2×2 junto a la ventana del
+// sistema con una factura real, y una tarjeta flotante con paralaje.
+const beneficios = [
+  { titulo: "Menos papel y archivo", texto: "Sin impresión, tintas ni almacenamiento físico de facturas.", icono: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M8 13h8 M8 17h8" },
+  { titulo: "Integrado a tu sistema", texto: "Emisión y recepción automáticas desde Softrix Facturación.", icono: "M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3H4z M4 14a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3H4z" },
+  { titulo: "Mejor servicio al cliente", texto: "Comprobantes al instante por correo o WhatsApp.", icono: "M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" },
+  { titulo: "Menos riesgo", texto: "Sin facturas falsas ni pagos duplicados: cada CAFE lleva su CUFE.", icono: "M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z M9 12l2 2 4-4" },
+];
+---
+
+<section class="seccion facturacion" aria-labelledby="fe-titulo">
+  <div class="contenedor facturacion__rejilla" data-paralaje-zona>
+    <div>
+      <div class="cabecera cabecera--izquierda">
+        <span class="etiqueta" data-reveal>Expertos en facturación electrónica</span>
+        <h2 id="fe-titulo" class="titulo" data-reveal data-reveal-delay="0.2">
+          Lo que ganas al facturar <span class="resalte">electrónicamente</span>
+        </h2>
+      </div>
+      <div class="facturacion__beneficios">
+        {
+          beneficios.map((b, i) => (
+            <div class="beneficio" data-reveal data-reveal-delay={`${0.2 + i * 0.1}`}>
+              <span class="icono-redondo" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d={b.icono} /></svg>
+              </span>
+              <h3>{b.titulo}</h3>
+              <p>{b.texto}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="leyenda" data-reveal data-reveal-delay="0.6">
+        CAFE: comprobante auxiliar de factura electrónica · CUFE: código único de factura electrónica.
+      </p>
+    </div>
+    <div class="facturacion__visual" data-reveal data-reveal-delay="0.3">
+      <div class="ventana">
+        <div class="ventana__barra" aria-hidden="true"><i></i><i></i><i></i><span>Factura electrónica</span></div>
+        <img src="/screenshots/facturacion-factura.png" alt="Factura electrónica emitida con Softrix Facturación, con su CAFE y su código QR" width="2160" height="1509" loading="lazy" />
+      </div>
+      <div class="flotante facturacion__flotante" data-paralaje="0.08">
+        <div class="flotante__titulo">
+          <span class="icono-redondo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 7" /></svg>
+          </span>
+          Enviada al cliente
+        </div>
+        <div class="flotante__fila"><span>Correo y WhatsApp</span><span class="positivo">Entregada</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .facturacion__rejilla {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+  .facturacion__beneficios {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 1.5rem;
+  }
+  .beneficio {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .beneficio h3 {
+    font-size: 1.3rem;
+  }
+  .beneficio p {
+    color: var(--p-gris);
+    font-size: 0.95rem;
+  }
+  .leyenda {
+    margin-top: 2rem;
+    color: var(--p-gris);
+    font-size: 0.8rem;
+  }
+  .facturacion__visual {
+    position: relative;
+  }
+  .ventana {
+    border: 1px solid var(--p-neutro);
+    border-radius: 1.25rem;
+    background: var(--p-blanco);
+    box-shadow: 0 40px 80px -40px rgba(15, 17, 22, 0.35);
+    overflow: hidden;
+  }
+  .ventana__barra {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--p-neutro);
+    background: var(--p-gris-claro);
+    font-size: 0.75rem;
+    color: var(--p-gris);
+  }
+  .ventana__barra i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--p-neutro);
+  }
+  .ventana__barra span {
+    margin-left: 0.5rem;
+  }
+  .ventana img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: top;
+  }
+  .facturacion__flotante {
+    position: absolute;
+    left: -1.5rem;
+    bottom: 2rem;
+    width: 250px;
+  }
+  @media (max-width: 900px) {
+    .facturacion__rejilla {
+      grid-template-columns: 1fr;
+    }
+    .facturacion__beneficios {
+      grid-template-columns: 1fr;
+    }
+    .facturacion__flotante {
+      left: 0.5rem;
+      bottom: -1rem;
+      width: 210px;
+    }
+  }
+</style>
