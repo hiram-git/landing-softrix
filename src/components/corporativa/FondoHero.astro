@@ -61,6 +61,9 @@ const productos = [
     --fondo3d-sombra: var(--sombra, var(--shadow-md, 0 10px 30px -12px rgba(11, 31, 58, 0.18)));
     --fondo3d-fuente: var(--f-texto, var(--font-sans, system-ui, sans-serif));
     --fondo3d-ease: var(--ease, cubic-bezier(0.2, 0.7, 0.2, 1));
+    /* Color del velo (r, g, b) y del fondo de las etiquetas; el tema oscuro los cambia. */
+    --fondo3d-velo: 255, 255, 255;
+    --fondo3d-chip: rgba(255, 255, 255, 0.9);
     position: absolute;
     inset: 0;
     z-index: 0;
@@ -86,10 +89,14 @@ const productos = [
     pointer-events: none;
     background: linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(255, 255, 255, 0.72) 38%,
-      rgba(255, 255, 255, 0) 60%
+      rgba(var(--fondo3d-velo), 0.9) 0%,
+      rgba(var(--fondo3d-velo), 0.72) 38%,
+      rgba(var(--fondo3d-velo), 0) 60%
     );
+  }
+  :global([data-theme="dark"]) .fondo3d {
+    --fondo3d-velo: 15, 11, 11;
+    --fondo3d-chip: rgba(23, 17, 17, 0.78);
   }
   .fondo3d__chip {
     --familia: var(--fondo3d-tinta);
@@ -101,7 +108,7 @@ const productos = [
     align-items: center;
     gap: 8px;
     padding: 8px 13px;
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--fondo3d-chip);
     border: 1px solid var(--fondo3d-borde);
     border-radius: 999px;
     box-shadow: var(--fondo3d-sombra);
@@ -154,26 +161,26 @@ const productos = [
   .fondo3d[data-apilado="1"] .fondo3d__velo {
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.94) 0%,
-      rgba(255, 255, 255, 0.84) 52%,
-      rgba(255, 255, 255, 0) 74%
+      rgba(var(--fondo3d-velo), 0.94) 0%,
+      rgba(var(--fondo3d-velo), 0.84) 52%,
+      rgba(var(--fondo3d-velo), 0) 74%
     );
   }
   .fondo3d[data-apilado="0"] .fondo3d__velo {
     background: linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(255, 255, 255, 0.72) 38%,
-      rgba(255, 255, 255, 0) 60%
+      rgba(var(--fondo3d-velo), 0.9) 0%,
+      rgba(var(--fondo3d-velo), 0.72) 38%,
+      rgba(var(--fondo3d-velo), 0) 60%
     );
   }
   @media (max-width: 900px) {
     .fondo3d:not([data-apilado]) .fondo3d__velo {
       background: linear-gradient(
         180deg,
-        rgba(255, 255, 255, 0.94) 0%,
-        rgba(255, 255, 255, 0.84) 52%,
-        rgba(255, 255, 255, 0) 74%
+        rgba(var(--fondo3d-velo), 0.94) 0%,
+        rgba(var(--fondo3d-velo), 0.84) 52%,
+        rgba(var(--fondo3d-velo), 0) 74%
       );
     }
     .fondo3d__chip {
@@ -244,6 +251,8 @@ const productos = [
 
     const reducir = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fino = matchMedia("(pointer: fine)").matches;
+    // Sobre fondo oscuro los puntos brillan (suma de luz) y usan los tonos claros.
+    const oscuro = cont.closest("[data-theme]")?.getAttribute("data-theme") === "dark";
     const ancla = cont.parentElement?.querySelector<HTMLElement>("[data-fondo3d-ancla]") ?? null;
 
     await cuandoLibre();
@@ -264,7 +273,10 @@ const productos = [
       Vector3,
       Raycaster,
       Plane,
+      AdditiveBlending,
+      NormalBlending,
     } = await import("three");
+    const mezcla = oscuro ? AdditiveBlending : NormalBlending;
 
     const escena = new Scene();
     const camara = new PerspectiveCamera(35, 1, 0.1, 60);
@@ -303,7 +315,9 @@ const productos = [
       fase[i] = azar() * Math.PI * 2;
       const t = tonos(familias[i % 3]);
       const u = azar();
-      const c = u < 0.62 ? t.oscuro : u < 0.9 ? t.medio : t.claro;
+      const c = oscuro
+        ? u < 0.55 ? t.medio : u < 0.85 ? t.oscuro : t.claro
+        : u < 0.62 ? t.oscuro : u < 0.9 ? t.medio : t.claro;
       colorBase.set([c.r, c.g, c.b], i * 3);
       colorClaro.set([t.claro.r, t.claro.g, t.claro.b], i * 3);
     }
@@ -314,7 +328,7 @@ const productos = [
     geoCampo.setAttribute("color", new BufferAttribute(colores, 3));
     const campo = new Points(
       geoCampo,
-      new PointsMaterial({ size: 0.075, vertexColors: true, transparent: true, opacity: 0, sizeAttenuation: true, depthWrite: false }),
+      new PointsMaterial({ size: 0.075, vertexColors: true, transparent: true, opacity: 0, sizeAttenuation: true, depthWrite: false, blending: mezcla }),
     );
     escena.add(campo);
 
@@ -332,13 +346,15 @@ const productos = [
         const th = dorado * i;
         pos.set([Math.cos(th) * r * RADIO, y * RADIO, Math.sin(th) * r * RADIO], i * 3);
         const u = (i * 7919) % 100;
-        const c = u < 68 ? t.oscuro : u < 90 ? t.medio : t.claro;
+        const c = oscuro
+          ? u < 60 ? t.medio : u < 85 ? t.claro : t.oscuro
+          : u < 68 ? t.oscuro : u < 90 ? t.medio : t.claro;
         col.set([c.r, c.g, c.b], i * 3);
       }
       const geo = new BufferGeometry();
       geo.setAttribute("position", new Float32BufferAttribute(pos, 3));
       geo.setAttribute("color", new Float32BufferAttribute(col, 3));
-      const puntos = new Points(geo, new PointsMaterial({ size: 0.065, vertexColors: true, transparent: true, opacity: 0.95, sizeAttenuation: true, depthWrite: false }));
+      const puntos = new Points(geo, new PointsMaterial({ size: 0.065, vertexColors: true, transparent: true, opacity: 0.95, sizeAttenuation: true, depthWrite: false, blending: mezcla }));
       const segs: number[] = [];
       const U2 = 0.34 * 0.34;
       for (let i = 0; i < NR; i++) {
@@ -351,7 +367,7 @@ const productos = [
       }
       const geoL = new BufferGeometry();
       geoL.setAttribute("position", new Float32BufferAttribute(segs, 3));
-      const lineas = new LineSegments(geoL, new LineBasicMaterial({ color: t.medio, transparent: true, opacity: 0.22, depthWrite: false }));
+      const lineas = new LineSegments(geoL, new LineBasicMaterial({ color: t.medio, transparent: true, opacity: oscuro ? 0.3 : 0.22, depthWrite: false, blending: mezcla }));
       const grupo = new Group();
       grupo.add(puntos, lineas);
       escena.add(grupo);
@@ -369,7 +385,7 @@ const productos = [
     });
     geoSuite.setAttribute("position", new BufferAttribute(posSuite, 3));
     geoSuite.setAttribute("color", new BufferAttribute(colSuite, 3));
-    const suite = new LineSegments(geoSuite, new LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.35, depthWrite: false }));
+    const suite = new LineSegments(geoSuite, new LineBasicMaterial({ vertexColors: true, transparent: true, opacity: oscuro ? 0.45 : 0.35, depthWrite: false, blending: mezcla }));
     escena.add(suite);
 
     // ── Tamaño y zona de las redes ───────────────────────────────────────
@@ -583,11 +599,11 @@ const productos = [
     // ── Entrada ──────────────────────────────────────────────────────────
     cont.setAttribute("data-lista", "");
     if (reducir) {
-      campo.material.opacity = 0.6;
+      campo.material.opacity = oscuro ? 0.75 : 0.6;
       paso(0);
       return;
     }
-    gsap.to(campo.material, { opacity: 0.6, duration: 1.6, ease: "power2.out" });
+    gsap.to(campo.material, { opacity: oscuro ? 0.75 : 0.6, duration: 1.6, ease: "power2.out" });
     for (const r of redes) {
       gsap.fromTo(r, { entrada: 0.45 }, { entrada: 1, duration: 1.5, ease: "power3.out", delay: 0.1 + r.indice * 0.15 });
     }

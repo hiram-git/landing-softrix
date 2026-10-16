@@ -16,19 +16,30 @@ interface Props {
   /** La franja superior y el pie completo son de la landing; las páginas de producto no los llevan. */
   topBar?: boolean;
   footer?: "completo" | "compacto";
+  /** Tema del design system (tokens.css trae los dos). El sitio va en oscuro. */
+  tema?: "light" | "dark";
 }
-const { title, description, seccion, topBar = true, footer = "completo" } = Astro.props;
+const {
+  title,
+  description,
+  seccion,
+  topBar = true,
+  footer = "completo",
+  tema = "dark",
+} = Astro.props;
 const canonica = new URL(Astro.url.pathname, Astro.site);
-const logo = "/logos/rcg-softrix-horizontal.png";
+const logo =
+  tema === "dark" ? "/logos/rcg-softrix-horizontal-inverse.png" : "/logos/rcg-softrix-horizontal.png";
 ---
 
 <!doctype html>
-<html lang="es" data-theme="light">
+<html lang="es" data-theme={tema} style={`color-scheme: ${tema}`}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content={tema === "dark" ? "#0f0b0b" : "#ffffff"} />
     <link rel="canonical" href={canonica} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_PA" />

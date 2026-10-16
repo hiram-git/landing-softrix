@@ -1,11 +1,13 @@
 ---
 import Button from "@/components/Button.astro";
 import DemoForm from "@/components/DemoForm.astro";
+import EquipoFiscal from "@/components/EquipoFiscal.astro";
 import FeatureCard from "@/components/FeatureCard.astro";
 import FondoHero from "@/components/corporativa/FondoHero.astro";
 import Hero from "@/components/Hero.astro";
 import Icon from "@/components/Icon.astro";
 import ProductCard from "@/components/ProductCard.astro";
+import SelloDgi from "@/components/SelloDgi.astro";
 import { contacto } from "@/data/contacto";
 import { productos, segmentos } from "@/data/productos";
 import Base from "@/layouts/Base.astro";
@@ -96,7 +98,7 @@ import Base from "@/layouts/Base.astro";
           <Button variant="ghost" arrow href="#contacto">Hablar con un asesor</Button>
         </div>
       </div>
-      <div class="legal__rejilla" data-revelar-grupo>
+      <div class="legal__rejilla" data-revelar-grupo="amplio">
         <FeatureCard title="Firma electrónica y digital">
           <Icon slot="icon" name="pen" />
           Gestión de certificados y firma para facturar y contratar con validez legal.
@@ -117,58 +119,27 @@ import Base from "@/layouts/Base.astro";
     </div>
   </section>
 
-  <!-- Facturación electrónica: beneficios -->
-  <section class="seccion seccion--alterna" aria-labelledby="fe-titulo">
-    <div class="contenedor pila">
-      <div class="encabezado" data-revelar>
-        <div class="eyebrow">Expertos en facturación electrónica</div>
-        <h2 id="fe-titulo" class="titulo-seccion">Lo que ganas al facturar electrónicamente</h2>
-      </div>
-      <div class="rejilla rejilla--4" data-revelar-grupo>
-        <FeatureCard badge="Ahorrativo" title="Menos papel y archivo">
-          Sin impresión, tintas ni almacenamiento físico de facturas.
-        </FeatureCard>
-        <FeatureCard badge="Innovador" title="Integrado a tu sistema">
-          Emisión y recepción automáticas desde Softrix Facturación.
-        </FeatureCard>
-        <FeatureCard badge="Rentable" title="Mejor servicio al cliente">
-          Comprobantes al instante por correo o WhatsApp.
-        </FeatureCard>
-        <FeatureCard badge="Seguro" title="Menos riesgo">
-          Sin facturas falsas ni pagos duplicados: cada CAFE lleva su CUFE.
-        </FeatureCard>
-      </div>
-      <p class="leyenda">
-        CAFE: comprobante auxiliar de factura electrónica · CUFE: código único de factura
-        electrónica.
-      </p>
-    </div>
-  </section>
+  <!-- Facturación electrónica: beneficios + sello DGI (de /rc-group) -->
+  <SelloDgi />
 
-  <!-- Equipos y sector gobierno -->
-  <section class="seccion" aria-label="Equipos y sector gobierno">
-    <div class="contenedor rejilla" data-revelar-grupo>
-      <div id="equipos" class="panel">
-        <div class="eyebrow">Equipos</div>
-        <h2 class="panel__titulo">Impresoras, lectores y terminales listos para Softrix</h2>
-        <p class="texto-apoyo">
-          Equipos de facturación electrónica probados con el sistema: impresoras de 80 mm, lectores
-          de código y terminales de punto de venta.
-        </p>
-        <div><Button variant="ghost" arrow href="#">Ver equipos</Button></div>
-      </div>
-      <div id="gobierno" class="panel panel--marca">
+  <!-- Equipos: terminal con revelado 3D (de /rc-group) -->
+  <EquipoFiscal />
+
+  <!-- Sector gobierno -->
+  <section class="seccion seccion--alterna" aria-labelledby="gobierno-titulo">
+    <div id="gobierno" class="contenedor panel panel--marca panel--fila" data-revelar>
+      <div class="panel__cuerpo">
         <div class="eyebrow panel__eyebrow-marca">Sector gobierno</div>
-        <h2 class="panel__titulo">Control de visitantes con verificación de antecedentes</h2>
+        <h2 id="gobierno-titulo" class="panel__titulo">Control de visitantes con verificación de antecedentes</h2>
         <p class="panel__apoyo-marca">
           SmartGate Control para entes públicos: invitaciones, niveles de aprobación y puesto de
           control en tableta.
         </p>
-        <div>
-          <Button variant="secondary-inverse" arrow href="/softrix/smartgate">
-            Ver SmartGate Control
-          </Button>
-        </div>
+      </div>
+      <div>
+        <Button variant="secondary-inverse" arrow href="/softrix/smartgate">
+          Ver SmartGate Control
+        </Button>
       </div>
     </div>
   </section>
@@ -220,8 +191,10 @@ import Base from "@/layouts/Base.astro";
      con el campo de partículas (el resto de la portada la sigue mostrando). */
   :global(.sx-hero.hero-3d:not(.sx-hero--dark)) {
     background:
-      radial-gradient(60% 55% at 86% 12%, color-mix(in srgb, var(--brand) 6%, transparent), transparent 70%),
+      radial-gradient(55% 60% at 80% 40%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 70%),
+      radial-gradient(40% 45% at 8% 100%, color-mix(in srgb, var(--info) 10%, transparent), transparent 70%),
       var(--surface-000);
+    border-bottom: 1px solid var(--border);
   }
   /* Columna derecha vacía: la zona donde FondoHero pone las tres redes. */
   .espacio3d {
@@ -310,6 +283,20 @@ import Base from "@/layouts/Base.astro";
     padding: var(--space-8);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
+  }
+  .panel--fila {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6) var(--space-12);
+  }
+  .panel__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex: 1 1 420px;
+    max-width: var(--measure);
   }
   .panel--marca {
     background: var(--brand-deep);

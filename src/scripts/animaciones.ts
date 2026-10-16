@@ -83,15 +83,17 @@ function revelar() {
     );
   }
   for (const grupo of document.querySelectorAll<HTMLElement>("[data-revelar-grupo]")) {
+    // «amplio»: las tarjetas suben desde 50 px una a una (stagger 0,15 s), como en /rc-group.
+    const amplio = grupo.dataset.revelarGrupo === "amplio";
     gsap.fromTo(
       grupo.children,
-      { autoAlpha: 0, y: 16 },
+      { autoAlpha: 0, y: amplio ? 50 : 16 },
       {
         autoAlpha: 1,
         y: 0,
-        duration: 0.48,
-        ease: SALIDA,
-        stagger: 0.08,
+        duration: amplio ? 0.85 : 0.48,
+        ease: amplio ? "power3.out" : SALIDA,
+        stagger: amplio ? 0.15 : 0.08,
         clearProps: "transform,opacity,visibility",
         scrollTrigger: { trigger: grupo, start: "top 85%", once: true },
       },
