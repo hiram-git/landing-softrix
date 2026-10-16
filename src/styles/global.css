@@ -38,6 +38,15 @@ html {
   background: var(--surface-000);
 }
 
+/* Tema oscuro: en tokens.css --surface-inverse pasa a blanco; el pie y la franja
+   superior son barras «invertidas» que aquí tienen que quedar más oscuras que la
+   página, no blancas. Se resuelve con variables propias, sin tocar los tokens. */
+[data-theme="dark"] {
+  --fondo-barra: #080505;
+  --tinta-barra: var(--ink);
+  --borde-barra: var(--border);
+}
+
 /* El fondo interactivo (canvas fijo, z-index -1) se ve donde nadie pinta
    fondo: el cuerpo y el hero claro quedan transparentes; las secciones
    alternas (surface-100), las tarjetas y el pie siguen opacos. */

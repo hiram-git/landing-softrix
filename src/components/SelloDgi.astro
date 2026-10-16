@@ -1,0 +1,335 @@
+---
+// Sección de facturación electrónica de la portada, con el sello de /rc-group:
+// a la izquierda los cuatro beneficios; a la derecha una factura simulada que
+// recibe el sello «Certificado por la DGI», que cae con rebote (bounce.out) al
+// entrar en pantalla. Al primer impacto, una onda, una vibración y el estado del
+// documento pasa a «Aprobado por la DGI».
+//
+// El documento es papel: lleva su propia paleta clara aunque la página sea oscura.
+import FeatureCard from "./FeatureCard.astro";
+
+const beneficios = [
+  { badge: "Ahorrativo", titulo: "Menos papel y archivo", texto: "Sin impresión, tintas ni almacenamiento físico de facturas." },
+  { badge: "Innovador", titulo: "Integrado a tu sistema", texto: "Emisión y recepción automáticas desde Softrix Facturación." },
+  { badge: "Rentable", titulo: "Mejor servicio al cliente", texto: "Comprobantes al instante por correo o WhatsApp." },
+  { badge: "Seguro", titulo: "Menos riesgo", texto: "Sin facturas falsas ni pagos duplicados: cada CAFE lleva su CUFE." },
+];
+
+// Patrón fijo para el «QR» decorativo (9×9).
+const qr = [
+  "111111101", "100000101", "101110101", "101110100", "101110111",
+  "100000110", "111111101", "000000010", "110101111",
+];
+---
+
+<section class="seccion seccion--alterna sello" aria-labelledby="fe-titulo" data-sello-dgi>
+  <div class="contenedor sello__rejilla">
+    <div class="sello__texto">
+      <div class="encabezado" data-revelar>
+        <div class="eyebrow">Expertos en facturación electrónica</div>
+        <h2 id="fe-titulo" class="titulo-seccion">Cada factura sale firmada y certificada por la DGI</h2>
+        <p class="texto-apoyo">
+          Softrix Facturación emite el comprobante, el certificado de firma digital lo firma y la DGI
+          lo autoriza con su CUFE. Nosotros gestionamos el certificado, la homologación y el soporte.
+        </p>
+      </div>
+      <div class="sello__beneficios" data-revelar-grupo>
+        {
+          beneficios.map((b) => (
+            <FeatureCard badge={b.badge} title={b.titulo}>
+              {b.texto}
+            </FeatureCard>
+          ))
+        }
+      </div>
+      <p class="leyenda">
+        CAFE: comprobante auxiliar de factura electrónica · CUFE: código único de factura
+        electrónica.
+      </p>
+    </div>
+
+    <div class="sello__escena" aria-hidden="true">
+      <div class="doc" data-doc>
+        <div class="doc__barra">
+          <span class="doc__pdf">PDF</span>
+          <span>factura-001-00001234.pdf</span>
+        </div>
+        <div class="doc__hoja">
+          <div class="doc__cabecera">
+            <div>
+              <div class="doc__tipo">Factura electrónica</div>
+              <div class="doc__meta">CAFE · N.º 001-00001234</div>
+              <div class="doc__meta">Softrix Facturación · Panamá</div>
+            </div>
+            <div class="doc__qr">
+              {qr.map((fila) => [...fila].map((b) => <i class:list={{ on: b === "1" }} />))}
+            </div>
+          </div>
+          <div class="doc__lineas">
+            <span style="width: 92%"></span><span style="width: 70%"></span><span style="width: 84%"></span>
+            <span style="width: 58%"></span>
+          </div>
+          <div class="doc__totales">
+            <div><span>Subtotal</span><span>B/. 125.40</span></div>
+            <div><span>ITBMS 7 %</span><span>B/. 8.78</span></div>
+            <div class="doc__total"><span>Total</span><span>B/. 134.18</span></div>
+          </div>
+          <div class="doc__cufe">CUFE FE0120000000000-0000000-0000000000000000000000000000000A3F9</div>
+          <div class="doc__estado" data-doc-estado>Pendiente de autorización</div>
+        </div>
+
+        <div class="onda" data-onda></div>
+        <div class="stamp" data-stamp>
+          <svg viewBox="0 0 200 200">
+            <defs>
+              <path id="sello-arco" d="M100 100 m-66 0 a66 66 0 1 1 132 0 a66 66 0 1 1 -132 0" />
+            </defs>
+            <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="6" />
+            <circle cx="100" cy="100" r="82" fill="none" stroke="currentColor" stroke-width="2" />
+            <text font-family="Exo 2, sans-serif" font-size="15.5" font-weight="700" letter-spacing="2.5" fill="currentColor">
+              <textPath href="#sello-arco" startOffset="25%" text-anchor="middle">CERTIFICADO POR LA DGI</textPath>
+            </text>
+            <path d="M70 104 l18 18 l42 -46" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+            <text x="100" y="152" text-anchor="middle" font-family="Exo 2, sans-serif" font-size="17" font-weight="700" letter-spacing="2" fill="currentColor">APROBADO</text>
+            <text x="100" y="170" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="9" font-weight="600" letter-spacing="3" fill="currentColor">PANAMÁ</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sello__rejilla {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: var(--space-12);
+    align-items: center;
+  }
+  .sello__texto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+  .sello__beneficios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-4);
+  }
+  .sello__escena {
+    display: grid;
+    place-items: center;
+    padding-top: var(--space-12); /* por donde cae el sello */
+  }
+
+  /* El documento es papel: paleta clara propia, también en el tema oscuro. */
+  .doc {
+    --papel: #ffffff;
+    --papel-2: #f7f5f5;
+    --tinta: #1a1414;
+    --tinta-2: #5e5454;
+    --raya: #ece6e6;
+    position: relative;
+    width: min(100%, 400px);
+    background: var(--papel);
+    color: var(--tinta);
+    border-radius: var(--radius-lg);
+    box-shadow:
+      0 40px 80px -30px rgba(0, 0, 0, 0.8),
+      0 0 0 1px rgba(255, 255, 255, 0.06);
+    font-family: var(--font-sans);
+  }
+  .doc__barra {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--papel-2);
+    border-bottom: 1px solid var(--raya);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    font-size: 12px;
+    color: var(--tinta-2);
+  }
+  .doc__pdf {
+    padding: 3px 7px;
+    border-radius: 6px;
+    background: #e5231a;
+    color: #fff;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .doc__hoja {
+    display: grid;
+    gap: 16px;
+    padding: 22px 24px 20px;
+  }
+  .doc__cabecera {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .doc__tipo {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .doc__meta {
+    margin-top: 3px;
+    font-size: 12px;
+    color: var(--tinta-2);
+  }
+  .doc__qr {
+    display: grid;
+    grid-template-columns: repeat(9, 5px);
+    grid-auto-rows: 5px;
+    gap: 1px;
+    align-self: start;
+    padding: 4px;
+    border: 1px solid var(--raya);
+    border-radius: 4px;
+  }
+  .doc__qr i {
+    display: block;
+  }
+  .doc__qr i.on {
+    background: var(--tinta);
+  }
+  .doc__lineas {
+    display: grid;
+    gap: 7px;
+  }
+  .doc__lineas span {
+    display: block;
+    height: 7px;
+    border-radius: 4px;
+    background: var(--raya);
+  }
+  .doc__totales {
+    display: grid;
+    gap: 5px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--raya);
+    font-size: 13px;
+    color: var(--tinta-2);
+  }
+  .doc__totales div {
+    display: flex;
+    justify-content: space-between;
+  }
+  .doc__total {
+    color: var(--tinta);
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .doc__cufe {
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--papel-2);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.4;
+    color: var(--tinta-2);
+    overflow-wrap: anywhere;
+  }
+  .doc__estado {
+    justify-self: start;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #fff4e0;
+    color: #8a5a00;
+    font-size: 12px;
+    font-weight: 600;
+    transition:
+      background-color 250ms,
+      color 250ms;
+  }
+  .doc__estado[data-aprobado] {
+    background: #e6f6ec;
+    color: #1d7a45;
+  }
+
+  /* El sello: tinta roja RCG, inclinado, sobre la parte baja del documento. */
+  .stamp {
+    position: absolute;
+    right: -30px;
+    bottom: -8px;
+    width: 160px;
+    height: 168px;
+    color: var(--brand);
+    mix-blend-mode: multiply;
+    rotate: -12deg;
+    pointer-events: none;
+  }
+  .stamp svg {
+    width: 100%;
+    height: 100%;
+  }
+  .onda {
+    position: absolute;
+    right: 22px;
+    bottom: 44px;
+    width: 60px;
+    height: 60px;
+    border: 3px solid var(--brand);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 959.98px) {
+    .sello__rejilla {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .stamp {
+      right: -6px;
+      width: 140px;
+      height: 140px;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const seccion = document.querySelector<HTMLElement>("[data-sello-dgi]");
+  const doc = seccion?.querySelector<HTMLElement>("[data-doc]");
+  const stamp = seccion?.querySelector<HTMLElement>("[data-stamp]");
+  const onda = seccion?.querySelector<HTMLElement>("[data-onda]");
+  const estado = seccion?.querySelector<HTMLElement>("[data-doc-estado]");
+
+  const aprobar = () => {
+    if (!estado) return;
+    estado.textContent = "Aprobado por la DGI";
+    estado.setAttribute("data-aprobado", "");
+  };
+
+  if (doc && stamp && onda) {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // Sin animación: el sello ya está puesto y el documento, aprobado.
+      aprobar();
+    } else {
+      // El sello está muy abajo de la primera pantalla: ocultarlo aquí no parpadea.
+      gsap.set(stamp, { autoAlpha: 0 });
+      // bounce.out toca el papel por primera vez cerca del 36 % de la duración.
+      const DURACION = 1.25;
+      const impacto = DURACION * 0.36;
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo(
+        stamp,
+        { y: -280, autoAlpha: 0, scale: 1.5, rotation: -2 },
+        { y: 0, autoAlpha: 1, scale: 1, rotation: 0, duration: DURACION, ease: "bounce.out" },
+      )
+        .fromTo(onda, { scale: 0.5, autoAlpha: 0.8 }, { scale: 2.6, autoAlpha: 0, duration: 0.8, ease: "power2.out" }, impacto)
+        .fromTo(doc, { x: 0 }, { x: 3, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, impacto)
+        .call(aprobar, undefined, impacto + 0.1);
+      ScrollTrigger.create({ trigger: doc, start: "top 70%", once: true, onEnter: () => tl.play() });
+    }
+  }
+</script>

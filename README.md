@@ -126,6 +126,29 @@ se pinta quieta.
 - Los colores se leen de los tokens en tiempo de ejecución; no hay hex en el script.
 - Se detiene cuando la pestaña está oculta o el canvas sale de pantalla.
 
+## Tema oscuro
+
+El sitio va en el tema oscuro del design system: `tokens.css` ya trae
+`[data-theme="dark"]` y `Base.astro` lo elige con la prop `tema` (`"dark"` por defecto;
+`"light"` vuelve al claro). `tokens.css` no se toca. Con el tema oscuro:
+
+- La barra usa el logo claro (`rcg-softrix-horizontal-inverse.png`).
+- El pie y la franja superior usan `--fondo-barra` (casi negro, en `global.css`), porque en
+  oscuro `--surface-inverse` es blanco.
+- El fondo 3D del hero pasa su velo a negro cálido, las etiquetas a vidrio oscuro y las
+  partículas a mezcla aditiva con los tonos claros de cada familia.
+
+## Elementos de `/rc-group` en la portada
+
+- **Sello DGI** (`SelloDgi.astro`): la sección de facturación electrónica pone a la derecha
+  una factura simulada que recibe el sello «Certificado por la DGI» con `bounce.out`, onda,
+  vibración y estado «Aprobado por la DGI». El sello es rojo RCG; la factura es papel claro.
+- **Terminal en 3D** (`EquipoFiscal.astro`): la sección Equipos gira el terminal FYJ-F1 en Y
+  y lo desliza ligado al scroll (`scrub`). Sus características son **de ejemplo**.
+- **Servicios legales**: las tarjetas suben desde 50 px una a una (`stagger: 0.15`) con
+  `data-revelar-grupo="amplio"`.
+- Los contadores de `/rc-group` no se trajeron: no hay cifras reales que publicar.
+
 ## Hero de la portada: el fondo 3D de `/rc-group`
 
 La portada conserva su contenido (servicios legales, los tres productos, gobierno, equipos

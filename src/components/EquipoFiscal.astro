@@ -1,0 +1,244 @@
+---
+// Equipos de la portada, con el revelado 3D de /rc-group: el terminal gira en el
+// eje Y y se desliza de izquierda a derecha atado al scroll (scrub). La
+// ilustración es un SVG propio; una foto real entra por el slot «foto».
+//
+// ⚠ Las características son de ejemplo: confirmarlas con la ficha técnica del
+// equipo antes de publicar.
+import Button from "./Button.astro";
+
+const caracteristicas = [
+  "Listo para la facturación electrónica de Softrix",
+  "Impresión térmica de 58 / 80 mm con corte automático",
+  "Conectividad Wi-Fi, 4G y Bluetooth",
+  "Batería para toda la jornada y pantalla táctil",
+];
+---
+
+<section id="equipos" class="seccion equipo" aria-labelledby="equipo-titulo" data-equipo>
+  <div class="contenedor equipo__rejilla">
+    <div class="equipo__escena">
+      <div class="equipo__dispositivo" data-equipo-dispositivo>
+        {
+          Astro.slots.has("foto") ? (
+            <slot name="foto" />
+          ) : (
+            <svg class="equipo__svg" viewBox="0 0 320 440" role="img" aria-label="Terminal de facturación FYJ-F1">
+              <defs>
+                <linearGradient id="eq-cuerpo" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#3a2e2e" />
+                  <stop offset="1" stop-color="#140f0f" />
+                </linearGradient>
+                <linearGradient id="eq-brillo" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#fff" stop-opacity="0.14" />
+                  <stop offset="1" stop-color="#fff" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <path d="M104 22 l8 8 8-8 8 8 8-8 8 8 8-8 8 8 8-8 8 8 8-8 8 8 8-8 8 8 8-8 8 8 v96 h-112 z" fill="#fff" stroke="#ddd6d6" />
+              <rect x="118" y="48" width="56" height="6" rx="3" fill="#1a1414" />
+              <rect x="118" y="62" width="82" height="4" rx="2" fill="#ddd6d6" />
+              <rect x="118" y="72" width="70" height="4" rx="2" fill="#ddd6d6" />
+              <rect x="118" y="82" width="84" height="4" rx="2" fill="#ddd6d6" />
+              <rect x="118" y="96" width="40" height="5" rx="2" fill="#e5231a" />
+              <rect x="56" y="118" width="208" height="306" rx="30" fill="url(#eq-cuerpo)" />
+              <rect x="56" y="118" width="208" height="306" rx="30" fill="url(#eq-brillo)" />
+              <rect x="56.5" y="118.5" width="207" height="305" rx="29.5" fill="none" stroke="#4a3c3c" />
+              <rect x="100" y="132" width="120" height="7" rx="3.5" fill="#0a0707" />
+              <rect x="80" y="154" width="160" height="126" rx="14" fill="#fff" />
+              <rect x="94" y="170" width="64" height="9" rx="4" fill="#1a1414" />
+              <rect x="94" y="188" width="118" height="6" rx="3" fill="#ddd6d6" />
+              <rect x="94" y="200" width="96" height="6" rx="3" fill="#ddd6d6" />
+              <rect x="94" y="212" width="110" height="6" rx="3" fill="#ddd6d6" />
+              <rect x="94" y="236" width="132" height="28" rx="8" fill="#e5231a" />
+              <text x="160" y="255" text-anchor="middle" font-family="Exo 2, sans-serif" font-size="13" font-weight="700" fill="#fff">TOTAL B/. 134.18</text>
+              <g fill="#2a2020" stroke="#3f3232">
+                <rect x="84" y="300" width="44" height="26" rx="7" /><rect x="138" y="300" width="44" height="26" rx="7" /><rect x="192" y="300" width="44" height="26" rx="7" />
+                <rect x="84" y="334" width="44" height="26" rx="7" /><rect x="138" y="334" width="44" height="26" rx="7" /><rect x="192" y="334" width="44" height="26" rx="7" />
+                <rect x="84" y="368" width="44" height="26" rx="7" /><rect x="138" y="368" width="44" height="26" rx="7" />
+              </g>
+              <rect x="192" y="368" width="44" height="26" rx="7" fill="#e5231a" />
+              <text x="214" y="386" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="#fff">OK</text>
+              <text x="160" y="412" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" letter-spacing="3" fill="#8a7c7c">FYJ-F1</text>
+            </svg>
+          )
+        }
+        <span class="equipo__chip">Facturación electrónica</span>
+      </div>
+      <div class="equipo__sombra" aria-hidden="true"></div>
+    </div>
+
+    <div class="equipo__texto" data-revelar>
+      <div class="eyebrow">Equipos</div>
+      <h2 id="equipo-titulo" class="titulo-seccion">Terminal FYJ-F1: factura, imprime y cumple en un solo equipo</h2>
+      <p class="texto-apoyo">
+        Impresoras, lectores y terminales de punto de venta probados con Softrix Facturación: emite el
+        comprobante, lo imprime en el momento y lo deja listo para la DGI.
+      </p>
+      <ul class="equipo__lista">
+        {
+          caracteristicas.map((c) => (
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4L19 7" /></svg>
+              {c}
+            </li>
+          ))
+        }
+      </ul>
+      <div class="equipo__acciones">
+        <Button variant="primary" arrow href="#demo" data-interes="Equipos">Cotizar equipo</Button>
+        <Button variant="ghost" href="/softrix/facturacion">Ver Softrix Facturación</Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .equipo {
+    overflow: clip;
+  }
+  .equipo__rejilla {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: var(--space-12);
+    align-items: center;
+  }
+  .equipo__escena {
+    position: relative;
+    padding: var(--space-4) 0 var(--space-12);
+    perspective: 1400px;
+  }
+  /* Halo rojo detrás del equipo: lo separa del fondo oscuro. */
+  .equipo__escena::before {
+    content: "";
+    position: absolute;
+    inset: 10% 5% 15%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--brand) 22%, transparent), transparent);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+  .equipo__dispositivo {
+    position: relative;
+    width: min(100%, 340px);
+    margin-inline: auto;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .equipo__svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
+  }
+  .equipo__dispositivo :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-xl);
+  }
+  .equipo__chip {
+    position: absolute;
+    right: -12px;
+    top: 36%;
+    padding: 8px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    background: var(--surface-100);
+    color: var(--brand-text);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    box-shadow: var(--shadow-md);
+  }
+  .equipo__sombra {
+    position: absolute;
+    left: 50%;
+    bottom: var(--space-4);
+    width: 56%;
+    height: 22px;
+    translate: -50% 0;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent);
+  }
+  .equipo__texto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: var(--measure);
+  }
+  .equipo__lista {
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .equipo__lista li {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    color: var(--ink);
+  }
+  .equipo__lista svg {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    padding: 3px;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand-text);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .equipo__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  @media (max-width: 959.98px) {
+    .equipo__rejilla {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .equipo__dispositivo {
+      width: min(80%, 300px);
+    }
+    .equipo__chip {
+      right: -4px;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const seccion = document.querySelector<HTMLElement>("[data-equipo]");
+  const dispositivo = seccion?.querySelector<HTMLElement>("[data-equipo-dispositivo]");
+  if (seccion && dispositivo) {
+    gsap.matchMedia().add(
+      {
+        ancho: "(min-width: 960px) and (prefers-reduced-motion: no-preference)",
+        angosto: "(max-width: 959.98px) and (prefers-reduced-motion: no-preference)",
+      },
+      (ctx) => {
+        // Atado al scroll: gira en Y y entra desde la izquierda mientras la sección sube.
+        const desplazamiento = ctx.conditions?.ancho ? -160 : -60;
+        gsap.fromTo(
+          dispositivo,
+          { rotationY: -32, x: desplazamiento, opacity: 0.35 },
+          {
+            rotationY: 0,
+            x: 0,
+            opacity: 1,
+            ease: "none",
+            scrollTrigger: { trigger: seccion, start: "top 85%", end: "center 55%", scrub: true },
+          },
+        );
+      },
+    );
+  }
+</script>
