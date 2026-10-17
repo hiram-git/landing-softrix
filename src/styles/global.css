@@ -47,6 +47,24 @@ html {
   --borde-barra: var(--border);
 }
 
+/* Secciones alternas: cada <section> elige su tema con data-theme (tokens.css lo
+   resuelve en ese elemento). La clara pinta su fondo y sus controles nativos en
+   claro; la oscura queda transparente para que se vea el fondo de puntos. Barra,
+   franja superior y pie siguen el tema de la página (oscuro). */
+section[data-theme="light"] {
+  background: var(--surface-000);
+  color: var(--ink);
+  color-scheme: light;
+}
+section[data-theme="dark"] {
+  background: transparent;
+  color: var(--ink);
+  color-scheme: dark;
+}
+section[data-theme="light"].seccion--cta {
+  padding-top: var(--space-16);
+}
+
 /* El fondo interactivo (canvas fijo, z-index -1) se ve donde nadie pinta
    fondo: el cuerpo y el hero claro quedan transparentes; las secciones
    alternas (surface-100), las tarjetas y el pie siguen opacos. */

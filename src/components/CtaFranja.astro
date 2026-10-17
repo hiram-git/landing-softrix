@@ -6,11 +6,13 @@ import Button from "./Button.astro";
 interface Props {
   title: string;
   apoyo?: string;
+  /** La sección clara u oscura dentro de la alternancia de la página. */
+  tema?: "light" | "dark";
 }
-const { title, apoyo = "Demo guiada de 30 minutos. Sin tarjeta." } = Astro.props;
+const { title, apoyo = "Demo guiada de 30 minutos. Sin tarjeta.", tema } = Astro.props;
 ---
 
-<section class="seccion--cta" aria-label="Solicitar demo">
+<section class="seccion--cta" data-theme={tema} aria-label="Solicitar demo">
   <div class="cta" data-revelar>
     <div class="cta__texto">
       <h2 class="cta__titulo">{title}</h2>

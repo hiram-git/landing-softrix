@@ -34,7 +34,7 @@ import Base from "@/layouts/Base.astro";
   </Hero>
 
   <!-- Productos RCG Softrix -->
-  <section id="softrix" class="seccion seccion--alterna" aria-labelledby="softrix-titulo">
+  <section id="softrix" class="seccion" data-theme="light" aria-labelledby="softrix-titulo">
     <div class="contenedor pila">
       <div class="encabezado" data-revelar>
         <div class="eyebrow">RCG Softrix</div>
@@ -83,7 +83,7 @@ import Base from "@/layouts/Base.astro";
   </section>
 
   <!-- Servicios legales y asesoría fiscal -->
-  <section id="legal" class="seccion" aria-labelledby="legal-titulo">
+  <section id="legal" class="seccion" data-theme="dark" aria-labelledby="legal-titulo">
     <div class="contenedor legal">
       <div class="legal__texto" data-revelar>
         <div class="eyebrow">Servicios legales y asesoría fiscal</div>
@@ -120,13 +120,13 @@ import Base from "@/layouts/Base.astro";
   </section>
 
   <!-- Facturación electrónica: beneficios + sello DGI (de /rc-group) -->
-  <SelloDgi />
+  <SelloDgi tema="light" />
 
   <!-- Equipos: terminal con revelado 3D (de /rc-group) -->
-  <EquipoFiscal />
+  <EquipoFiscal tema="dark" />
 
   <!-- Sector gobierno -->
-  <section class="seccion seccion--alterna" aria-labelledby="gobierno-titulo">
+  <section class="seccion" data-theme="light" aria-labelledby="gobierno-titulo">
     <div id="gobierno" class="contenedor panel panel--marca panel--fila" data-revelar>
       <div class="panel__cuerpo">
         <div class="eyebrow panel__eyebrow-marca">Sector gobierno</div>
@@ -145,7 +145,7 @@ import Base from "@/layouts/Base.astro";
   </section>
 
   <!-- Distribuidores (screens/inicio-movil.html) -->
-  <section id="distribuidores" class="seccion distribuidores" aria-labelledby="dist-titulo">
+  <section id="distribuidores" class="seccion distribuidores" data-theme="dark" aria-labelledby="dist-titulo">
     <div class="contenedor distribuidores__fila" data-revelar-grupo>
       <div class="encabezado" data-revelar>
         <div class="eyebrow distribuidores__eyebrow">Programa de distribuidores</div>
@@ -161,7 +161,7 @@ import Base from "@/layouts/Base.astro";
   </section>
 
   <!-- Demo / contacto -->
-  <section id="demo" class="seccion--demo seccion--alterna" aria-labelledby="demo-titulo">
+  <section id="demo" class="seccion--demo" data-theme="light" aria-labelledby="demo-titulo">
     <div id="contacto" class="contenedor demo-fila" data-revelar-grupo>
       <div class="demo-fila__texto">
         <div class="eyebrow">Contáctenos</div>

@@ -8,6 +8,12 @@
 // El documento es papel: lleva su propia paleta clara aunque la página sea oscura.
 import FeatureCard from "./FeatureCard.astro";
 
+// `tema`: la sección clara u oscura dentro de la alternancia de la página.
+interface Props {
+  tema?: "light" | "dark";
+}
+const { tema = "light" } = Astro.props;
+
 const beneficios = [
   { badge: "Ahorrativo", titulo: "Menos papel y archivo", texto: "Sin impresión, tintas ni almacenamiento físico de facturas." },
   { badge: "Innovador", titulo: "Integrado a tu sistema", texto: "Emisión y recepción automáticas desde Softrix Facturación." },
@@ -22,7 +28,7 @@ const qr = [
 ];
 ---
 
-<section class="seccion seccion--alterna sello" aria-labelledby="fe-titulo" data-sello-dgi>
+<section class="seccion sello" data-theme={tema} aria-labelledby="fe-titulo" data-sello-dgi>
   <div class="contenedor sello__rejilla">
     <div class="sello__texto">
       <div class="encabezado" data-revelar>
@@ -138,6 +144,12 @@ const qr = [
       0 40px 80px -30px rgba(0, 0, 0, 0.8),
       0 0 0 1px rgba(255, 255, 255, 0.06);
     font-family: var(--font-sans);
+  }
+  /* Sobre una sección clara el papel no necesita una sombra tan honda. */
+  :global([data-theme="light"]) .doc {
+    box-shadow:
+      0 30px 60px -30px rgba(26, 20, 20, 0.35),
+      0 0 0 1px var(--border);
   }
   .doc__barra {
     display: flex;

@@ -7,6 +7,12 @@
 // equipo antes de publicar.
 import Button from "./Button.astro";
 
+// `tema`: la sección clara u oscura dentro de la alternancia de la página.
+interface Props {
+  tema?: "light" | "dark";
+}
+const { tema = "dark" } = Astro.props;
+
 const caracteristicas = [
   "Listo para la facturación electrónica de Softrix",
   "Impresión térmica de 58 / 80 mm con corte automático",
@@ -15,7 +21,7 @@ const caracteristicas = [
 ];
 ---
 
-<section id="equipos" class="seccion equipo" aria-labelledby="equipo-titulo" data-equipo>
+<section id="equipos" class="seccion equipo" data-theme={tema} aria-labelledby="equipo-titulo" data-equipo>
   <div class="contenedor equipo__rejilla">
     <div class="equipo__escena">
       <div class="equipo__dispositivo" data-equipo-dispositivo>
