@@ -138,6 +138,13 @@ El sitio va en el tema oscuro del design system: `tokens.css` ya trae
 - El fondo 3D del hero pasa su velo a negro cálido, las etiquetas a vidrio oscuro y las
   partículas a mezcla aditiva con los tonos claros de cada familia.
 
+**Secciones alternas.** Debajo del hero (oscuro), las secciones se alternan clara y oscura
+en la portada y en las páginas de producto. Cada `<section>` lleva su `data-theme`
+(`tokens.css` resuelve los colores en ese elemento): la clara pinta su fondo blanco y sus
+controles nativos en claro, y la oscura queda transparente para que se vea el fondo de
+puntos. `SelloDgi`, `EquipoFiscal` y `CtaFranja` reciben la prop `tema`. La franja
+superior, la barra y el pie siguen siempre en oscuro.
+
 ## Elementos de `/rc-group` en la portada
 
 - **Sello DGI** (`SelloDgi.astro`): la sección de facturación electrónica pone a la derecha
