@@ -12,7 +12,9 @@
       "!**/*.astro",
       "!src/styles/tokens.css",
       "!src/styles/components.css",
-      "!docs/handoff"
+      "!docs/handoff",
+      "!.claude",
+      "!.impeccable"
     ]
   },
   "formatter": {

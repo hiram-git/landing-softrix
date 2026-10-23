@@ -1,12 +1,18 @@
-// Servidor del sitio (Elysia + Bun): la API de la solicitud de demo (stub que
-// valida y registra en consola; el destino real, correo o CRM, está pendiente)
-// y, en producción, el sitio estático que deja `astro build` en dist/. Así un
-// solo proceso atiende la página y /api (en desarrollo, Vite sirve el sitio y
-// reenvía /api aquí).
+// Servidor del sitio (Elysia + Bun): la API de la solicitud de demo y, en
+// producción, el sitio estático que deja `astro build` en dist/. Así un solo
+// proceso atiende la página y /api (en desarrollo, Vite sirve el sitio y reenvía
+// /api aquí).
+//
+// La solicitud de demo todavía no tiene destino (correo o CRM: pendiente). Para
+// no perder ninguna mientras tanto, cada una se añade como una línea JSON a
+// SOLICITUDES_FILE (por defecto data/solicitudes-demo.jsonl) y además queda en
+// el log.
 import { existsSync } from "node:fs";
-import { join, normalize, resolve } from "node:path";
+import { appendFile, mkdir } from "node:fs/promises";
+import { dirname, join, normalize, resolve } from "node:path";
 import { Elysia, t } from "elysia";
 import { intereses } from "../src/data/contacto";
+import { contactoValido, LIMITES } from "../src/data/demo";
 
 const PUERTO = Number(process.env.PORT ?? process.env.API_PORT ?? 3001);
 // Por defecto 0.0.0.0 (IPv4). HOST=:: escucha también en IPv6, donde lo haya.
@@ -14,6 +20,53 @@ const HOST = process.env.HOST ?? "0.0.0.0";
 // Carpeta del sitio estático; sin ella (o sin build) solo se sirve la API.
 const SITIO = resolve(process.env.SITE_DIR ?? join(import.meta.dir, "..", "dist"));
 const HAY_SITIO = existsSync(join(SITIO, "index.html"));
+const SOLICITUDES = resolve(
+  process.env.SOLICITUDES_FILE ?? join(import.meta.dir, "..", "data", "solicitudes-demo.jsonl"),
+);
+
+// Guarda la solicitud sin bloquear la respuesta. Si el disco falla, la solicitud
+// sigue en el log del servicio (journalctl): nunca se pierde en silencio.
+async function guardarSolicitud(solicitud: Record<string, string>) {
+  try {
+    await mkdir(dirname(SOLICITUDES), { recursive: true });
+    await appendFile(SOLICITUDES, `${JSON.stringify(solicitud)}\n`);
+  } catch (error) {
+    console.error("[demo] no se pudo guardar la solicitud en", SOLICITUDES, error);
+  }
+}
+
+// Freno a envíos en ráfaga: hasta 5 solicitudes por IP cada 10 minutos.
+const VENTANA_MS = 10 * 60 * 1000;
+const MAXIMO_POR_VENTANA = 5;
+const envios = new Map<string, number[]>();
+function demasiadas(ip: string) {
+  const ahora = Date.now();
+  const recientes = (envios.get(ip) ?? []).filter((t) => ahora - t < VENTANA_MS);
+  recientes.push(ahora);
+  envios.set(ip, recientes);
+  if (envios.size > 5000) {
+    for (const [clave, marcas] of envios) {
+      if (marcas.every((t) => ahora - t >= VENTANA_MS)) envios.delete(clave);
+    }
+  }
+  return recientes.length > MAXIMO_POR_VENTANA;
+}
+
+// La IP real llega del proxy (nginx pone X-Real-IP y X-Forwarded-For).
+function ipDe(
+  request: Request,
+  server: { requestIP(r: Request): { address: string } | null } | null,
+) {
+  return (
+    request.headers.get("x-real-ip") ??
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    server?.requestIP(request)?.address ??
+    "desconocida"
+  );
+}
+
+const quiereJson = (request: Request) =>
+  Boolean(request.headers.get("accept")?.includes("application/json"));
 
 // Traduce una ruta del navegador al archivo de dist/ (build.format: "file"):
 // «/» → index.html, «/softrix/rrhh» → softrix/rrhh.html, «/_astro/x.css» → tal cual.
@@ -36,24 +89,53 @@ function archivoDe(ruta: string) {
 const texto = (max: number) => t.String({ minLength: 1, maxLength: max, pattern: "\\S" });
 
 export const app = new Elysia()
+  // Sin JavaScript el formulario llega como envío normal: ante un dato inválido
+  // se vuelve a la página en lugar de mostrar un JSON de error.
+  .onError(({ code, request, redirect }) => {
+    if (code === "VALIDATION" && !quiereJson(request)) return redirect("/?demo=error#demo", 303);
+  })
   .post(
     "/api/demo",
-    ({ body, request, set, redirect }) => {
-      // Stub: aquí irá el aviso a ventas. Por ahora solo queda en el log.
-      console.info("[demo] nueva solicitud", { ...body, recibida: new Date().toISOString() });
+    async ({ body, request, server, set, redirect }) => {
+      const json = quiereJson(request);
+      const listo = () => {
+        if (!json) return redirect("/?demo=enviada#demo", 303);
+        set.status = 201;
+        return { ok: true };
+      };
 
-      // Sin JavaScript el formulario llega como envío normal: se vuelve a la página.
-      if (!request.headers.get("accept")?.includes("application/json")) {
-        return redirect("/?demo=enviada#demo", 303);
+      // Trampa para bots: si llenó el campo oculto, se responde como si nada.
+      if (body.sitio_web?.trim()) return listo();
+
+      if (demasiadas(ipDe(request, server))) {
+        set.status = 429;
+        return json
+          ? { error: "Demasiadas solicitudes. Inténtalo en unos minutos." }
+          : redirect("/?demo=error#demo", 303);
       }
-      set.status = 201;
-      return { ok: true };
+      if (!contactoValido(body.contacto)) {
+        set.status = 422;
+        return json
+          ? { error: "El contacto debe ser un WhatsApp o un correo." }
+          : redirect("/?demo=error#demo", 303);
+      }
+
+      const solicitud = {
+        recibida: new Date().toISOString(),
+        nombre: body.nombre.trim(),
+        contacto: body.contacto.trim(),
+        interes: body.interes,
+      };
+      console.info("[demo] nueva solicitud", solicitud);
+      await guardarSolicitud(solicitud);
+      return listo();
     },
     {
       body: t.Object({
-        nombre: texto(120),
-        contacto: texto(160),
+        nombre: texto(LIMITES.nombre),
+        contacto: texto(LIMITES.contacto),
         interes: t.Union(intereses.map((i) => t.Literal(i))),
+        sitio_web: t.Optional(t.String({ maxLength: 500 })),
       }),
     },
   )

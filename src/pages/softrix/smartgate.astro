@@ -39,10 +39,13 @@ const pasos = {
   >
     <img
       class="captura captura--sobre-marca sx-enter sx-enter--5"
-      src="/screenshots/smartgate-tablero.png"
+      src="/screenshots/smartgate-tablero-1280.webp"
+      srcset="/screenshots/smartgate-tablero-640.webp 640w, /screenshots/smartgate-tablero-1280.webp 1280w"
+      sizes="(max-width: 959.98px) calc(100vw - 32px), 600px"
       alt="Tablero de SmartGate Control: personas esperadas, autorizadas y cola de trabajo"
-      width="1366"
-      height="824"
+      width="1280"
+      height="800"
+      fetchpriority="high"
     />
   </Hero>
 
@@ -77,11 +80,14 @@ const pasos = {
       <figure class="pantalla">
         <img
           class="captura pantalla__captura"
-          src="/screenshots/smartgate-accesos.png"
+          src="/screenshots/smartgate-accesos-1280.webp"
+          srcset="/screenshots/smartgate-accesos-640.webp 640w, /screenshots/smartgate-accesos-1280.webp 1280w"
+          sizes="(max-width: 959.98px) calc(100vw - 32px), 600px"
           alt="Departamento de Accesos de SmartGate Control: solicitudes por decidir con verificación de antecedentes"
-          width="1366"
-          height="1431"
+          width="1280"
+          height="880"
           loading="lazy"
+          decoding="async"
         />
         <figcaption>
           <h3 class="pantalla__titulo">Departamento de Accesos</h3>
@@ -94,11 +100,14 @@ const pasos = {
       <figure class="pantalla">
         <img
           class="captura pantalla__captura"
-          src="/screenshots/smartgate-visitante.png"
+          src="/screenshots/smartgate-visitante-1280.webp"
+          srcset="/screenshots/smartgate-visitante-640.webp 640w, /screenshots/smartgate-visitante-1280.webp 828w"
+          sizes="(max-width: 959.98px) calc(100vw - 32px), 600px"
           alt="Formulario de visitante de SmartGate Control en el teléfono: a quién visita y quién es usted"
           width="828"
-          height="2288"
+          height="569"
           loading="lazy"
+          decoding="async"
         />
         <figcaption>
           <h3 class="pantalla__titulo">Registro del visitante desde su teléfono</h3>
@@ -110,7 +119,7 @@ const pasos = {
     </div>
   </section>
 
-  <CtaFranja tema="light" title="Mira SmartGate Control con el flujo de visitas de tu entidad" />
+  <CtaFranja interes="SmartGate Control" tema="light" title="Mira SmartGate Control con el flujo de visitas de tu entidad" />
 </Base>
 
 <style>

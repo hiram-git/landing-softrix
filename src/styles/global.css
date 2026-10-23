@@ -19,10 +19,12 @@ html {
 }
 
 /* GSAP revela estos bloques al entrar en pantalla; mientras carga, el <head>
-   los oculta con .anima para que no parpadeen (ver Base.astro). */
+   los oculta con .anima para que no parpadeen (ver Base.astro). Con opacidad y no
+   con visibility: un bloque transparente sigue recibiendo el foco del teclado,
+   y al enfocarlo animaciones.ts lo muestra de inmediato. */
 .anima [data-revelar],
 .anima [data-revelar-grupo] > * {
-  visibility: hidden;
+  opacity: 0;
 }
 
 /* Barra fija: por encima del contenido, y con su sombra shadow-md solo
@@ -61,7 +63,8 @@ section[data-theme="dark"] {
   color: var(--ink);
   color-scheme: dark;
 }
-section[data-theme="light"].seccion--cta {
+/* La franja de demo no trae padding superior: con tema propio lo necesita. */
+section[data-theme].seccion--cta {
   padding-top: var(--space-16);
 }
 
@@ -180,6 +183,39 @@ code {
 
 [hidden] {
   display: none !important;
+}
+
+/* Enlace para saltar al contenido: invisible hasta que recibe el foco. */
+.saltar {
+  position: absolute;
+  top: calc(-1 * var(--space-16));
+  left: var(--space-4);
+  z-index: 100;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--brand);
+  color: var(--on-brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+.saltar:focus {
+  top: var(--space-4);
+}
+main:focus {
+  outline: none;
+}
+
+/* Objetivos táctiles de 44 px en pantallas táctiles (los del design system miden 40). */
+@media (pointer: coarse) {
+  .sx-btn:not(.sx-btn--lg),
+  .pastilla {
+    min-height: 44px;
+  }
+}
+
+/* El pie de la tarjeta de producto se parte en pantallas de 320 px. */
+.sx-card__footer {
+  flex-wrap: wrap;
 }
 
 .sr-only {

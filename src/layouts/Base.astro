@@ -29,7 +29,7 @@ const {
 } = Astro.props;
 const canonica = new URL(Astro.url.pathname, Astro.site);
 const logo =
-  tema === "dark" ? "/logos/rcg-softrix-horizontal-inverse.png" : "/logos/rcg-softrix-horizontal.png";
+  tema === "dark" ? "/logos/rcg-softrix-horizontal-inverse.webp" : "/logos/rcg-softrix-horizontal.webp";
 ---
 
 <!doctype html>
@@ -67,6 +67,7 @@ const logo =
     </script>
   </head>
   <body class="sx-root">
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
     <FondoInteractivo modo="pagina" tono="claro" />
     {topBar && <TopBar />}
     <Navbar
@@ -77,7 +78,7 @@ const logo =
       sticky
     />
     <MobileMenu logoSrc={logo} actual={Astro.url.pathname} />
-    <main>
+    <main id="contenido" tabindex="-1">
       <slot />
     </main>
     <Footer variante={footer} />

@@ -1,5 +1,6 @@
 ---
 import { contacto, intereses } from "@/data/contacto";
+import { LIMITES } from "@/data/demo";
 import Badge from "./Badge.astro";
 import Button from "./Button.astro";
 import Icon from "./Icon.astro";
@@ -12,22 +13,31 @@ import Input from "./Input.astro";
 
 <div class="demo" data-demo>
   <form class="demo__form" action="/api/demo" method="post" novalidate data-demo-form>
-    <Input name="nombre" label="Nombre" required autocomplete="name" />
+    <Input name="nombre" label="Nombre" required autocomplete="name" maxlength={LIMITES.nombre} />
     <Input
       name="contacto"
       label="WhatsApp o correo"
       required
+      maxlength={LIMITES.contacto}
       hint="Te respondemos por el medio que pongas aquí"
     />
     <div class="sx-field">
       <label class="sx-field__label" for="interes">¿Qué te interesa?</label>
-      <select id="interes" name="interes" class="sx-select">
+      <select id="interes" name="interes" class="sx-select" required>
+        <option value="" selected>Elige una opción</option>
         {intereses.map((i) => <option>{i}</option>)}
       </select>
     </div>
+    <!-- Trampa para bots: las personas no la ven ni la alcanzan con el teclado. -->
+    <div class="demo__trampa" aria-hidden="true">
+      <label>Sitio web <input type="text" name="sitio_web" tabindex="-1" autocomplete="off" /></label>
+    </div>
     <div class="demo__error" role="alert" hidden data-demo-error>
       <Icon name="alert" />
-      <span data-demo-error-texto>No pudimos enviar tu solicitud. Inténtalo de nuevo o escríbenos por WhatsApp.</span>
+      <span>
+        <span data-demo-error-texto>No pudimos enviar tu solicitud. Inténtalo de nuevo.</span>
+        <a href={contacto.whatsapp}>escríbenos por WhatsApp</a>.
+      </span>
     </div>
     <div class="demo__pie">
       <div class="demo__nota">Solo usamos tus datos para contactarte.</div>
@@ -65,6 +75,18 @@ import Input from "./Input.astro";
     gap: var(--space-3);
     align-items: center;
     justify-content: space-between;
+  }
+  .demo__trampa {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .demo__error a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
   }
   .demo__nota {
     font-size: 12px;
@@ -135,10 +157,25 @@ import Input from "./Input.astro";
 </style>
 
 <script>
+  import { intereses } from "@/data/contacto";
+  import { contactoValido } from "@/data/demo";
+
   const MENSAJES = {
     nombre: "Escribe tu nombre",
     contacto: "Escribe un WhatsApp o un correo",
+    interes: "Elige qué te interesa",
   } as const;
+  const FORMATO_CONTACTO = "Escribe un WhatsApp de al menos 7 dígitos o un correo válido";
+  const ESPERA_MAXIMA = 15000;
+
+  // Mensaje del aviso según lo que falló; el enlace a WhatsApp va siempre al lado.
+  function mensajeDeFallo(estado: number | "red" | "tiempo"): string {
+    if (estado === "red") return "Parece que no tienes conexión. Revisa tu internet e inténtalo de nuevo, o";
+    if (estado === "tiempo") return "El envío tardó demasiado. Inténtalo de nuevo en un momento, o";
+    if (estado === 422) return "Revisa los datos del formulario e inténtalo de nuevo, o";
+    if (estado === 429) return "Recibimos varias solicitudes seguidas desde tu conexión. Espera unos minutos, o";
+    return "No pudimos enviar tu solicitud. Inténtalo de nuevo en un momento, o";
+  }
 
   const raiz = document.querySelector<HTMLElement>("[data-demo]");
   const form = raiz?.querySelector<HTMLFormElement>("[data-demo-form]");
@@ -147,7 +184,7 @@ import Input from "./Input.astro";
   const enviar = raiz?.querySelector<HTMLButtonElement>("[data-demo-enviar]");
 
   // Mismo markup que Input.astro con `error`: borde danger, icono y texto.
-  function marcar(campo: HTMLInputElement, mensaje: string | null) {
+  function marcar(campo: HTMLInputElement | HTMLSelectElement, mensaje: string | null) {
     const caja = campo.closest(".sx-field");
     if (!caja) return;
     caja.querySelector(".sx-field__error")?.remove();
@@ -175,18 +212,27 @@ import Input from "./Input.astro";
     campo.setAttribute("aria-describedby", error.id);
   }
 
+  const textoAviso = aviso?.querySelector<HTMLElement>("[data-demo-error-texto]");
+
   if (form && exito && aviso && enviar) {
+    const select = form.elements.namedItem("interes") as HTMLSelectElement;
+    // Quien llega desde una página de producto trae su interés en ?interes=.
+    const pedido = new URLSearchParams(location.search).get("interes");
+    if (pedido && (intereses as readonly string[]).includes(pedido)) select.value = pedido;
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       aviso.hidden = true;
       const datos = Object.fromEntries(new FormData(form)) as Record<string, string>;
 
-      let primero: HTMLInputElement | null = null;
+      let primero: HTMLInputElement | HTMLSelectElement | null = null;
       for (const nombre of Object.keys(MENSAJES) as (keyof typeof MENSAJES)[]) {
-        const campo = form.elements.namedItem(nombre) as HTMLInputElement;
-        const vacio = !String(datos[nombre] ?? "").trim();
-        marcar(campo, vacio ? MENSAJES[nombre] : null);
-        if (vacio && !primero) primero = campo;
+        const campo = form.elements.namedItem(nombre) as HTMLInputElement | HTMLSelectElement;
+        const valor = String(datos[nombre] ?? "").trim();
+        let mensaje: string | null = valor ? null : MENSAJES[nombre];
+        if (!mensaje && nombre === "contacto" && !contactoValido(valor)) mensaje = FORMATO_CONTACTO;
+        marcar(campo, mensaje);
+        if (mensaje && !primero) primero = campo;
       }
       if (primero) {
         primero.focus();
@@ -195,24 +241,45 @@ import Input from "./Input.astro";
 
       enviar.disabled = true;
       enviar.setAttribute("aria-busy", "true");
+      // Sin respuesta en 15 s se corta el envío: el botón no queda bloqueado para siempre.
+      const corte = new AbortController();
+      const reloj = window.setTimeout(() => corte.abort(), ESPERA_MAXIMA);
       try {
         const r = await fetch(form.action, {
           method: "POST",
           headers: { "content-type": "application/json", accept: "application/json" },
           body: JSON.stringify(datos),
+          signal: corte.signal,
         });
-        if (!r.ok) throw new Error(String(r.status));
+        if (!r.ok) throw r.status;
         form.hidden = true;
         exito.hidden = false;
         exito.focus();
         document.dispatchEvent(new CustomEvent("demo:enviada", { detail: exito }));
-      } catch {
+      } catch (fallo) {
+        const estado =
+          typeof fallo === "number"
+            ? fallo
+            : corte.signal.aborted
+              ? "tiempo"
+              : navigator.onLine === false || fallo instanceof TypeError
+                ? "red"
+                : 0;
+        if (textoAviso) textoAviso.textContent = mensajeDeFallo(estado);
         aviso.hidden = false;
       } finally {
+        window.clearTimeout(reloj);
         enviar.disabled = false;
         enviar.removeAttribute("aria-busy");
       }
     });
+
+    // El error de un campo se borra en cuanto la persona lo corrige.
+    form.addEventListener("input", (e) => {
+      const campo = e.target as HTMLInputElement;
+      if (campo.getAttribute("aria-invalid") === "true" && campo.value.trim()) marcar(campo, null);
+    });
+    select.addEventListener("change", () => select.value && marcar(select, null));
 
     raiz?.querySelector("[data-demo-otra]")?.addEventListener("click", () => {
       form.reset();
