@@ -62,6 +62,14 @@ PORT=4330 bun run start        # o: bun api/index.ts
 
 - `PORT` (o `API_PORT`): puerto de escucha. `SITE_DIR`: otra carpeta del sitio (por
   defecto `dist/` junto al repo). Sin build, responde solo `/api` y 404 en el resto.
+- **Solicitudes de demo**: mientras no haya destino (correo o CRM), cada solicitud válida
+  se añade como una línea JSON a `SOLICITUDES_FILE` (por defecto `data/solicitudes-demo.jsonl`,
+  fuera de git) y queda también en el log (`journalctl -u landing`). Si la unidad de systemd
+  usa `ProtectSystem=strict`, hay que permitir esa carpeta con `ReadWritePaths=/opt/landing/data`.
+- **Defensas del formulario**: contacto con formato (correo, o al menos 7 dígitos), límites
+  de longitud, campo trampa contra bots, hasta 5 solicitudes por IP cada 10 minutos (429) y,
+  sin JavaScript, vuelta a `/?demo=error#demo` ante un dato inválido. Las reglas viven en
+  `src/data/demo.ts` y las comparten el formulario y la API.
 - Las rutas se resuelven como las deja Astro (`build.format: "file"`): `/softrix/rrhh` →
   `dist/softrix/rrhh.html`; lo de `/_astro/` sale con caché larga y el HTML sin caché.
 

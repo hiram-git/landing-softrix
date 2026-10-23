@@ -53,10 +53,15 @@ const modulos = {
       <div class="encabezado" data-revelar>
         <div class="eyebrow">Módulos</div>
         <h2 id="modulos-titulo" class="titulo-seccion">De la ficha del colaborador al recibo de pago</h2>
-        <!-- Pendiente del handoff: validar el alcance de cada módulo antes de publicar. -->
-        <p class="texto-apoyo">
-          [CONFIRMAR CON PRODUCTO: alcance exacto de cada módulo antes de publicar.]
-        </p>
+        {
+          /* Pendiente del handoff: validar el alcance de cada módulo. El aviso se
+             ve en desarrollo y nunca llega al sitio publicado. */
+          import.meta.env.DEV && (
+            <p class="texto-apoyo">
+              [CONFIRMAR CON PRODUCTO: alcance exacto de cada módulo antes de publicar.]
+            </p>
+          )
+        }
       </div>
       <div class="rejilla rejilla--2" data-revelar-grupo>
         <FeatureCard title="Colaboradores" items={modulos.colaboradores} />
@@ -88,7 +93,7 @@ const modulos = {
     </div>
   </section>
 
-  <CtaFranja tema="light" title="Mira Softrix RRHH con una planilla parecida a la tuya" />
+  <CtaFranja interes="Softrix RRHH" tema="light" title="Mira Softrix RRHH con una planilla parecida a la tuya" />
 </Base>
 
 <style>

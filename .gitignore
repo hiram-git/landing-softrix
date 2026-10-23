@@ -5,3 +5,5 @@ dist/
 .env.*
 !.env.example
 .DS_Store
+# Solicitudes de demo guardadas por api/index.ts
+data/

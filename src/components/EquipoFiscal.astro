@@ -165,6 +165,7 @@ const caracteristicas = [
     background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent);
   }
   .equipo__texto {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
@@ -178,6 +179,8 @@ const caracteristicas = [
     list-style: none;
   }
   .equipo__lista li {
+    min-width: 0;
+    overflow-wrap: anywhere;
     display: flex;
     gap: var(--space-3);
     align-items: flex-start;

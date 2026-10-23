@@ -66,12 +66,14 @@ function anclas(animar: boolean) {
 
 // ── Revelado de secciones al entrar en pantalla ─────────────────────────
 function revelar() {
+  // Opacidad y no autoAlpha: autoAlpha pone visibility:hidden y el teclado se
+  // saltaba todo lo que estaba debajo de la primera pantalla (el formulario incluido).
   for (const el of document.querySelectorAll<HTMLElement>("[data-revelar]")) {
     gsap.fromTo(
       el,
-      { autoAlpha: 0, y: 16 },
+      { opacity: 0, y: 16 },
       {
-        autoAlpha: 1,
+        opacity: 1,
         y: 0,
         duration: 0.48,
         ease: SALIDA,
@@ -87,9 +89,9 @@ function revelar() {
     const amplio = grupo.dataset.revelarGrupo === "amplio";
     gsap.fromTo(
       grupo.children,
-      { autoAlpha: 0, y: amplio ? 50 : 16 },
+      { opacity: 0, y: amplio ? 50 : 16 },
       {
-        autoAlpha: 1,
+        opacity: 1,
         y: 0,
         duration: amplio ? 0.85 : 0.48,
         ease: amplio ? "power3.out" : SALIDA,
@@ -349,6 +351,16 @@ mm.add(
     paralaje();
   },
 );
+
+// Si el foco del teclado llega a un bloque que todavía no se reveló, se completa
+// su entrada al instante: nadie debe tabular sobre algo transparente.
+document.addEventListener("focusin", (e) => {
+  const bloque = (e.target as HTMLElement).closest?.<HTMLElement>(
+    "[data-revelar], [data-revelar-grupo] > *",
+  );
+  if (!bloque) return;
+  for (const t of gsap.getTweensOf(bloque)) t.progress(1);
+});
 
 const animar = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
 const punteroFino = window.matchMedia("(pointer: fine)").matches;
