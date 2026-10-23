@@ -259,6 +259,19 @@ CloudFront, y la fuente Sora variable de Google Fonts.
   hay entrada ni transición del panel, y el video queda en pausa en su primer fotograma.
 - El rojo RCG aparece solo en el logotipo y en el resplandor del CTA al pasar el cursor.
 
+## Imágenes optimizadas
+
+Las páginas de producto no cargan los PNG de `public/screenshots/` sino sus versiones WebP
+(`-640.webp` y `-1280.webp`, con `srcset` y `sizes`), recortadas a la misma proporción en
+que se muestran (16:10, 4:3 o 16:11, desde arriba). El logo de la barra y del pie también
+va en WebP. Tras cambiar o añadir una captura, regenerarlas con:
+
+```bash
+python3 -I scripts/optimizar-imagenes.py   # requiere Pillow
+```
+
+Los PNG originales se quedan como fuente; las propuestas (`/propuesta`) todavía los usan.
+
 ## Pendientes del handoff (no inventar)
 
 - Los módulos de Softrix RRHH llevan la nota «[CONFIRMAR CON PRODUCTO]».

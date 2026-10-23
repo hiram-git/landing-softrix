@@ -48,10 +48,13 @@ const modulos = {
   >
     <img
       class="captura captura--sobre-marca sx-enter sx-enter--5"
-      src="/screenshots/facturacion-panel.png"
+      src="/screenshots/facturacion-panel-1280.webp"
+      srcset="/screenshots/facturacion-panel-640.webp 640w, /screenshots/facturacion-panel-1280.webp 1280w"
+      sizes="(max-width: 959.98px) calc(100vw - 32px), 600px"
       alt="Panel de Softrix Facturación con ventas, stock y cuentas por cobrar"
-      width="2160"
-      height="3065"
+      width="1280"
+      height="800"
+      fetchpriority="high"
     />
   </Hero>
 
@@ -60,11 +63,14 @@ const modulos = {
     <div class="contenedor fila" data-revelar-grupo>
       <img
         class="captura fe__captura"
-        src="/screenshots/facturacion-factura.png"
+        src="/screenshots/facturacion-factura-1280.webp"
+        srcset="/screenshots/facturacion-factura-640.webp 640w, /screenshots/facturacion-factura-1280.webp 1280w"
+        sizes="(max-width: 959.98px) calc(100vw - 32px), 600px"
         alt="Nueva factura de venta en Softrix Facturación con desglose de ITBMS"
-        width="2160"
-        height="1509"
+        width="1280"
+        height="960"
         loading="lazy"
+        decoding="async"
       />
       <div class="fe__texto">
         <div class="eyebrow">Facturación electrónica DGI</div>
