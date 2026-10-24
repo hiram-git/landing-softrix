@@ -53,6 +53,23 @@ for nombre, proporcion in PROPORCIONES.items():
             alto_final = round(ancho_final / proporcion)
             guardar(base.resize((ancho_final, alto_final), Image.LANCZOS), CAPTURAS / f"{nombre}-{ancho}.webp")
 
+# Recortes de la portada: un detalle de cada captura a un tamaño en que se lee, no la
+# pantalla entera reducida. Caja (izquierda, arriba, derecha, abajo) en px del PNG original,
+# siempre en 16:10, que es la proporción del marco de las tarjetas de producto.
+RECORTES = {
+    "facturacion-panel": (418, 118, 1554, 828),  # saludo y los indicadores del día y del mes
+    "rrhh-panel": (390, 80, 1130, 543),  # planilla en curso y sus indicadores
+    "smartgate-accesos": (112, 100, 872, 575),  # Departamento de Accesos: Autorizar / Denegar
+}
+
+for nombre, caja in RECORTES.items():
+    with Image.open(CAPTURAS / f"{nombre}.png") as original:
+        detalle = original.convert("RGB").crop(caja)
+        for ancho in ANCHOS:
+            ancho_final = min(ancho, detalle.size[0])
+            alto_final = round(ancho_final * 10 / 16)
+            guardar(detalle.resize((ancho_final, alto_final), Image.LANCZOS), CAPTURAS / f"{nombre}-portada-{ancho}.webp")
+
 # Logo de la barra y del pie: se pinta a 28–34 px de alto; 480 px de ancho cubre 2x.
 for nombre in ("rcg-softrix-horizontal-inverse", "rcg-softrix-horizontal"):
     with Image.open(LOGOS / f"{nombre}.png") as original:

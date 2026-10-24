@@ -11,6 +11,8 @@ export interface Producto {
   cta: string;
   icon: IconName;
   featured?: boolean;
+  /** Detalle legible de una pantalla real (`*-portada-*.webp`), con el ancho real del archivo grande. */
+  captura: { base: string; anchoGrande: number; alt: string };
   badge?: string;
   badgeTone?: BadgeTone;
 }
@@ -31,6 +33,11 @@ export const productos: Producto[] = [
       "Caja con apertura, cierre y supervisor",
       "Órdenes de servicio y taller",
     ],
+    captura: {
+      base: "/screenshots/facturacion-panel-portada",
+      anchoGrande: 1136,
+      alt: "Panel de Softrix Facturación con las ventas del día y del mes y las cuentas por cobrar",
+    },
     badge: "Nube o local",
     badgeTone: "info",
     cta: "Ver Facturación",
@@ -48,6 +55,11 @@ export const productos: Producto[] = [
       "Portal del colaborador",
       "Multi-empresa",
     ],
+    captura: {
+      base: "/screenshots/rrhh-panel-portada",
+      anchoGrande: 740,
+      alt: "Panel de Softrix RRHH con la planilla quincenal en curso y sus indicadores",
+    },
     cta: "Ver RRHH",
     href: "/softrix/rrhh",
   },
@@ -63,6 +75,11 @@ export const productos: Producto[] = [
       "Puesto de control en tableta",
       "Empresas públicas y privadas",
     ],
+    captura: {
+      base: "/screenshots/smartgate-accesos-portada",
+      anchoGrande: 760,
+      alt: "Departamento de Accesos de SmartGate Control: una visita verificada lista para autorizar o denegar",
+    },
     cta: "Ver SmartGate",
     href: "/softrix/smartgate",
   },
