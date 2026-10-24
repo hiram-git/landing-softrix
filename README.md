@@ -72,7 +72,9 @@ PORT=4330 bun run start        # o: bun api/index.ts
   y, si el SMTP falla, la solicitud igual queda guardada y el error en el log. Las variables
   están en `.env.example`: se copian a `/opt/landing/.env` (Bun lo lee al arrancar desde
   `WorkingDirectory`; `chmod 600`). Al arrancar, el log dice «aviso por correo activo» o por
-  qué no.
+  qué no. El ejemplo viene listo para el SMTP de Resend (`smtp.resend.com:465`, usuario
+  `resend`, API key como contraseña); el remitente, `DEMO_CORREO_DE`, tiene que ser de un
+  dominio verificado en Resend.
 - **Iniciar sesión** (`/iniciar-sesion`): una tarjeta por cada producto con `acceso` en
   `src/data/productos.ts` (hoy Facturación y RRHH), que lleva a su sistema en la misma pestaña.
 - **Defensas del formulario**: contacto con formato (correo, o al menos 7 dígitos), límites

@@ -3,7 +3,8 @@
 //
 //   SMTP_HOST, SMTP_PORT (587), SMTP_SECURE (true con 465), SMTP_USER, SMTP_PASS
 //   DEMO_CORREO_PARA   a quién llega (por defecto, el correo de contacto del sitio)
-//   DEMO_CORREO_DE     remitente (por defecto, SMTP_USER)
+//   DEMO_CORREO_DE     remitente (por defecto, SMTP_USER si es un correo). En Resend
+//                      el usuario es «resend»: el remitente va aquí, de un dominio verificado.
 import nodemailer, { type Transporter } from "nodemailer";
 import { contacto } from "../src/data/contacto";
 
@@ -18,19 +19,20 @@ const host = process.env.SMTP_HOST?.trim();
 const puerto = Number(process.env.SMTP_PORT ?? 587);
 const usuario = process.env.SMTP_USER?.trim();
 const para = process.env.DEMO_CORREO_PARA?.trim() || contacto.correo;
-const de = process.env.DEMO_CORREO_DE?.trim() || usuario;
+const de = process.env.DEMO_CORREO_DE?.trim() || (usuario?.includes("@") ? usuario : undefined);
 
-const transporte: Transporter | null = host
-  ? nodemailer.createTransport({
-      host,
-      port: puerto,
-      secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === "true" : puerto === 465,
-      auth: usuario ? { user: usuario, pass: process.env.SMTP_PASS ?? "" } : undefined,
-      connectionTimeout: 10_000,
-      greetingTimeout: 10_000,
-      socketTimeout: 20_000,
-    })
-  : null;
+const transporte: Transporter | null =
+  host && de
+    ? nodemailer.createTransport({
+        host,
+        port: puerto,
+        secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === "true" : puerto === 465,
+        auth: usuario ? { user: usuario, pass: process.env.SMTP_PASS ?? "" } : undefined,
+        connectionTimeout: 10_000,
+        greetingTimeout: 10_000,
+        socketTimeout: 20_000,
+      })
+    : null;
 
 export const correoActivo = transporte !== null;
 
@@ -82,7 +84,11 @@ export async function avisarSolicitud(s: Solicitud) {
 // Al arrancar, deja dicho en el log si el SMTP responde: es lo primero que se mira.
 export async function comprobarCorreo() {
   if (!transporte) {
-    console.info("[demo] aviso por correo apagado: falta SMTP_HOST");
+    console.info(
+      host
+        ? "[demo] aviso por correo apagado: falta DEMO_CORREO_DE (el remitente)"
+        : "[demo] aviso por correo apagado: falta SMTP_HOST",
+    );
     return;
   }
   try {
