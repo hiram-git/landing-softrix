@@ -206,6 +206,22 @@ main:focus {
 }
 
 /* Objetivos táctiles de 44 px en pantallas táctiles (los del design system miden 40). */
+/* Pantalla real dentro de una tarjeta de producto: un detalle legible, enmarcado. */
+.sx-card__media {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-100);
+}
+.sx-card__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: 0 0;
+}
+
 /* Un botón fantasma que abre una fila no tiene fondo: su etiqueta, no su caja, va alineada con el texto. */
 .boton-al-texto {
   margin-inline-start: calc(-1 * (var(--space-4) + 1px));

@@ -32,6 +32,13 @@ const {
 
 <article class:list={["sx-card", featured && "sx-card--featured", clase]}>
   {
+    Astro.slots.has("media") && (
+      <div class="sx-card__media">
+        <slot name="media" />
+      </div>
+    )
+  }
+  {
     Astro.slots.has("icon") && (
       <div class="sx-card__icon" aria-hidden="true">
         <slot name="icon" />

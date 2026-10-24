@@ -153,6 +153,16 @@ controles nativos en claro, y la oscura queda transparente para que se vea el fo
 puntos. `SelloDgi`, `EquipoFiscal` y `CtaFranja` reciben la prop `tema`. La franja
 superior, la barra y el pie siguen siempre en oscuro.
 
+**Orden de la portada.** Hero → productos → sello DGI → equipos → servicios legales →
+sector gobierno → distribuidores → demo. Facturación, su prueba ante la DGI y su terminal
+van seguidos; lo legal y fiscal los respalda después, y las audiencias aparte (entes
+públicos, revendedores) quedan al final, antes del formulario.
+
+**Productos con pantalla.** Facturación, el producto insignia, ocupa una fila entera con su
+pantalla a la derecha; RRHH y SmartGate le siguen en pareja con la suya arriba. No son
+capturas enteras reducidas (a ese tamaño no se leen) sino un detalle de cada una
+(`*-portada-640/1280.webp`, generado por `scripts/optimizar-imagenes.py` en `RECORTES`).
+
 ## Elementos de `/rc-group` en la portada
 
 - **Sello DGI** (`SelloDgi.astro`): la sección de facturación electrónica pone a la derecha

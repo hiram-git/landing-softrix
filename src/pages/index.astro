@@ -58,10 +58,10 @@ import Base from "@/layouts/Base.astro";
           ))
         }
       </div>
-      <div class="rejilla" data-revelar-grupo>
+      <div class="productos" data-revelar-grupo>
         {
           productos.map((p) => (
-            <div class="producto" data-producto={p.id}>
+            <div class:list={["producto", p.featured && "producto--insignia"]} data-producto={p.id}>
               <ProductCard
                 featured={p.featured}
                 eyebrow={p.eyebrow}
@@ -73,7 +73,17 @@ import Base from "@/layouts/Base.astro";
                 cta={p.cta}
                 href={p.href}
               >
-                <Icon slot="icon" name={p.icon} />
+                <img
+                  slot="media"
+                  src={`${p.captura.base}-640.webp`}
+                  srcset={`${p.captura.base}-640.webp 640w, ${p.captura.base}-1280.webp ${p.captura.anchoGrande}w`}
+                  sizes={p.featured ? "(max-width: 959.98px) calc(100vw - 32px), 640px" : "(max-width: 959.98px) calc(100vw - 32px), 560px"}
+                  alt={p.captura.alt}
+                  width="640"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
+                />
               </ProductCard>
             </div>
           ))
@@ -82,7 +92,13 @@ import Base from "@/layouts/Base.astro";
     </div>
   </section>
 
-  <!-- Servicios legales y asesoría fiscal -->
+  <!-- Facturación electrónica: beneficios + sello DGI (de /rc-group) -->
+  <SelloDgi tema="dark" />
+
+  <!-- Equipos: terminal con revelado 3D (de /rc-group) -->
+  <EquipoFiscal tema="light" />
+
+  <!-- Servicios legales y asesoría fiscal: el respaldo detrás de facturar ante la DGI -->
   <section id="legal" class="seccion" data-theme="dark" aria-labelledby="legal-titulo">
     <div class="contenedor legal">
       <div class="legal__texto" data-revelar>
@@ -118,12 +134,6 @@ import Base from "@/layouts/Base.astro";
       </div>
     </div>
   </section>
-
-  <!-- Facturación electrónica: beneficios + sello DGI (de /rc-group) -->
-  <SelloDgi tema="light" />
-
-  <!-- Equipos: terminal con revelado 3D (de /rc-group) -->
-  <EquipoFiscal tema="dark" />
 
   <!-- Sector gobierno -->
   <section class="seccion" data-theme="light" aria-labelledby="gobierno-titulo">
@@ -238,8 +248,18 @@ import Base from "@/layouts/Base.astro";
     background: var(--brand);
     color: var(--on-brand);
   }
+  /* El producto insignia encabeza a lo ancho; los otros dos le siguen en pareja. */
+  .productos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+  .producto--insignia {
+    grid-column: 1 / -1;
+  }
   .producto {
     display: flex;
+    min-width: 0;
     transition: opacity 150ms ease-out;
   }
   .producto > :global(.sx-card) {
@@ -247,6 +267,29 @@ import Base from "@/layouts/Base.astro";
   }
   .producto[data-atenuado] {
     opacity: 0.4;
+  }
+  /* Insignia: texto a la izquierda, la pantalla a la derecha ocupando todo el alto. */
+  .producto--insignia > :global(.sx-card) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    grid-template-rows: repeat(4, auto) 1fr;
+    column-gap: var(--space-12);
+  }
+  .producto--insignia :global(.sx-card__media) {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: center;
+  }
+  .producto--insignia > :global(.sx-card) > :global(:not(.sx-card__media)) {
+    grid-column: 1;
+  }
+  @media (max-width: 959.98px) {
+    .productos {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .producto--insignia > :global(.sx-card) {
+      display: flex;
+    }
   }
 
   .legal {
