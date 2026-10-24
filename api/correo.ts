@@ -43,6 +43,13 @@ function enlaceWhatsapp(valor: string) {
 }
 const unaLinea = (valor: string) => valor.replace(/[\r\n]+/g, " ");
 
+// El error de nodemailer en una línea: código y respuesta del servidor, que es lo que explica
+// la causa (clave rechazada, dominio sin verificar, puerto cerrado…).
+function detalle(error: unknown) {
+  const e = error as { code?: string; response?: string; message?: string };
+  return [e.code, e.response ?? e.message].filter(Boolean).join(": ");
+}
+
 export function mensajeDe(s: Solicitud) {
   const fecha = new Date(s.recibida).toLocaleString("es-PA", {
     timeZone: "America/Panama",
@@ -72,11 +79,15 @@ export function mensajeDe(s: Solicitud) {
 
 // No lanza: un fallo de SMTP nunca le cuesta la solicitud al visitante (ya está guardada).
 export async function avisarSolicitud(s: Solicitud) {
-  if (!transporte) return;
+  if (!transporte) {
+    console.info("[demo] aviso por correo apagado: la solicitud solo quedó guardada");
+    return;
+  }
   try {
-    await transporte.sendMail(mensajeDe(s));
+    const envio = await transporte.sendMail(mensajeDe(s));
+    console.info(`[demo] aviso enviado a ${para} (${envio.response})`);
   } catch (error) {
-    console.error("[demo] no se pudo enviar el aviso por correo a", para, error);
+    console.error(`[demo] no se pudo enviar el aviso a ${para}: ${detalle(error)}`);
   }
 }
 
@@ -94,6 +105,6 @@ export async function comprobarCorreo() {
     await transporte.verify();
     console.info(`[demo] aviso por correo activo: ${host}:${puerto} → ${para}`);
   } catch (error) {
-    console.error(`[demo] el SMTP ${host}:${puerto} no responde o rechaza las credenciales`, error);
+    console.error(`[demo] el SMTP ${host}:${puerto} falló: ${detalle(error)}`);
   }
 }

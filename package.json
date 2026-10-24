@@ -14,6 +14,7 @@
     "preview": "astro preview",
     "api": "bun api/index.ts",
     "start": "bun api/index.ts",
+    "correo:probar": "bun api/probar-correo.ts",
     "check": "astro check",
     "lint": "biome check ."
   },

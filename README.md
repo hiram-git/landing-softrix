@@ -74,7 +74,9 @@ PORT=4330 bun run start        # o: bun api/index.ts
   `WorkingDirectory`; `chmod 600`). Al arrancar, el log dice «aviso por correo activo» o por
   qué no. El ejemplo viene listo para el SMTP de Resend (`smtp.resend.com:465`, usuario
   `resend`, API key como contraseña); el remitente, `DEMO_CORREO_DE`, tiene que ser de un
-  dominio verificado en Resend.
+  dominio verificado en Resend. Para probarlo sin el formulario:
+  `sudo -u softrix bun run correo:probar` (en `/opt/landing`) muestra la configuración que ve,
+  envía un aviso de prueba y, si falla, el error del servidor en una línea.
 - **Iniciar sesión** (`/iniciar-sesion`): una tarjeta por cada producto con `acceso` en
   `src/data/productos.ts` (hoy Facturación y RRHH), que lleva a su sistema en la misma pestaña.
 - **Defensas del formulario**: contacto con formato (correo, o al menos 7 dígitos), límites
