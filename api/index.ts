@@ -3,16 +3,16 @@
 // proceso atiende la página y /api (en desarrollo, Vite sirve el sitio y reenvía
 // /api aquí).
 //
-// La solicitud de demo todavía no tiene destino (correo o CRM: pendiente). Para
-// no perder ninguna mientras tanto, cada una se añade como una línea JSON a
-// SOLICITUDES_FILE (por defecto data/solicitudes-demo.jsonl) y además queda en
-// el log.
+// Cada solicitud de demo válida se añade como una línea JSON a SOLICITUDES_FILE
+// (por defecto data/solicitudes-demo.jsonl), queda en el log y, con SMTP
+// configurado, llega por correo (api/correo.ts).
 import { existsSync } from "node:fs";
 import { appendFile, mkdir } from "node:fs/promises";
 import { dirname, join, normalize, resolve } from "node:path";
 import { Elysia, t } from "elysia";
 import { intereses } from "../src/data/contacto";
 import { contactoValido, LIMITES } from "../src/data/demo";
+import { avisarSolicitud, comprobarCorreo } from "./correo";
 
 const PUERTO = Number(process.env.PORT ?? process.env.API_PORT ?? 3001);
 // Por defecto 0.0.0.0 (IPv4). HOST=:: escucha también en IPv6, donde lo haya.
@@ -128,6 +128,8 @@ export const app = new Elysia()
       };
       console.info("[demo] nueva solicitud", solicitud);
       await guardarSolicitud(solicitud);
+      // El correo sale después de responder: un SMTP lento no hace esperar al visitante.
+      void avisarSolicitud(solicitud);
       return listo();
     },
     {
@@ -163,4 +165,5 @@ if (import.meta.main) {
   app.listen({ port: PUERTO, hostname: HOST });
   const modo = HAY_SITIO ? `sitio: ${SITIO} + /api` : "solo /api";
   console.info(`RCG Softrix en http://localhost:${PUERTO} (${modo})`);
+  void comprobarCorreo();
 }

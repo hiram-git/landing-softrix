@@ -62,10 +62,19 @@ PORT=4330 bun run start        # o: bun api/index.ts
 
 - `PORT` (o `API_PORT`): puerto de escucha. `SITE_DIR`: otra carpeta del sitio (por
   defecto `dist/` junto al repo). Sin build, responde solo `/api` y 404 en el resto.
-- **Solicitudes de demo**: mientras no haya destino (correo o CRM), cada solicitud válida
-  se añade como una línea JSON a `SOLICITUDES_FILE` (por defecto `data/solicitudes-demo.jsonl`,
-  fuera de git) y queda también en el log (`journalctl -u landing`). Si la unidad de systemd
-  usa `ProtectSystem=strict`, hay que permitir esa carpeta con `ReadWritePaths=/opt/landing/data`.
+- **Solicitudes de demo**: cada solicitud válida se añade como una línea JSON a
+  `SOLICITUDES_FILE` (por defecto `data/solicitudes-demo.jsonl`, fuera de git) y queda también
+  en el log (`journalctl -u landing`). Si la unidad de systemd usa `ProtectSystem=strict`, hay
+  que permitir esa carpeta con `ReadWritePaths=/opt/landing/data`.
+- **Aviso por correo** (`api/correo.ts`): con `SMTP_HOST` configurado, cada solicitud llega
+  por correo a `DEMO_CORREO_PARA` (por defecto el correo de contacto del sitio), con
+  «Responder a» el correo del visitante o un enlace a su WhatsApp. Sale después de responder
+  y, si el SMTP falla, la solicitud igual queda guardada y el error en el log. Las variables
+  están en `.env.example`: se copian a `/opt/landing/.env` (Bun lo lee al arrancar desde
+  `WorkingDirectory`; `chmod 600`). Al arrancar, el log dice «aviso por correo activo» o por
+  qué no.
+- **Iniciar sesión** (`/iniciar-sesion`): una tarjeta por cada producto con `acceso` en
+  `src/data/productos.ts` (hoy Facturación y RRHH), que lleva a su sistema en la misma pestaña.
 - **Defensas del formulario**: contacto con formato (correo, o al menos 7 dígitos), límites
   de longitud, campo trampa contra bots, hasta 5 solicitudes por IP cada 10 minutos (429) y,
   sin JavaScript, vuelta a `/?demo=error#demo` ante un dato inválido. Las reglas viven en
