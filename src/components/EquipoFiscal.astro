@@ -140,10 +140,12 @@ const caracteristicas = [
     height: auto;
     border-radius: var(--radius-xl);
   }
+  /* Cuelga del canto derecho a la altura del teclado: nunca encima de la pantalla. */
   .equipo__chip {
     position: absolute;
-    right: -12px;
-    top: 36%;
+    right: -96px;
+    top: 70%;
+    white-space: nowrap;
     padding: 8px 12px;
     border-radius: var(--radius-pill);
     border: 1px solid var(--border);
@@ -206,15 +208,22 @@ const caracteristicas = [
     gap: var(--space-3);
     margin-top: var(--space-4);
   }
+  /* Sin margen para colgar del canto, el chip baja al pie del equipo. */
+  @media (max-width: 1179.98px) {
+    .equipo__chip {
+      top: auto;
+      right: auto;
+      left: 50%;
+      bottom: -30px;
+      translate: -50% 0;
+    }
+  }
   @media (max-width: 959.98px) {
     .equipo__rejilla {
       grid-template-columns: minmax(0, 1fr);
     }
     .equipo__dispositivo {
       width: min(80%, 300px);
-    }
-    .equipo__chip {
-      right: -4px;
     }
   }
 </style>

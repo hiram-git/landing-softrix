@@ -206,6 +206,11 @@ main:focus {
 }
 
 /* Objetivos táctiles de 44 px en pantallas táctiles (los del design system miden 40). */
+/* Un botón fantasma que abre una fila no tiene fondo: su etiqueta, no su caja, va alineada con el texto. */
+.boton-al-texto {
+  margin-inline-start: calc(-1 * (var(--space-4) + 1px));
+}
+
 @media (pointer: coarse) {
   .sx-btn:not(.sx-btn--lg),
   .pastilla {
