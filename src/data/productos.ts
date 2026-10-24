@@ -13,6 +13,8 @@ export interface Producto {
   featured?: boolean;
   /** Detalle legible de una pantalla real (`*-portada-*.webp`), con el ancho real del archivo grande. */
   captura: { base: string; anchoGrande: number; alt: string };
+  /** Dirección del sistema en producción; sin ella el producto no aparece en «Iniciar sesión». */
+  acceso?: string;
   badge?: string;
   badgeTone?: BadgeTone;
 }
@@ -40,6 +42,7 @@ export const productos: Producto[] = [
     },
     badge: "Nube o local",
     badgeTone: "info",
+    acceso: "https://facturacion.rcgpty.com",
     cta: "Ver Facturación",
     href: "/softrix/facturacion",
   },
@@ -60,6 +63,7 @@ export const productos: Producto[] = [
       anchoGrande: 740,
       alt: "Panel de Softrix RRHH con la planilla quincenal en curso y sus indicadores",
     },
+    acceso: "https://rrhh.rcgpty.com",
     cta: "Ver RRHH",
     href: "/softrix/rrhh",
   },

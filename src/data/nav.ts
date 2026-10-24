@@ -1,6 +1,6 @@
 import type { NavLink } from "@/components/types";
 
-export type Seccion = "inicio" | "facturacion" | "rrhh" | "smartgate";
+export type Seccion = "inicio" | "facturacion" | "rrhh" | "smartgate" | "acceso";
 
 const rutasSoftrix = {
   facturacion: "/softrix/facturacion",
@@ -10,7 +10,7 @@ const rutasSoftrix = {
 
 // El array navLinks de screens/inicio.html, con las rutas reales del sitio.
 export function navLinks(actual: Seccion): NavLink[] {
-  const enSoftrix = actual !== "inicio";
+  const enSoftrix = actual === "facturacion" || actual === "rrhh" || actual === "smartgate";
   return [
     {
       label: "Servicios Legales",
@@ -54,4 +54,4 @@ export function navLinks(actual: Seccion): NavLink[] {
 }
 
 export const navPrimary = { label: "Solicitar demo", href: "/#demo" };
-export const navSecondary = { label: "Iniciar sesión", href: "#" };
+export const navSecondary = { label: "Iniciar sesión", href: "/iniciar-sesion" };
