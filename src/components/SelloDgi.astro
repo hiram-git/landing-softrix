@@ -88,12 +88,12 @@ const qr = [
         <div class="stamp" data-stamp>
           <svg viewBox="0 0 200 200">
             <defs>
-              <path id="sello-arco" d="M100 100 m-66 0 a66 66 0 1 1 132 0 a66 66 0 1 1 -132 0" />
+              <path id="sello-arco" d="M100 166 a66 66 0 1 1 0 -132 a66 66 0 1 1 0 132" />
             </defs>
             <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="6" />
             <circle cx="100" cy="100" r="82" fill="none" stroke="currentColor" stroke-width="2" />
-            <text font-family="Exo 2, sans-serif" font-size="15.5" font-weight="700" letter-spacing="2.5" fill="currentColor">
-              <textPath href="#sello-arco" startOffset="25%" text-anchor="middle">CERTIFICADO POR LA DGI</textPath>
+            <text font-family="Exo 2, sans-serif" font-size="15.5" font-weight="700" letter-spacing="1.5" fill="currentColor">
+              <textPath href="#sello-arco" startOffset="50%" text-anchor="middle">CERTIFICADO POR LA DGI</textPath>
             </text>
             <path d="M70 104 l18 18 l42 -46" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
             <text x="100" y="152" text-anchor="middle" font-family="Exo 2, sans-serif" font-size="17" font-weight="700" letter-spacing="2" fill="currentColor">APROBADO</text>
@@ -267,13 +267,13 @@ const qr = [
     color: #1d7a45;
   }
 
-  /* El sello: tinta roja RCG, inclinado, sobre la parte baja del documento. */
+  /* El sello: tinta roja RCG, inclinado, sobre la esquina baja del documento y por debajo del total. */
   .stamp {
     position: absolute;
-    right: -30px;
-    bottom: -8px;
-    width: 160px;
-    height: 168px;
+    right: -36px;
+    bottom: -44px;
+    width: 140px;
+    height: 140px;
     color: var(--brand);
     mix-blend-mode: multiply;
     rotate: -12deg;
@@ -285,8 +285,8 @@ const qr = [
   }
   .onda {
     position: absolute;
-    right: 22px;
-    bottom: 44px;
+    right: 4px;
+    bottom: -4px;
     width: 60px;
     height: 60px;
     border: 3px solid var(--brand);
@@ -300,9 +300,14 @@ const qr = [
       grid-template-columns: minmax(0, 1fr);
     }
     .stamp {
-      right: -6px;
-      width: 140px;
-      height: 140px;
+      right: -14px;
+      bottom: -40px;
+      width: 120px;
+      height: 120px;
+    }
+    .onda {
+      right: 16px;
+      bottom: -10px;
     }
   }
 </style>
