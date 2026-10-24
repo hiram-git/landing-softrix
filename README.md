@@ -67,7 +67,7 @@ PORT=4330 bun run start        # o: bun api/index.ts
   en el log (`journalctl -u landing`). Si la unidad de systemd usa `ProtectSystem=strict`, hay
   que permitir esa carpeta con `ReadWritePaths=/opt/landing/data`.
 - **Aviso por correo** (`api/correo.ts`): con `SMTP_HOST` configurado, cada solicitud llega
-  por correo a `DEMO_CORREO_PARA` (por defecto el correo de contacto del sitio), con
+  por correo a `DEMO_CORREO_PARA` (por defecto `rcgsoftrix@rcgpty.com`), con
   «Responder a» el correo del visitante o un enlace a su WhatsApp. Sale después de responder
   y, si el SMTP falla, la solicitud igual queda guardada y el error en el log. Las variables
   están en `.env.example`: se copian a `/opt/landing/.env` (Bun lo lee al arrancar desde

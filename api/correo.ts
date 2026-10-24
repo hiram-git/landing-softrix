@@ -2,11 +2,10 @@
 // solicitud solo se guarda (data/solicitudes-demo.jsonl) y queda en el log.
 //
 //   SMTP_HOST, SMTP_PORT (587), SMTP_SECURE (true con 465), SMTP_USER, SMTP_PASS
-//   DEMO_CORREO_PARA   a quién llega (por defecto, el correo de contacto del sitio)
+//   DEMO_CORREO_PARA   a quién llega (por defecto, rcgsoftrix@rcgpty.com)
 //   DEMO_CORREO_DE     remitente (por defecto, SMTP_USER si es un correo). En Resend
 //                      el usuario es «resend»: el remitente va aquí, de un dominio verificado.
 import nodemailer, { type Transporter } from "nodemailer";
-import { contacto } from "../src/data/contacto";
 
 export interface Solicitud {
   recibida: string;
@@ -18,7 +17,7 @@ export interface Solicitud {
 const host = process.env.SMTP_HOST?.trim();
 const puerto = Number(process.env.SMTP_PORT ?? 587);
 const usuario = process.env.SMTP_USER?.trim();
-const para = process.env.DEMO_CORREO_PARA?.trim() || contacto.correo;
+const para = process.env.DEMO_CORREO_PARA?.trim() || "rcgsoftrix@rcgpty.com";
 const de = process.env.DEMO_CORREO_DE?.trim() || (usuario?.includes("@") ? usuario : undefined);
 
 const transporte: Transporter | null =
