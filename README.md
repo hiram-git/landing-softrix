@@ -68,18 +68,24 @@ PORT=4330 bun run start        # o: bun api/index.ts
   que permitir esa carpeta con `ReadWritePaths=/opt/landing/data`.
 - **Aviso por correo** (`api/correo.ts`): con `SMTP_HOST` configurado, cada solicitud llega
   por correo a `DEMO_CORREO_PARA` (por defecto `rcgsoftrix@rcgpty.com`), con
-  «Responder a» el correo del visitante o un enlace a su WhatsApp. Sale después de responder
+  «Responder a» el correo del visitante y un enlace a su WhatsApp. Si dejó correo, el visitante
+  recibe además una confirmación cuyas respuestas llegan al equipo; una sola por dirección cada
+  24 h, para que el formulario no sirva para mandarle correos a un tercero. Salen después de responder
   y, si el SMTP falla, la solicitud igual queda guardada y el error en el log. Las variables
   están en `.env.example`: se copian a `/opt/landing/.env` (Bun lo lee al arrancar desde
   `WorkingDirectory`; `chmod 600`). Al arrancar, el log dice «aviso por correo activo» o por
   qué no. El ejemplo viene listo para el SMTP de Resend (`smtp.resend.com:465`, usuario
   `resend`, API key como contraseña); el remitente, `DEMO_CORREO_DE`, tiene que ser de un
   dominio verificado en Resend. Para probarlo sin el formulario:
-  `sudo -u softrix bun run correo:probar` (en `/opt/landing`) muestra la configuración que ve,
-  envía un aviso de prueba y, si falla, el error del servidor en una línea.
+  `sudo -u softrix bun run correo:probar [correo]` (en `/opt/landing`) muestra la configuración que ve,
+  envía el aviso y la confirmación de prueba (al correo indicado) y, si falla, el error del
+  servidor en una línea.
 - **Iniciar sesión** (`/iniciar-sesion`): una tarjeta por cada producto con `acceso` en
   `src/data/productos.ts` (hoy Facturación y RRHH), que lleva a su sistema en la misma pestaña.
-- **Defensas del formulario**: contacto con formato (correo, o al menos 7 dígitos), límites
+- **Correo y WhatsApp** van en campos separados y basta con uno (`erroresContacto` en
+  `src/data/demo.ts`, la misma regla en el formulario y en la API). Una pestaña de antes que
+  todavía manda el campo único `contacto` se acepta y se reparte por el «@».
+- **Defensas del formulario**: correo con formato y WhatsApp de al menos 7 dígitos, límites
   de longitud, campo trampa contra bots, hasta 5 solicitudes por IP cada 10 minutos (429) y,
   sin JavaScript, vuelta a `/?demo=error#demo` ante un dato inválido. Las reglas viven en
   `src/data/demo.ts` y las comparten el formulario y la API.

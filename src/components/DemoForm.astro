@@ -6,7 +6,7 @@ import Button from "./Button.astro";
 import Icon from "./Icon.astro";
 import Input from "./Input.astro";
 
-// Formulario de demo de screens/inicio.html: nombre, contacto e interés, con
+// Formulario de demo de screens/inicio.html: nombre, correo y/o WhatsApp e interés, con
 // su estado de éxito. Envía a POST /api/demo; sin JavaScript también funciona
 // (envío normal del formulario).
 ---
@@ -14,13 +14,27 @@ import Input from "./Input.astro";
 <div class="demo" data-demo>
   <form class="demo__form" action="/api/demo" method="post" novalidate data-demo-form>
     <Input name="nombre" label="Nombre" required autocomplete="name" maxlength={LIMITES.nombre} />
-    <Input
-      name="contacto"
-      label="WhatsApp o correo"
-      required
-      maxlength={LIMITES.contacto}
-      hint="Te respondemos por el medio que pongas aquí"
-    />
+    <fieldset class="demo__contacto">
+      <legend class="demo__leyenda">¿Cómo te contactamos? Basta con uno.</legend>
+      <Input
+        name="correo"
+        label="Correo"
+        type="email"
+        inputmode="email"
+        autocomplete="email"
+        maxlength={LIMITES.correo}
+        hint="Te enviamos la confirmación aquí"
+      />
+      <Input
+        name="whatsapp"
+        label="WhatsApp"
+        type="tel"
+        inputmode="tel"
+        autocomplete="tel"
+        maxlength={LIMITES.whatsapp}
+        hint="Con o sin +507"
+      />
+    </fieldset>
     <div class="sx-field">
       <label class="sx-field__label" for="interes">¿Qué te interesa?</label>
       <select id="interes" name="interes" class="sx-select" required>
@@ -68,6 +82,22 @@ import Input from "./Input.astro";
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     background: var(--surface-000);
+  }
+  .demo__contacto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-4);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .demo__leyenda {
+    margin-bottom: var(--space-3);
+    padding: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--ink-muted);
   }
   .demo__pie {
     display: flex;
@@ -158,14 +188,12 @@ import Input from "./Input.astro";
 
 <script>
   import { intereses } from "@/data/contacto";
-  import { contactoValido } from "@/data/demo";
+  import { type CampoContacto, erroresContacto } from "@/data/demo";
 
   const MENSAJES = {
     nombre: "Escribe tu nombre",
-    contacto: "Escribe un WhatsApp o un correo",
     interes: "Elige qué te interesa",
   } as const;
-  const FORMATO_CONTACTO = "Escribe un WhatsApp de al menos 7 dígitos o un correo válido";
   const ESPERA_MAXIMA = 15000;
 
   // Mensaje del aviso según lo que falló; el enlace a WhatsApp va siempre al lado.
@@ -225,12 +253,15 @@ import Input from "./Input.astro";
       aviso.hidden = true;
       const datos = Object.fromEntries(new FormData(form)) as Record<string, string>;
 
+      // En el orden de la pantalla, para enfocar el primero que falla.
+      const errores: [string, string | null][] = [
+        ["nombre", String(datos.nombre ?? "").trim() ? null : MENSAJES.nombre],
+        ...Object.entries(erroresContacto(datos.correo, datos.whatsapp)),
+        ["interes", datos.interes ? null : MENSAJES.interes],
+      ];
       let primero: HTMLInputElement | HTMLSelectElement | null = null;
-      for (const nombre of Object.keys(MENSAJES) as (keyof typeof MENSAJES)[]) {
+      for (const [nombre, mensaje] of errores) {
         const campo = form.elements.namedItem(nombre) as HTMLInputElement | HTMLSelectElement;
-        const valor = String(datos[nombre] ?? "").trim();
-        let mensaje: string | null = valor ? null : MENSAJES[nombre];
-        if (!mensaje && nombre === "contacto" && !contactoValido(valor)) mensaje = FORMATO_CONTACTO;
         marcar(campo, mensaje);
         if (mensaje && !primero) primero = campo;
       }
@@ -274,10 +305,19 @@ import Input from "./Input.astro";
       }
     });
 
-    // El error de un campo se borra en cuanto la persona lo corrige.
+    // El error de un campo se borra en cuanto la persona lo corrige. Correo y WhatsApp van
+    // juntos: escribir en uno resuelve el «deja al menos uno» del otro.
     form.addEventListener("input", (e) => {
       const campo = e.target as HTMLInputElement;
       if (campo.getAttribute("aria-invalid") === "true" && campo.value.trim()) marcar(campo, null);
+      if (campo.name === "correo" || campo.name === "whatsapp") {
+        const otro = form.elements.namedItem(campo.name === "correo" ? "whatsapp" : "correo") as HTMLInputElement;
+        const errores = erroresContacto(
+          (form.elements.namedItem("correo") as HTMLInputElement).value,
+          (form.elements.namedItem("whatsapp") as HTMLInputElement).value,
+        );
+        if (otro.getAttribute("aria-invalid") === "true" && !errores[otro.name as CampoContacto]) marcar(otro, null);
+      }
     });
     select.addEventListener("change", () => select.value && marcar(select, null));
 

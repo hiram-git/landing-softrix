@@ -11,8 +11,8 @@ import { appendFile, mkdir } from "node:fs/promises";
 import { dirname, join, normalize, resolve } from "node:path";
 import { Elysia, t } from "elysia";
 import { intereses } from "../src/data/contacto";
-import { contactoValido, LIMITES } from "../src/data/demo";
-import { avisarSolicitud, comprobarCorreo } from "./correo";
+import { erroresContacto, LIMITES } from "../src/data/demo";
+import { avisarSolicitud, comprobarCorreo, type Solicitud } from "./correo";
 
 const PUERTO = Number(process.env.PORT ?? process.env.API_PORT ?? 3001);
 // Por defecto 0.0.0.0 (IPv4). HOST=:: escucha también en IPv6, donde lo haya.
@@ -26,7 +26,7 @@ const SOLICITUDES = resolve(
 
 // Guarda la solicitud sin bloquear la respuesta. Si el disco falla, la solicitud
 // sigue en el log del servicio (journalctl): nunca se pierde en silencio.
-async function guardarSolicitud(solicitud: Record<string, string>) {
+async function guardarSolicitud(solicitud: Solicitud) {
   try {
     await mkdir(dirname(SOLICITUDES), { recursive: true });
     await appendFile(SOLICITUDES, `${JSON.stringify(solicitud)}\n`);
@@ -113,17 +113,23 @@ export const app = new Elysia()
           ? { error: "Demasiadas solicitudes. Inténtalo en unos minutos." }
           : redirect("/?demo=error#demo", 303);
       }
-      if (!contactoValido(body.contacto)) {
+      // Una pestaña abierta antes del cambio todavía manda un solo campo «contacto».
+      const viejo = body.contacto?.trim() ?? "";
+      const correo = (body.correo ?? (viejo.includes("@") ? viejo : "")).trim();
+      const whatsapp = (body.whatsapp ?? (viejo.includes("@") ? "" : viejo)).trim();
+      const errores = erroresContacto(correo, whatsapp);
+      if (errores.correo || errores.whatsapp) {
         set.status = 422;
         return json
-          ? { error: "El contacto debe ser un WhatsApp o un correo." }
+          ? { error: errores.correo ?? errores.whatsapp }
           : redirect("/?demo=error#demo", 303);
       }
 
-      const solicitud = {
+      const solicitud: Solicitud = {
         recibida: new Date().toISOString(),
         nombre: body.nombre.trim(),
-        contacto: body.contacto.trim(),
+        ...(correo && { correo }),
+        ...(whatsapp && { whatsapp }),
         interes: body.interes,
       };
       console.info("[demo] nueva solicitud", solicitud);
@@ -135,7 +141,9 @@ export const app = new Elysia()
     {
       body: t.Object({
         nombre: texto(LIMITES.nombre),
-        contacto: texto(LIMITES.contacto),
+        correo: t.Optional(t.String({ maxLength: LIMITES.correo })),
+        whatsapp: t.Optional(t.String({ maxLength: LIMITES.whatsapp })),
+        contacto: t.Optional(t.String({ maxLength: LIMITES.correo })),
         interes: t.Union(intereses.map((i) => t.Literal(i))),
         sitio_web: t.Optional(t.String({ maxLength: 500 })),
       }),
